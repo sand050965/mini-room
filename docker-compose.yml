@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app
+
+  app:
+    image: sand050965/app
+    container_name: app
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_SCHEMA=${DATABASE_SCHEMA}
+      - DATABASE_ROOT_USER=${DATABASE_ROOT_USER}
+      - DATABASE_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY_ID=${AWS_SECRET_ACCESS_KEY_ID}
+      - AWS_CLOUDFRONT_URL=${AWS_CLOUDFRONT_URL}
+    restart: on-failure

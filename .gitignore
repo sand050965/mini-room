@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# env
+.env
+
+# node
+node_modules
+
+# nginx
+nginx/private.key
+nginx/certificate.crt
+
+# Plan.md
+Plan.md
