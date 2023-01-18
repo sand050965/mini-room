@@ -8,11 +8,16 @@ const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
+const { ExpressPeerServer } = require("peer");
+const peerServer = ExpressPeerServer(server, {
+  debug: true,
+});
 
 app.set("views", `${__dirname}/views`);
 app.set("view engine", "ejs");
 
 app.use(express.static(`${__dirname}/public`));
+app.use("peerjs", peerServer);
 app.use(
   session({
     secret: "test",
@@ -26,6 +31,11 @@ const jsonParser = bodyParser.json();
 // index page
 app.get("/", (req, res) => {
   res.render("index");
+});
+
+// test page
+app.get("/test", (req, res) => {
+  res.render("test");
 });
 
 // start meeting
@@ -64,10 +74,10 @@ app.get("/:roomId", (req, res) => {
     res.render("premeeting", { roomId: roomId, action: action });
   }
 
-  res.render("room", { roomId: room });
+  res.render("room", { roomId: roomId });
 });
 
-// -------------socket io-------------
+// -------------Socket IO-------------
 io.on("connection", (socket) => {
   socket.on("join-room", (roomId, userId) => {
     socket.join(roomId);

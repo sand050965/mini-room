@@ -21,19 +21,51 @@
         <title>Mini Room</title>
     </head>
     <body>
-        <div class="container">
+        <!-- Modal -->
+        <div class="modal fade"
+             id="modalContainer"
+             tabindex="-1"
+             aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Allow Mini Room to use your camera and microphone</h1>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Mini Room needs access to your camera and microphone so that other participants can see and hear you. Mini Room will ask you to confirm this decision on each browser and computer you use.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Dismiss</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Main Content -->
+        <div class="premeetin-container">
             <div id="avatarContainer" class="avatar-container center none">
-                <div class="avatar">
-                    <img src="../img/avatar.png"/>
+                <div class="avatar-content vertical-center">
+                    <div class="avatar">
+                        <img id="avatarImg" src="../img/avatar.png"/>
+                    </div>
+                    <div id="nameTag" class="name-tag center">
+                        <span id="participantName" class="participant-name center">User 1</span>
+                    </div>
                 </div>
             </div>
             <div id="videoContainer" class="video-container"></div>
             <div id="sideBar" class="side-bar center">
                 <div class="side-bar-grid">
-                    <h1 class="title">Join This Meeting</h1>
-                    <h5 class="subtitle">Ready to join this meeting ?</h5>
+                    <h1 id="title" class="title">Join This Meeting</h1>
+                    <h5 id="subtitle" class="subtitle">Ready to join this meeting ?</h5>
                     <div class="premeeting-input-container">
-                        <input class="form-control form-control-lg"
+                        <input id="nameInput"
+                               class="form-control form-control-lg"
+                               autocomplete="name"
                                type="text"
                                placeholder="Enter Your Name">
                     </div>
@@ -44,8 +76,8 @@
                     </div>
                     <div class="center">
                         <div class="icons-container center">
-                            <i class="fa-solid fa-microphone"></i>
-                            <i class="fa-solid fa-video"></i>
+                            <i id="audioBtn" class="fa-solid fa-microphone-slash disable"></i>
+                            <i id="videoBtn" class="fa-solid fa-video-slash disable"></i>
                         </div>
                     </div>
                 </div>
@@ -54,6 +86,9 @@
     </body>
 </html>
 <!-- Vendor JS Files -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="https://kit.fontawesome.com/8de498932c.js" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <!-- Template Main JS File -->
 <script type="module" src="../js/premeeting.js"></script>

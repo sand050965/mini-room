@@ -116,7 +116,9 @@ nav .avatar-container img {
 .hero {
   width: 100%;
   height: 80vh;
-  background: #3e92ac;
+  /* background: #3e92ac; */
+  background: rgb(19, 58, 103);
+  /* background: rgb(108, 150, 183); */
 }
 
 .hero h1 {
@@ -135,14 +137,15 @@ nav .avatar-container img {
 
 .hero .drop-down-btn {
   line-height: 40px;
-  background: #0259f0;
+  /* background: #0259f0; */
+  background: #70A9a1;
   color: #fff;
   font-size: 19px;
 }
 
 .hero .drop-down-btn:hover,
 .btn-outline-secondary.dropdown-toggle.show {
-  background-color: #075488;
+  background-color: #40798c;
 }
 
 .hero .video-plus {
@@ -162,9 +165,7 @@ nav .avatar-container img {
 }
 
 .hero .form-control:focus {
-  box-shadow: 0 0 0 0.25rem rgba(83, 85, 238, 0.5);
-  height: calc(54px - 0.5rem);
-  margin-top: 0.25rem;
+  box-shadow: 0 0 0 0.15rem #91c1a3;
 }
 
 .hero .join-btn {
@@ -174,19 +175,20 @@ nav .avatar-container img {
 }
 
 .hero .able {
-  background: #2a02f0;
+  background: #0fa2c7;
   color: #fff;
   cursor: pointer;
   border-radius: 5px;
 }
 
 .hero .able:hover {
-  background: #02027d;
+  background: #057b99;
 }
 
 .hero .disable {
   background: transparent;
   border: transparent;
+  color:rgba(255, 255, 255, 0.6);
 }
 
 .hero .img-fluid {
