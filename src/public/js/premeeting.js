@@ -1,11 +1,22 @@
 // import Video from "./video.js";
 // const video = new Video();
+const socket = io("/");
+const peer = new Peer(undefined, {
+  path: "/peerjs",
+  host: "/",
+  port: "3000",
+});
+
+let userId;
 let audioAuth = false;
 let videoAuth = false;
+let isMuted = false;
+let isStoppedVideo = false;
+let myStream = null;
+let myVideoStream = null;
+let myAudioStream = null;
 const myVideo = document.createElement("video");
-myVideo.muted = true;
-const modalContainer = document.querySelector("#modalContainer");
-const modal = new bootstrap.Modal(modalContainer);
+const modal = new bootstrap.Modal(document.querySelector("#modalContainer"));
 const videoContainer = document.querySelector("#videoContainer");
 const avatarContainer = document.querySelector("#avatarContainer");
 const title = document.querySelector("#title");
@@ -17,16 +28,26 @@ const participantName = document.querySelector("#participantName");
 const nameInput = document.querySelector("#nameInput");
 const confirmBtn = document.querySelector("#confirmBtn");
 
+// Peer JS
+peer.on("open", (id) => {
+  userId = id;
+  participantName.innerHTML = "User ID:<br/>" + `${userId}`;
+});
+
+// ============================
+
 // Init App
 const init = () => {
+  myVideo.muted = true;
+
   // AOS
   AOS.init();
 
   // Hide Modal
   modal.hide();
 
-  // User Stream
-  getUserStream();
+  // Process User Stream
+  processUserStream();
 
   if (ACTION === "start") {
     title.textContent = "Start The Meeting";
@@ -37,24 +58,63 @@ const init = () => {
   }
 };
 
-const getUserStream = async () => {
+// Process Video and Audio Stream
+const processUserStream = async () => {
+  await getStream();
+  // await getAudioStream();
+  // await getVideoStream();
+};
+
+// Get Stream
+const getStream = async () => {
   try {
-    const mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: true,
+    myStream = await navigator.mediaDevices.getUserMedia({
       audio: true,
+      video: true,
     });
-    
     audioAuth = true;
     videoAuth = true;
-    addStream(myVideo, stream);
+    addStream(myVideo, myStream);
   } catch (e) {
     audioAuth = false;
     videoAuth = false;
-    closeAudioStream();
-    closeVideoStream();
+    mute();
+    stopVideo();
   }
 };
 
+// Get Audio Stream
+// const getAudioStream = async () => {
+//   try {
+//     myAudioStream = await navigator.mediaDevices.getUserMedia({
+//       audio: true,
+//     });
+//     audioAuth = true;
+//     videoAuth = true;
+//   } catch (e) {
+//     if (myAudioStream === undefined) {
+//       audioAuth = false;
+//       mute();
+//     }
+//   }
+// };
+
+// Get Video Stream
+// const getVideoStream = async () => {
+//   try {
+//     myVideoStream = await navigator.mediaDevices.getUserMedia({
+//       video: true,
+//     });
+//     videoAuth = true;
+//   } catch (e) {
+//     if (myVideoStream === undefined) {
+//       videoAuth = false;
+//       stopVideo();
+//     }
+//   }
+// };
+
+// Add Stream on HTML
 const addStream = (video, stream) => {
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
@@ -62,8 +122,8 @@ const addStream = (video, stream) => {
   });
 
   videoContainer.appendChild(video);
-  openAudioStream();
-  openVideoStream();
+  unmute();
+  playVideo();
 };
 
 const btnControl = (e) => {
@@ -78,35 +138,52 @@ const btnControl = (e) => {
 
   switch (e.target.id) {
     case "audioBtn":
-      if (audioBtn.classList.contains("fa-microphone-slash")) {
-        openAudioStream();
-      } else {
-        closeAudioStream();
-      }
+      muteUnmute();
       break;
     case "videoBtn":
-      if (videoBtn.classList.contains("fa-video-slash")) {
-        openVideoStream();
-      } else {
-        closeVideoStream();
-      }
+      playStopVideo();
       break;
   }
 };
 
-const openAudioStream = () => {
+const muteUnmute = () => {
+  const enabled = myStream.getAudioTracks()[0].enabled;
+  if (enabled) {
+    myStream.getAudioTracks()[0].enabled = false;
+    mute();
+  } else {
+    myStream.getAudioTracks()[0].enabled = true;
+    unmute();
+  }
+};
+
+const playStopVideo = () => {
+  const enabled = myStream.getVideoTracks()[0].enabled;
+  if (enabled) {
+    myStream.getVideoTracks()[0].enabled = false;
+    stopVideo();
+  } else {
+    myStream.getVideoTracks()[0].enabled = true;
+    playVideo();
+  }
+};
+
+const unmute = () => {
+  isMuted = false;
   audioBtn.classList.add("fa-microphone");
   audioBtn.classList.remove("fa-microphone-slash");
   audioBtn.classList.remove("disable");
 };
 
-const closeAudioStream = () => {
+const mute = () => {
+  isMuted = true;
   audioBtn.classList.remove("fa-microphone");
   audioBtn.classList.add("fa-microphone-slash");
   audioBtn.classList.add("disable");
 };
 
-const openVideoStream = () => {
+const playVideo = () => {
+  isStoppedVideo = false;
   videoContainer.classList.remove("none");
   avatarContainer.classList.add("none");
   videoBtn.classList.remove("fa-video-slash");
@@ -114,7 +191,8 @@ const openVideoStream = () => {
   videoBtn.classList.add("fa-video");
 };
 
-const closeVideoStream = () => {
+const stopVideo = () => {
+  isStoppedVideo = true;
   videoContainer.classList.add("none");
   avatarContainer.classList.remove("none");
   videoBtn.classList.remove("fa-video");
@@ -124,15 +202,39 @@ const closeVideoStream = () => {
 
 const displayName = (e) => {
   if (e.target.value === "") {
-    participantName.textContent = User;
+    participantName.textContent = `User ID:\n${userId}`;
     return;
   }
   participantName.textContent = e.target.value;
 };
 
-const confirmState = () => {
-  const data = {};
-  window.location = `/${ROOM_ID}`;
+const confirmState = async () => {
+  if (!audioAuth && !videoAuth) {
+    modal.show();
+    return;
+  }
+
+  const data = {
+    userId: userId,
+    participantName: participantName.textContent.replace("User ID:", "").trim(),
+    videoAuth: videoAuth,
+    audioAuth: audioAuth,
+    isMuted: isMuted,
+    isStoppedVideo: isStoppedVideo,
+  };
+
+  const postData = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  };
+  const response = await fetch("/api/premeeting/ready", postData);
+  const result = await response.json();
+  if (result.ok) {
+    window.location = `/${ROOM_ID}`;
+  }
 };
 
 window.addEventListener("load", init);
@@ -141,6 +243,6 @@ for (const btn of btnsArray) {
   btn.addEventListener("click", btnControl);
 }
 
-nameInput.addEventListener("keydown", displayName);
+nameInput.addEventListener("keyup", displayName);
 
 confirmBtn.addEventListener("click", confirmState);

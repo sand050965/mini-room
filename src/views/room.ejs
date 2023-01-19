@@ -4,26 +4,63 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://unpkg.com/@csstools/normalize.css" rel="stylesheet" />
+        <!-- favicon -->
+        <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+        <!-- Vendor CSS Files -->
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+              rel="stylesheet"
+              integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+              crossorigin="anonymous">
+        <!-- Template Main CSS File -->
         <link rel="stylesheet" href="/css/room.css">
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="https://unpkg.com/peerjs@1.3.2/dist/peerjs.min.js"></script>
-        <script src="https://kit.fontawesome.com/8de498932c.js" crossorigin="anonymous"></script>
         <script>
             const ROOM_ID = '<%= roomId %>';
+            const USER_ID = '<%= userId %>'
+            const PARTICIPANT_NAME = '<%= participantName %>';
+            const AUDIO_AUTH = '<%= audioAuth %>';
+            const VIDEO_AUTH = '<%= videoAuth %>';
+            const IS_MUTED = '<%= isMuted %>';
+            const IS_STOPPED_VIDEO = '<%= isStoppedVideo %>';
         </script>
-        <title>Room</title>
+        <title>Mini Room</title>
     </head>
     <body>
-        <div id="videoGrid"></div>
+        <!-- Modal -->
+        <div class="modal fade"
+             id="modalContainer"
+             tabindex="-1"
+             aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Allow Mini Room to use your camera and microphone</h1>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Mini Room needs access to your camera and microphone so that other participants can see and hear you. Mini Room will ask you to confirm this decision on each browser and computer you use.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Dismiss</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main-conainer">
+            <div id="videoContainer"></div>
+            <div class="tool-bar"></div>
+        </div>
     </body>
 </html>
 <!-- Vendor JS Files -->
 <script src="/socket.io/socket.io.js"></script>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="https://kit.fontawesome.com/8de498932c.js" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <!-- Template Main JS File -->
-<script type="module" src="/js/room.js"></script>
+<script type="module" src="../js/room.js"></script>
