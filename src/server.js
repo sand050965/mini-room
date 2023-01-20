@@ -112,14 +112,6 @@ app.get("/:roomId", (req, res) => {
   });
 });
 
-// test
-app.get("/room/:roomId", (req, res) => {
-  const roomId = req.params.roomId;
-  res.render("room", {
-    roomId: roomId,
-  });
-});
-
 // -------------Socket IO-------------
 io.on("connection", (socket) => {
   socket.on("join-room", (roomId, userId) => {

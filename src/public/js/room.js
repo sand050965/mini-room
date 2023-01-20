@@ -5,7 +5,7 @@ myVideo.muted = true;
 let myStream;
 const peers = {};
 
-const peer = new Peer(undefined, {
+const peer = new Peer(USER_ID, {
   path: "/peerjs",
   host: "/",
   port: "3000",
@@ -42,6 +42,7 @@ socket.on("user-connected", (userId) => {
 });
 
 peer.on("open", (id) => {
+  console.log(id);
   socket.emit("join-room", ROOM_ID, id);
 });
 
