@@ -110,7 +110,14 @@ app.get("/:roomId", (req, res) => {
     isMuted: isMuted,
     isStoppedVideo: isStoppedVideo,
   });
-  req.session = null;
+});
+
+// test
+app.get("/room/:roomId", (req, res) => {
+  const roomId = req.params.roomId;
+  res.render("room", {
+    roomId: roomId,
+  });
 });
 
 // -------------Socket IO-------------
