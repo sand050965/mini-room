@@ -1,0 +1,97 @@
+/*--------------------------------------------------------------
+# General
+--------------------------------------------------------------*/
+body,
+div,
+fieldset,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+html,
+img,
+p {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  outline: 0 !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #fff;
+}
+
+body {
+  position: relative;
+  background: #202124;
+}
+
+.none {
+  display: none !important;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.vertical-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/*--------------------------------------------------------------
+# Modal
+--------------------------------------------------------------*/
+.modal .modal-dialog {
+  min-width: 550px !important;
+}
+
+.modal h1 {
+  color: #000;
+}
+
+/*--------------------------------------------------------------
+# Main Container
+--------------------------------------------------------------*/
+.main-container {
+  height: calc(100vh - 80px);
+  display: grid;
+  grid-template-columns: auto 360px;
+}
+
+.main-left {
+  height: 100%;
+}
+
+.video-container {
+  width: 100%;
+  height: 100%;
+}
+
+.main-right {
+  width: 100%;
+  height: 100%;
+}
+
+.offcanvas {
+  position: relative;
+  height: 100%;
+}
+
+.tool-bar {
+  width: 100vw;
+  height: 80px;
+  padding: 20px;
+}

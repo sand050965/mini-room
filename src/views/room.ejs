@@ -50,9 +50,34 @@
                 </div>
             </div>
         </div>
-        <div class="main-conainer">
-            <div id="videoContainer"></div>
-            <div class="tool-bar"></div>
+        <div class="main-container">
+            <div class="main-left">
+                <div id="videoContainer" class="video-container center"></div>
+            </div>
+            <div class="main-right">
+                <!-- offcanvas -->
+                <div id="sideBar"
+                     class="offcanvas offcanvas-end"
+                     data-bs-scroll="true"
+                     data-bs-backdrop="false"
+                     tabindex="-1"
+                     id="offcanvasScrolling"
+                     aria-labelledby="offcanvasScrollingLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Chat</h5>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <p>Try scrolling the rest of the page to see this option in action.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tool-bar">
+            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#sideBar" aria-controls="offcanvasScrolling">Enable body scrolling</button>
         </div>
     </body>
 </html>
