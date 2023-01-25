@@ -51,6 +51,12 @@ body {
   align-items: center;
 }
 
+.right-center {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 /*--------------------------------------------------------------
 # Modal
 --------------------------------------------------------------*/
@@ -67,21 +73,68 @@ body {
 --------------------------------------------------------------*/
 .main-container {
   height: calc(100vh - 80px);
+}
+
+.main-container .main-left {
+  width: 100%;
+  height: 100%;
+}
+
+.main-left .video-container {
+  width: 100%;
+  height: 100%;
+  padding: 20px 15px 0 15px;
+}
+
+.video-container .one-video-container {
+  position: relative;
+}
+.video-container .two-video-container {
+  position: absolute;
+  bottom: 120px;
+  right: 10px;
+  z-index: 3;
+  width: 234px !important;
+  height: 132px !important;
+}
+.video-container .more-video-grid {
   display: grid;
-  grid-template-columns: auto 360px;
+  grid-template-columns: max-content;
+  grid-template-rows: max-content;
+  gap: 20px;
 }
 
-.main-left {
+.video-container .item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+}
+
+.item .video-rotate {
+  object-fit: cover;
+  -moz-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+
+.item .one-video {
+  width: 2240px;
   height: 100%;
 }
 
-.video-container {
+.item .more-video {
   width: 100%;
-  height: 100%;
 }
 
-.main-right {
-  width: 100%;
+/*--------------------------------------------------------------
+# Side Bar
+--------------------------------------------------------------*/
+
+.main-container .main-right {
   height: 100%;
 }
 
@@ -90,8 +143,106 @@ body {
   height: 100%;
 }
 
+.sidebar-open {
+  width: 360px;
+  height: 100%;
+}
+
+/*--------------------------------------------------------------
+# Tool Bar
+--------------------------------------------------------------*/
 .tool-bar {
+  display: grid;
+  grid-template-columns: 45% 55%;
   width: 100vw;
   height: 80px;
-  padding: 20px;
+}
+
+.tool-bar .control-btns {
+  display: grid;
+  grid-template-columns: 250px auto;
+  align-items: center;
+}
+
+.tool-bar i {
+  color: #fff;
+  font-size: 1rem;
+}
+
+.tool-bar .main-control-container {
+  height: 40px;
+}
+
+.tool-bar .main-control {
+  display: grid;
+  grid-template-columns: repeat(3, 40px) 56px;
+  gap: 20px;
+  height: 100%;
+}
+
+.main-control .circle-btn {
+  width: 100%;
+  height: 100%;
+  border-radius: 50px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.main-control .oval-btn {
+  width: 100%;
+  height: 100%;
+  border-radius: 40px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.main-control .btn-able {
+  background-color: #3c4043;
+}
+
+.main-control .btn-able:hover {
+  background-color: #4d5256;
+}
+
+.main-control .btn-disable {
+  background-color: #ea4335;
+}
+
+.main-control .btn-disable:hover {
+  background-color: #f44d44;
+}
+
+.main-control .rotate {
+  -moz-transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+  -o-transform: rotate(135deg);
+  -ms-transform: rotate(135deg);
+  transform: rotate(135deg);
+}
+
+.tool-bar .side-control-container {
+  height: 48px;
+}
+
+.tool-bar .side-control {
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  height: 100%;
+  margin-right: 50px;
+}
+
+.side-control .side-btn {
+  width: 100%;
+  height: 100%;
+  border-radius: 50px;
+  padding: 12px;
+  cursor: pointer;
+}
+
+.side-control .side-btn:hover {
+  background-color: #272828;
+}
+
+.side-control i {
+  font-size: 20px;
 }

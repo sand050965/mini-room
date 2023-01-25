@@ -42,7 +42,7 @@
                                 aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Mini Room needs access to your camera and microphone so that other participants can see and hear you. Mini Room will ask you to confirm this decision on each browser and computer you use.
+                        Mini Room needs access to your camera and microphone so that other participants can see and hear you.
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Dismiss</button>
@@ -51,17 +51,52 @@
             </div>
         </div>
         <div class="main-container">
-            <div class="main-left">
-                <div id="videoContainer" class="video-container center"></div>
+            <div class="main-left center">
+                <div id="videoContainer" class="video-container"></div>
             </div>
             <div class="main-right">
-                <!-- offcanvas -->
-                <div id="sideBar"
+                <!-- Info Side Bar -->
+                <div id="infoSideBar"
                      class="offcanvas offcanvas-end"
                      data-bs-scroll="true"
                      data-bs-backdrop="false"
                      tabindex="-1"
-                     id="offcanvasScrolling"
+                     aria-labelledby="offcanvasScrollingLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Info</h5>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <p>Info</p>
+                    </div>
+                </div>
+                <!-- Participants Side Bar -->
+                <div id="participantsSideBar"
+                     class="offcanvas offcanvas-end"
+                     data-bs-scroll="true"
+                     data-bs-backdrop="false"
+                     tabindex="-1"
+                     aria-labelledby="offcanvasScrollingLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Participants</h5>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <p>Participants</p>
+                    </div>
+                </div>
+                <!-- Chat Side Bar -->
+                <div id="chatSideBar"
+                     class="offcanvas offcanvas-end"
+                     data-bs-scroll="true"
+                     data-bs-backdrop="false"
+                     tabindex="-1"
                      aria-labelledby="offcanvasScrollingLabel">
                     <div class="offcanvas-header">
                         <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Chat</h5>
@@ -71,21 +106,51 @@
                                 aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body">
-                        <p>Try scrolling the rest of the page to see this option in action.</p>
+                        <p>Chat</p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="tool-bar">
-            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#sideBar" aria-controls="offcanvasScrolling">Enable body scrolling</button>
-        </div>
-    </body>
-</html>
-<!-- Vendor JS Files -->
-<script src="/socket.io/socket.io.js"></script>
-<script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script src="https://kit.fontawesome.com/8de498932c.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<!-- Template Main JS File -->
-<script type="module" src="../js/room.js"></script>
+            <div class="meeting-info"></div>
+            <div class="control-btns">
+                <div class="main-control-container center">
+                    <div class="main-control">
+                        <div id="audioBtn" class="center circle-btn btn-able">
+                            <i id="audioBtnIcon" class="fa-solid fa-microphone"></i>
+                        </div>
+                        <div id="videoBtn" class="center circle-btn btn-able">
+                            <i id="videoBtnIcon" class="fa-solid fa-video"></i>
+                        </div>
+                        <div id="shareBtn" class="center circle-btn btn-able">
+                            <i id="shareBtnIcon" class="fa-solid fa-arrow-up-from-bracket"></i>
+                        </div>
+                        <div id="leaveBtn" class="center oval-btn btn-disable">
+                            <i id="leaveBtnIcon" class="fa-solid fa-phone rotate"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="side-control-container right-center">
+                    <div class="side-control">
+                        <div id="infoBtn" class="center side-btn">
+                            <i class="fa-solid fa-circle-info"></i>
+                        </div>
+                        <div id="participantsBtn" class="center side-btn">
+                            <i class="fa-solid fa-user-group"></i>
+                        </div>
+                        <div id="chatBtn" class="center side-btn">
+                            <i class="fa-solid fa-message"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </body>
+    </html>
+    <!-- Vendor JS Files -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://kit.fontawesome.com/8de498932c.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!-- Template Main JS File -->
+    <script type="module" src="../js/room.js"></script>
