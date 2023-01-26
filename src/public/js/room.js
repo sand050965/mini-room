@@ -1,7 +1,7 @@
 const socket = io("/");
 let myStream;
-const peers = {};
 let cnt = 1;
+let peers = {};
 const myVideo = document.createElement("video");
 myVideo.muted = true;
 const videoContainer = document.querySelector("#videoContainer");
@@ -22,12 +22,6 @@ const btnsArray = [
   chatBtn,
 ];
 
-const peer = new Peer(USER_ID, {
-  path: "/peerjs",
-  host: "/",
-  port: "3000",
-});
-
 const init = async () => {
   try {
     myStream = await navigator.mediaDevices.getUserMedia({
@@ -35,8 +29,14 @@ const init = async () => {
       audio: true,
     });
     const videoItem = document.createElement("div");
-    addStream(myVideo, myStream, videoItem);
+    addStream(myVideo, myStream, videoItem, "You");
   } catch (e) {}
+};
+
+const getRoomInfo = async () => {
+  const response = await fetch(`/room/${ROOM_ID}`);
+  const result = await response.json();
+  cnt = result.data.length;
 };
 
 const videoGridStyle = (item, video) => {
@@ -147,39 +147,47 @@ const stopVideo = () => {
   videoBtn.classList.add("btn-disable");
 };
 
-
-
 // Socket IO & Peer JS
+const peer = new Peer(USER_ID, {
+  path: "/peerjs",
+  host: "/",
+  port: "3000",
+});
+
+peer.on("open", (id) => {
+  socket.emit("join-room", ROOM_ID, id, USER_NAME);
+});
+
 // Receive Other User's Stream (Listen to one we get call)
 peer.on("call", (call) => {
   // Answer call
   call.answer(myStream);
+  console.log(call);
+
+  peers[call.peer] = call;
 
   // Respond to stream that comes in
   const videoItem = document.createElement("div");
   const video = document.createElement("video");
-  call.on("stream", (userVideoStream) => {
-    addStream(video, userVideoStream, videoItem);
+  call.on("stream", async (userVideoStream) => {
+    await getRoomInfo();
+    addStream(video, userVideoStream, videoItem, "Aloha");
   });
 });
 
 // New user connected
-socket.on("user-connected", (userId) => {
-  cnt++;
-  connectToNewUser(userId, myStream);
+socket.on("user-connected", async (userId, userName) => {
+  await getRoomInfo();
+  connectToNewUser(userId, userName, myStream);
 });
 
-peer.on("open", (id) => {
-  socket.emit("join-room", ROOM_ID, id);
-});
-
-socket.on("user-disconnected", (userId) => {
+socket.on("user-disconnected", async (userId) => {
   if (peers[userId]) {
     peers[userId].close();
   }
 });
 
-const addStream = (video, stream, item) => {
+const addStream = (video, stream, item, userName) => {
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
     video.play();
@@ -187,25 +195,29 @@ const addStream = (video, stream, item) => {
   item.appendChild(video);
   item.classList.add("item");
   videoGridStyle(item, video);
+  const nameTag = document.createElement("div");
+  nameTag.textContent = userName;
+  nameTag.classList.add("name-tag");
+  item.appendChild(nameTag);
   videoContainer.append(item);
 };
 
 // // Make Call
-const connectToNewUser = (userId, stream) => {
+const connectToNewUser = (userId, userName, stream) => {
   const call = peer.call(userId, stream);
   const videoItem = document.createElement("div");
   const video = document.createElement("video");
 
   // Receive Other User's Stream (Listen to someone try to call us)
-  call.on("stream", (userVideoStream) => {
-    addStream(video, userVideoStream, videoItem);
+  call.on("stream", async (userVideoStream) => {
+    await getRoomInfo();
+    addStream(video, userVideoStream, videoItem, userName);
   });
 
   call.on("close", () => {
     video.remove();
   });
 
-  // ********* peers need to go to db and refresh when someone comes in
   peers[userId] = call;
 };
 

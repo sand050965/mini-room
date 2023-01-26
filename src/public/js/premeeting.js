@@ -24,14 +24,14 @@ const subtitle = document.querySelector("#subtitle");
 const audioBtn = document.querySelector("#audioBtn");
 const videoBtn = document.querySelector("#videoBtn");
 const btnsArray = [videoBtn, audioBtn];
-const participantName = document.querySelector("#participantName");
+const userName = document.querySelector("#userName");
 const nameInput = document.querySelector("#nameInput");
 const confirmBtn = document.querySelector("#confirmBtn");
 
 // Peer JS
 peer.on("open", (id) => {
   userId = id;
-  participantName.innerHTML = "User ID:<br/>" + `${userId}`;
+  userName.innerHTML = `${userId}`;
 });
 
 // ============================
@@ -202,10 +202,10 @@ const stopVideo = () => {
 
 const displayName = (e) => {
   if (e.target.value === "") {
-    participantName.textContent = `User ID:\n${userId}`;
+    userName.textContent = `${userId}`;
     return;
   }
-  participantName.textContent = e.target.value;
+  userName.textContent = e.target.value;
 };
 
 const confirmState = async () => {
@@ -216,11 +216,13 @@ const confirmState = async () => {
 
   const data = {
     userId: userId,
-    participantName: participantName.textContent.replace("User ID:", "").trim(),
+    userName: userName.textContent.trim(),
+    roomId: ROOM_ID.toString(),
     videoAuth: videoAuth,
     audioAuth: audioAuth,
     isMuted: isMuted,
     isStoppedVideo: isStoppedVideo,
+    isReadyState: true,
   };
 
   const postData = {

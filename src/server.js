@@ -1,15 +1,17 @@
 "use strict";
+const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-const dotenv = require("dotenv");
 const cors = require("cors");
-
-const express = require("express");
 const { v4: uuidv4 } = require("uuid");
 const { ExpressPeerServer } = require("peer");
+const { connectToDB, disconnectToDB } = require("./utils/DBUtil");
+const premeetingRouter = require("./routes/premeeting");
+const roomRouter = require("./routes/room");
 
+// app, socket io, peer js and port config
 const app = express();
+const port = process.env.PORT || 3000;
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
 const peerServer = ExpressPeerServer(server, {
@@ -19,27 +21,28 @@ const peerServer = ExpressPeerServer(server, {
 app.set("views", `${__dirname}/views`);
 app.set("view engine", "ejs");
 
-app.use(express.static(`${__dirname}/public`));
-app.use(cookieParser("12345jvhjjhvjhvjllloo998fy6789"));
-app.use("/peerjs", peerServer);
+// middlewares
+app.use(cors());
 app.use(
   session({
     secret: "test",
-    resave: false,
+    resave: true,
     saveUninitialized: true,
   })
 );
+app.use(express.static(`${__dirname}/public`));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use("/peerjs", peerServer);
+app.use("/api/premeeting", premeetingRouter);
+app.use("/", roomRouter);
 
-const jsonParser = bodyParser.json();
+// DB connection
+connectToDB();
 
 // index page
 app.get("/", (req, res) => {
   res.render("index");
-});
-
-// test page
-app.get("/test", (req, res) => {
-  res.render("test");
 });
 
 // start meeting
@@ -50,77 +53,22 @@ app.get("/api/start", (req, res) => {
 });
 
 // join meeting
-app.post("/api/join", jsonParser, (req, res) => {
+app.post("/api/join", (req, res) => {
   const joinRoomId = req.body.roomId;
   req.session.action = "join";
   // validation...
   res.status(200).json({ ok: true });
 });
 
-//premeeting ready
-app.post("/api/premeeting/ready", jsonParser, (req, res) => {
-  const userId = req.body.userId;
-  const participantName = req.body.participantName;
-  const audioAuth = req.body.audioAuth;
-  const videoAuth = req.body.videoAuth;
-  const isMuted = req.body.isMuted;
-  const isStoppedVideo = req.body.isStoppedVideo;
-  req.session.userId = userId;
-  req.session.participantName = participantName;
-  req.session.audioAuth = audioAuth;
-  req.session.videoAuth = videoAuth;
-  req.session.isMuted = isMuted;
-  req.session.isStoppedVideo = isStoppedVideo;
-  req.session.isReadyState = true;
-  res.status(200).json({ ok: true });
-});
-
-// meeting room
-app.get("/:roomId", (req, res) => {
-  const roomId = req.params.roomId;
-  const userId = req.session.userId;
-  const isReadyState = req.session.isReadyState;
-  const participantName = req.session.participantName;
-  const audioAuth = req.session.audioAuth;
-  const videoAuth = req.session.videoAuth;
-  const isMuted = req.session.isMuted;
-  const isStoppedVideo = req.session.isStoppedVideo;
-
-  let action = req.session.action;
-
-  if (action === null) {
-    action = "join";
-  }
-
-  if (!isReadyState) {
-    // premeeting
-    req.session.action = null;
-    res.render("premeeting", {
-      roomId: roomId,
-      action: action,
-    });
-    return;
-  }
-  res.render("room", {
-    roomId: roomId,
-    userId: userId,
-    participantName: participantName,
-    audioAuth: audioAuth,
-    videoAuth: videoAuth,
-    isMuted: isMuted,
-    isStoppedVideo: isStoppedVideo,
-  });
-});
-
 // -------------Socket IO-------------
 io.on("connection", (socket) => {
-  socket.on("join-room", (roomId, userId) => {
+  socket.on("join-room", (roomId, userId, userName) => {
     socket.join(roomId);
-    socket.to(roomId).emit("user-connected", userId);
+    socket.to(roomId).emit("user-connected", userId, userName);
     socket.on("disconnect", () => {
       socket.to(roomId).emit("user-disconnected", userId);
     });
   });
 });
 
-server.listen(3000);
+server.listen(port);

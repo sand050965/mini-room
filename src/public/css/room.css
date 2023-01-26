@@ -113,6 +113,14 @@ body {
   border-radius: 5px;
 }
 
+.item .name-tag {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  color: #fff;
+  padding: 5px 20px;
+}
+
 .item .video-rotate {
   object-fit: cover;
   -moz-transform: scaleX(-1);

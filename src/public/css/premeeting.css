@@ -99,7 +99,7 @@ body {
   margin-top: 10px;
 }
 
-.avatar-container .participant-name {
+.avatar-container .user-name {
   min-width: 100px;
   max-width: 40vw;
   height: auto;
