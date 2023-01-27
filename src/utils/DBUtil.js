@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 require("dotenv").config();
 
-const url = `${process.env.DB_URL}`;
+const uri = process.env.DB_URI;
 
 const connectToDB = () => {
-  mongoose.connect(url, {
+  mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });

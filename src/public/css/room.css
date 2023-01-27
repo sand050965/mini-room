@@ -26,7 +26,15 @@ h3,
 h4,
 h5,
 h6 {
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
   color: #fff;
+}
+
+textarea,
+textarea:focus {
+  border: 0;
+  outline: 0;
+  resize: none;
 }
 
 body {
@@ -75,6 +83,11 @@ body {
   height: calc(100vh - 80px);
 }
 
+.main-container-grid {
+  display: grid;
+  grid-template-columns: auto 360px;
+}
+
 .main-container .main-left {
   width: 100%;
   height: 100%;
@@ -83,7 +96,7 @@ body {
 .main-left .video-container {
   width: 100%;
   height: 100%;
-  padding: 20px 15px 0 15px;
+  padding-top: 15px;
 }
 
 .video-container .one-video-container {
@@ -139,21 +152,91 @@ body {
 }
 
 /*--------------------------------------------------------------
-# Side Bar
+# Offcanvas
 --------------------------------------------------------------*/
-
 .main-container .main-right {
   height: 100%;
 }
 
-.offcanvas {
-  position: relative;
-  height: 100%;
+.main-right .offcanvas-outlayer {
+  position: static !important;
+  width: 340px;
+  height: calc(100% - 20px);
+  margin: 20px 0 0 20px;
+  border-radius: 10px;
 }
 
-.sidebar-open {
-  width: 360px;
-  height: 100%;
+.offcanvas h5 {
+  color: #000;
+}
+
+/*--------------------------------------------------------------
+# Chat Offcanvas
+--------------------------------------------------------------*/
+#chatOffcanvas .offcanvas-body {
+  overflow: hidden;
+  max-height: calc(100% - 270px);
+}
+
+#chatOffcanvas .warning {
+  background-color: rgb(244, 244, 244);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 12px;
+  text-align: center;
+}
+
+#chatOffcanvas .message-container {
+  max-height: 100%;
+  overflow-y: scroll;
+}
+
+#chatOffcanvas .message-input-container {
+  position: relative;
+  padding: 22px 12px 5px 12px;
+}
+
+.message-container .message {
+  margin-bottom: 12px;
+  padding: 10px;
+}
+
+.message-input-container textarea {
+  width: 100%;
+  background-color: rgb(244, 244, 244);
+  padding: 0 60px 0 12px;
+  line-height: 48px;
+}
+
+.message-input-container .message-input {
+  min-height: 48px;
+  border-radius: 50px;
+}
+
+.message-input-container .send-msg-btn {
+  width: 48px;
+  height: 48px;
+  position: absolute;
+  z-index: 3;
+  right: 12px;
+  bottom: 5px;
+  border-radius: 50%;
+  color: #babcbd;
+  padding: 12px;
+  background-color: rgb(244, 244, 244);
+}
+
+.message-input-container .send-msg-btn i {
+  font-size: 24px;
+}
+
+.message-input-container .send-msg-btn-able {
+  color: #1a73e8;
+  cursor: pointer;
+}
+
+.message-input-container .send-msg-btn-able:hover {
+  background-color: rgb(244, 244, 244);
 }
 
 /*--------------------------------------------------------------
@@ -249,6 +332,10 @@ body {
 
 .side-control .side-btn:hover {
   background-color: #272828;
+}
+
+.side-btn-clicked {
+  color: #8ab4f8 !important;
 }
 
 .side-control i {

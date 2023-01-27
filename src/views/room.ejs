@@ -8,9 +8,9 @@
         <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
         <!-- Vendor CSS Files -->
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
               rel="stylesheet"
-              integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+              integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
               crossorigin="anonymous">
         <!-- Template Main CSS File -->
         <link rel="stylesheet" href="/css/room.css">
@@ -50,63 +50,73 @@
                 </div>
             </div>
         </div>
-        <div class="main-container">
+        <div id="mainContainer" class="main-container">
             <div class="main-left center">
                 <div id="videoContainer" class="video-container"></div>
             </div>
             <div class="main-right">
-                <!-- Info Side Bar -->
-                <div id="infoSideBar"
-                     class="offcanvas offcanvas-end"
-                     data-bs-scroll="true"
+                <!-- Info Offcanvas -->
+                <div id="infoOffcanvas"
+                     class="offcanvas offcanvas-end offcanvas-outlayer"
                      data-bs-backdrop="false"
                      tabindex="-1"
-                     aria-labelledby="offcanvasScrollingLabel">
+                     aria-labelledby="offcanvasRightLabel">
                     <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Info</h5>
+                        <h5 class="offcanvas-title" id="staticBackdropLabel">Meeting details</h5>
                         <button type="button"
                                 class="btn-close"
                                 data-bs-dismiss="offcanvas"
-                                aria-label="Close"></button>
+                                data-bs-target="#infoSideBar"
+                                aria-label="Close">
+                        </button>
                     </div>
                     <div class="offcanvas-body">
-                        <p>Info</p>
+                        <div class="warning">I will not close if you click outside of me.</div>
+                        <div class=""></div>
                     </div>
                 </div>
-                <!-- Participants Side Bar -->
-                <div id="participantsSideBar"
-                     class="offcanvas offcanvas-end"
-                     data-bs-scroll="true"
+                <!-- Participants Offcanvas -->
+                <div id="participantOfcanvas"
+                     class="offcanvas offcanvas-end offcanvas-outlayer"
                      data-bs-backdrop="false"
                      tabindex="-1"
-                     aria-labelledby="offcanvasScrollingLabel">
+                     aria-labelledby="offcanvasRightLabel">
                     <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Participants</h5>
+                        <h5 class="offcanvas-title" id="staticBackdropLabel">People</h5>
                         <button type="button"
                                 class="btn-close"
                                 data-bs-dismiss="offcanvas"
-                                aria-label="Close"></button>
+                                data-bs-target="#participantsSideBar"
+                                aria-label="Close">
+                        </button>
                     </div>
                     <div class="offcanvas-body">
-                        <p>Participants</p>
+                        <div class="warning">I will not close if you click outside of me.</div>
+                        <div></div>
                     </div>
                 </div>
-                <!-- Chat Side Bar -->
-                <div id="chatSideBar"
-                     class="offcanvas offcanvas-end"
-                     data-bs-scroll="true"
+                <!-- Chat Offcanvas -->
+                <div id="chatOffcanvas"
+                     class="offcanvas offcanvas-end offcanvas-outlayer"
                      data-bs-backdrop="false"
                      tabindex="-1"
-                     aria-labelledby="offcanvasScrollingLabel">
+                     aria-labelledby="offcanvasRightLabel">
                     <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Chat</h5>
+                        <h5 class="offcanvas-title" id="staticBackdropLabel">In-call Messages</h5>
                         <button type="button"
                                 class="btn-close"
                                 data-bs-dismiss="offcanvas"
-                                aria-label="Close"></button>
+                                data-bs-target="#chatSideBar"
+                                aria-label="Close">
+                        </button>
                     </div>
+                    <div class="warning">Messages can only be seen by people in the call and are deleted when the call ends.</div>
                     <div class="offcanvas-body">
-                        <p>Chat</p>
+                        <div id="messageContainer" class="message-container"></div>
+                    </div>
+                    <div id="messageInputContainer" class="message-input-container">
+                        <textarea id="messageInput" rows="1" type="text" class="message-input center" placeholder="Send a message to everyone"></textarea>
+                        <span id="sendMsgBtn" type="btn" class="send-msg-btn center" type="button"><i class="fa-solid fa-paper-plane"></i></span>
                     </div>
                 </div>
             </div>
@@ -133,13 +143,13 @@
                 <div class="side-control-container right-center">
                     <div class="side-control">
                         <div id="infoBtn" class="center side-btn">
-                            <i class="fa-solid fa-circle-info"></i>
+                            <i id="infoBtnIcon" class="fa-solid fa-circle-info"></i>
                         </div>
-                        <div id="participantsBtn" class="center side-btn">
-                            <i class="fa-solid fa-user-group"></i>
+                        <div id="participantBtn" class="center side-btn">
+                            <i id="participantBtnIcon" class="fa-solid fa-user-group"></i>
                         </div>
                         <div id="chatBtn" class="center side-btn">
-                            <i class="fa-solid fa-message"></i>
+                            <i id="chatBtnIcon" class="fa-solid fa-message"></i>
                         </div>
                     </div>
                 </div>
@@ -151,6 +161,6 @@
     <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://kit.fontawesome.com/8de498932c.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <!-- Template Main JS File -->
     <script type="module" src="../js/room.js"></script>
