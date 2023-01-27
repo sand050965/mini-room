@@ -2,6 +2,7 @@ const socket = io("/");
 let myStream;
 let cnt = 1;
 let peers = {};
+let msgScrollTop;
 const myVideo = document.createElement("video");
 myVideo.muted = true;
 const videoContainer = document.querySelector("#videoContainer");
@@ -11,15 +12,32 @@ const videoBtn = document.querySelector("#videoBtn");
 const videoBtnIcon = document.querySelector("#videoBtnIcon");
 const shareBtn = document.querySelector("#shareBtn");
 const infoBtn = document.querySelector("#infoBtn");
-const participantsBtn = document.querySelector("#participantsBtn");
+const participantBtn = document.querySelector("#participantBtn");
 const chatBtn = document.querySelector("#chatBtn");
+const sendMsgBtn = document.querySelector("#sendMsgBtn");
+const infoOffcanvas = document.querySelector("#infoOffcanvas");
+const BsInfoOffcanvas = new bootstrap.Offcanvas(infoOffcanvas);
+const participantOffcanvas = document.querySelector("#participantOfcanvas");
+const BsParticipantOffcanvas = new bootstrap.Offcanvas(participantOffcanvas);
+const chatOffcanvas = document.querySelector("#chatOffcanvas");
+const BsChatOffcanvas = new bootstrap.Offcanvas(chatOffcanvas);
+const messageInput = document.querySelector("#messageInput");
 const btnsArray = [
   videoBtn,
   audioBtn,
   shareBtn,
   infoBtn,
-  participantsBtn,
+  participantBtn,
   chatBtn,
+  sendMsgBtn,
+];
+
+const sideBtnIconsArray = [infoBtnIcon, participantBtnIcon, chatBtnIcon];
+
+const bsOffcanvasArray = [
+  BsInfoOffcanvas,
+  BsParticipantOffcanvas,
+  BsChatOffcanvas,
 ];
 
 const init = async () => {
@@ -78,7 +96,6 @@ const btnControl = (e) => {
   //   modal.show();
   //   return;
   // }
-
   if (e.target.id.includes("audioBtn")) {
     muteUnmute();
   } else if (e.target.id.includes("videoBtn")) {
@@ -86,8 +103,28 @@ const btnControl = (e) => {
   } else if (e.target.id.includes("shareBtn")) {
   } else if (e.target.id.includes("leaveBtn")) {
   } else if (e.target.id.includes("infoBtn")) {
-  } else if (e.target.id.includes("participantsBtn")) {
+    toggleSideBar(infoOffcanvas, BsInfoOffcanvas, e.target.id);
+  } else if (e.target.id.includes("participantBtn")) {
+    toggleSideBar(participantOffcanvas, BsParticipantOffcanvas, e.target.id);
   } else if (e.target.id.includes("chatBtn")) {
+    toggleSideBar(chatOffcanvas, BsChatOffcanvas, e.target.id);
+  } else if (e.target.id.includes("sendMsgBtn")) {
+    sendMessage();
+  }
+};
+
+const keydowControl = (e) => {
+  if (e.which === 13) {
+    e.preventDefault();
+    sendMessage();
+  }
+};
+
+const sendMsgControl = (e) => {
+  if (e.target.value.trim().length === 0) {
+    sendMsgBtn.classList.remove("send-msg-btn-able");
+  } else {
+    sendMsgBtn.classList.add("send-msg-btn-able");
   }
 };
 
@@ -147,6 +184,76 @@ const stopVideo = () => {
   videoBtn.classList.add("btn-disable");
 };
 
+const toggleSideBar = (tagetSideBar, tagetBsOffcanvas, btnId) => {
+  let targetBtn;
+  if (btnId.includes("Icon")) {
+    targetBtn = document.querySelector(`#${btnId}`);
+  } else {
+    targetBtn = document.querySelector(`#${btnId}Icon`);
+  }
+
+  const mainContainer = document.querySelector("#mainContainer");
+
+  for (const bsOffcanvas of bsOffcanvasArray) {
+    if (bsOffcanvas === tagetBsOffcanvas) {
+      continue;
+    }
+    bsOffcanvas.hide();
+  }
+
+  for (const sideBtnIcon of sideBtnIconsArray) {
+    sideBtnIcon.classList.remove("side-btn-clicked");
+  }
+
+  if (tagetSideBar.classList.contains("show")) {
+    tagetBsOffcanvas.hide();
+    mainContainer.classList.remove("main-container-grid");
+    targetBtn.classList.remove("side-btn-clicked");
+  } else {
+    tagetBsOffcanvas.show();
+    mainContainer.classList.add("main-container-grid");
+    targetBtn.classList.add("side-btn-clicked");
+  }
+};
+
+const addStream = (video, stream, item, userName) => {
+  video.srcObject = stream;
+  video.addEventListener("loadedmetadata", () => {
+    video.play();
+  });
+  item.appendChild(video);
+  item.classList.add("item");
+  videoGridStyle(item, video);
+  const nameTag = document.createElement("div");
+  nameTag.textContent = userName;
+  nameTag.classList.add("name-tag");
+  item.appendChild(nameTag);
+  videoContainer.append(item);
+};
+
+const displayMessage = (message, userId, userName) => {
+  if (userId === USER_ID) {
+    userName = "You";
+  }
+  const messageContainer = document.querySelector("#messageContainer");
+  const messageContent = document.createElement("div");
+  const messageSender = document.createElement("b");
+  const br = document.createElement("br");
+  const mainMessage = document.createElement("div");
+  messageSender.textContent = userName;
+  mainMessage.textContent = message;
+  messageContent.appendChild(messageSender);
+  messageContent.appendChild(br);
+  messageContent.appendChild(mainMessage);
+  messageContent.classList.add("message");
+  messageContainer.appendChild(messageContent);
+};
+
+const scrollToBottom = () => {
+  const messageContainer = document.querySelector("#messageContainer");
+  messageContainer.scrollTop = messageContainer.scrollHeight;
+};
+
 // Socket IO & Peer JS
 const peer = new Peer(USER_ID, {
   path: "/peerjs",
@@ -162,8 +269,6 @@ peer.on("open", (id) => {
 peer.on("call", (call) => {
   // Answer call
   call.answer(myStream);
-  console.log(call);
-
   peers[call.peer] = call;
 
   // Respond to stream that comes in
@@ -175,31 +280,32 @@ peer.on("call", (call) => {
   });
 });
 
-// New user connected
+// new user connected
 socket.on("user-connected", async (userId, userName) => {
   await getRoomInfo();
   connectToNewUser(userId, userName, myStream);
 });
 
+// create message
+socket.on("create-message", (message, userId, userName) => {
+  displayMessage(message, userId, userName);
+  scrollToBottom();
+});
+
+// user disconnected
 socket.on("user-disconnected", async (userId) => {
   if (peers[userId]) {
     peers[userId].close();
   }
 });
 
-const addStream = (video, stream, item, userName) => {
-  video.srcObject = stream;
-  video.addEventListener("loadedmetadata", () => {
-    video.play();
-  });
-  item.appendChild(video);
-  item.classList.add("item");
-  videoGridStyle(item, video);
-  const nameTag = document.createElement("div");
-  nameTag.textContent = userName;
-  nameTag.classList.add("name-tag");
-  item.appendChild(nameTag);
-  videoContainer.append(item);
+const sendMessage = () => {
+  const messageInput = document.querySelector("#messageInput");
+  const message = messageInput.value.trim();
+  if (message.length !== 0) {
+    socket.emit("message", message);
+    messageInput.value = "";
+  }
 };
 
 // // Make Call
@@ -222,6 +328,10 @@ const connectToNewUser = (userId, userName, stream) => {
 };
 
 window.addEventListener("load", init);
+
+window.addEventListener("keydown", keydowControl);
+
+messageInput.addEventListener("keyup", sendMsgControl);
 
 for (const btn of btnsArray) {
   btn.addEventListener("click", btnControl);

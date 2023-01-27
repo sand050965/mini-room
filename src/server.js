@@ -65,6 +65,9 @@ io.on("connection", (socket) => {
   socket.on("join-room", (roomId, userId, userName) => {
     socket.join(roomId);
     socket.to(roomId).emit("user-connected", userId, userName);
+    socket.on("message", (message) => {
+      io.to(roomId).emit("create-message", message, userId, userName);
+    });
     socket.on("disconnect", () => {
       socket.to(roomId).emit("user-disconnected", userId);
     });
