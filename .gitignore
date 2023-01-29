@@ -5,11 +5,11 @@
 .env
 
 # node
-node_modules
+**/node_modules
 
 # nginx
-nginx/private.key
-nginx/certificate.crt
+**/private.key
+**/certificate.crt
 
 # Plan.md
 Plan.md
