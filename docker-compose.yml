@@ -13,16 +13,15 @@ services:
       - app
 
   app:
-    image: sand050965/app
+    image: sand050965/miniroom
     container_name: app
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_HOST=${DATABASE_HOST}
-      - DATABASE_PORT=${DATABASE_PORT}
-      - DATABASE_SCHEMA=${DATABASE_SCHEMA}
-      - DATABASE_ROOT_USER=${DATABASE_ROOT_USER}
-      - DATABASE_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
+      - PORT=${PORT}
+      - DB_URI=${DB_URI}
+      - DB_NAME=${DB_NAME}
+      - DB_COLLECTION=${DB_COLLECTION}
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY_ID=${AWS_SECRET_ACCESS_KEY_ID}
       - AWS_CLOUDFRONT_URL=${AWS_CLOUDFRONT_URL}

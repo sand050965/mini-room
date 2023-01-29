@@ -1,10 +1,8 @@
-// import Video from "./video.js";
-// const video = new Video();
 const socket = io("/");
 const peer = new Peer(undefined, {
-  path: "/peerjs",
-  host: "/",
-  port: "3000",
+  host: "triptaipei.online",
+  port: 443,
+  secure: true,
 });
 
 let userId;

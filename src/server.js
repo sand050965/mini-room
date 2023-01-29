@@ -4,7 +4,6 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
-const { ExpressPeerServer } = require("peer");
 const { connectToDB, disconnectToDB } = require("./utils/DBUtil");
 const premeetingRouter = require("./routes/premeeting");
 const roomRouter = require("./routes/room");
@@ -14,9 +13,6 @@ const app = express();
 const port = process.env.PORT || 3000;
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
-const peerServer = ExpressPeerServer(server, {
-  debug: true,
-});
 
 app.set("views", `${__dirname}/views`);
 app.set("view engine", "ejs");
@@ -33,7 +29,7 @@ app.use(
 app.use(express.static(`${__dirname}/public`));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/peerjs", peerServer);
+// app.use("/peerjs", peerServer);
 app.use("/api/premeeting", premeetingRouter);
 app.use("/", roomRouter);
 
@@ -63,6 +59,7 @@ app.post("/api/join", (req, res) => {
 // -------------Socket IO-------------
 io.on("connection", (socket) => {
   socket.on("join-room", (roomId, userId, userName) => {
+    console.log("new user");
     socket.join(roomId);
     socket.to(roomId).emit("user-connected", userId, userName);
     socket.on("message", (message) => {

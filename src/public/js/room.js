@@ -256,9 +256,9 @@ const scrollToBottom = () => {
 
 // Socket IO & Peer JS
 const peer = new Peer(USER_ID, {
-  path: "/peerjs",
-  host: "/",
-  port: "3000",
+  host: "triptaipei.online",
+  port: 443,
+  secure: true,
 });
 
 peer.on("open", (id) => {
