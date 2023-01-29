@@ -37,9 +37,13 @@ textarea:focus {
   resize: none;
 }
 
-body {
+body, video {
   position: relative;
   background: #202124;
+}
+
+body {
+  position: relative;
 }
 
 .none {
@@ -102,6 +106,7 @@ body {
 .video-container .one-video-container {
   position: relative;
 }
+
 .video-container .two-video-container {
   position: absolute;
   bottom: 120px;
@@ -110,6 +115,11 @@ body {
   width: 234px !important;
   height: 132px !important;
 }
+
+.video-container .offcanvas-open {
+  right: 380px;
+}
+
 .video-container .more-video-grid {
   display: grid;
   grid-template-columns: max-content;

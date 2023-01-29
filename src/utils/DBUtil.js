@@ -1,6 +1,8 @@
-require("dotenv").config();
 const mongoose = require("mongoose");
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 mongoose.set("strictQuery", false);
+
 const uri = process.env.DB_URI;
 
 const connectToDB = () => {
@@ -34,4 +36,5 @@ const disconnectToDB = () => {
     console.log("Diconnected to database");
   });
 };
+
 module.exports = { connectToDB, disconnectToDB };

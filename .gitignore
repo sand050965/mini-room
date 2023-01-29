@@ -1,8 +1,14 @@
 # macOS
 .DS_Store
 
+# VS Code
+launch.json
+
 # env
 .env
+
+# config
+**/config.json
 
 # node
 **/node_modules

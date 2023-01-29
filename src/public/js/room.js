@@ -1,8 +1,9 @@
 const socket = io("/");
+import Video from "./video.js";
+const video = new Video();
 let myStream;
 let cnt = 1;
 let peers = {};
-let msgScrollTop;
 const myVideo = document.createElement("video");
 myVideo.muted = true;
 const videoContainer = document.querySelector("#videoContainer");
@@ -52,9 +53,15 @@ const init = async () => {
 };
 
 const getRoomInfo = async () => {
-  const response = await fetch(`/room/${ROOM_ID}`);
+  const response = await fetch(`/api/room/${ROOM_ID}`);
   const result = await response.json();
   cnt = result.data.length;
+};
+
+const getUserInfo = async (userId) => {
+  const response = await fetch(`/api/room/${ROOM_ID}/${userId}`);
+  const result = await response.json();
+  return result;
 };
 
 const videoGridStyle = (item, video) => {
@@ -97,9 +104,9 @@ const btnControl = (e) => {
   //   return;
   // }
   if (e.target.id.includes("audioBtn")) {
-    muteUnmute();
+    video.muteUnmute(myStream, audioBtn, audioBtnIcon);
   } else if (e.target.id.includes("videoBtn")) {
-    playStopVideo();
+    video.playStopVideo(myStream, videoContainer, videoBtn, videoBtnIcon);
   } else if (e.target.id.includes("shareBtn")) {
   } else if (e.target.id.includes("leaveBtn")) {
   } else if (e.target.id.includes("infoBtn")) {
@@ -128,64 +135,10 @@ const sendMsgControl = (e) => {
   }
 };
 
-// Mute and Unmute
-const muteUnmute = () => {
-  const enabled = myStream.getAudioTracks()[0].enabled;
-  if (enabled) {
-    myStream.getAudioTracks()[0].enabled = false;
-    mute();
-  } else {
-    myStream.getAudioTracks()[0].enabled = true;
-    unmute();
-  }
-};
-
-const unmute = () => {
-  audioBtnIcon.classList.add("fa-microphone");
-  audioBtnIcon.classList.remove("fa-microphone-slash");
-  audioBtn.classList.remove("btn-disable");
-  audioBtn.classList.add("btn-able");
-};
-
-const mute = () => {
-  audioBtnIcon.classList.remove("fa-microphone");
-  audioBtnIcon.classList.add("fa-microphone-slash");
-  audioBtn.classList.remove("btn-able");
-  audioBtn.classList.add("btn-disable");
-};
-
-// Play and Stop Video
-const playStopVideo = () => {
-  const enabled = myStream.getVideoTracks()[0].enabled;
-  if (enabled) {
-    myStream.getVideoTracks()[0].enabled = false;
-    stopVideo();
-  } else {
-    myStream.getVideoTracks()[0].enabled = true;
-    playVideo();
-  }
-};
-
-const playVideo = () => {
-  videoContainer.classList.remove("none");
-  // avatarContainer.classList.add("none");
-  videoBtnIcon.classList.remove("fa-video-slash");
-  videoBtnIcon.classList.add("fa-video");
-  videoBtn.classList.remove("btn-disable");
-  videoBtn.classList.add("btn-able");
-};
-
-const stopVideo = () => {
-  videoContainer.classList.add("none");
-  // avatarContainer.classList.remove("none");
-  videoBtnIcon.classList.remove("fa-video");
-  videoBtnIcon.classList.add("fa-video-slash");
-  videoBtn.classList.remove("btn-able");
-  videoBtn.classList.add("btn-disable");
-};
-
 const toggleSideBar = (tagetSideBar, tagetBsOffcanvas, btnId) => {
   let targetBtn;
+  const firstVideoItem = document.querySelector("#firstVideoItem");
+
   if (btnId.includes("Icon")) {
     targetBtn = document.querySelector(`#${btnId}`);
   } else {
@@ -209,10 +162,12 @@ const toggleSideBar = (tagetSideBar, tagetBsOffcanvas, btnId) => {
     tagetBsOffcanvas.hide();
     mainContainer.classList.remove("main-container-grid");
     targetBtn.classList.remove("side-btn-clicked");
+    firstVideoItem.classList.remove("offcanvas-open");
   } else {
     tagetBsOffcanvas.show();
     mainContainer.classList.add("main-container-grid");
     targetBtn.classList.add("side-btn-clicked");
+    if (cnt === 2) firstVideoItem.classList.add("offcanvas-open");
   }
 };
 
@@ -221,6 +176,7 @@ const addStream = (video, stream, item, userName) => {
   video.addEventListener("loadedmetadata", () => {
     video.play();
   });
+
   item.appendChild(video);
   item.classList.add("item");
   videoGridStyle(item, video);
@@ -235,6 +191,7 @@ const displayMessage = (message, userId, userName) => {
   if (userId === USER_ID) {
     userName = "You";
   }
+
   const messageContainer = document.querySelector("#messageContainer");
   const messageContent = document.createElement("div");
   const messageSender = document.createElement("b");
@@ -274,9 +231,14 @@ peer.on("call", (call) => {
   // Respond to stream that comes in
   const videoItem = document.createElement("div");
   const video = document.createElement("video");
+  
   call.on("stream", async (userVideoStream) => {
     await getRoomInfo();
-    addStream(video, userVideoStream, videoItem, "Aloha");
+    const userInfo = await getUserInfo(call.peer);
+    const userName = userInfo.data.userName;
+    // const otherUserIsMuted = userInfo.data.isMuted;
+    // const otherUserIsVideo = userInfo.data.isVideo;
+    addStream(video, userVideoStream, videoItem, userName);
   });
 });
 

@@ -1,8 +1,6 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const Room = require("../models/Room");
 const router = express.Router();
-const jsonParser = bodyParser.json();
 
 // meeting room
 router.get("/:roomId", async (req, res) => {
@@ -42,15 +40,5 @@ router.get("/:roomId", async (req, res) => {
     action: action,
   });
 });
-
-// get meeting room info
-router.get("/room/:roomId", async (req, res) => {
-  const roomId = req.params.roomId;
-  const roomInfo = await Room.find({ roomId: roomId });
-  res.status(200).json({ data: roomInfo });
-});
-
-// delete participant from meeting room
-
 
 module.exports = router;
