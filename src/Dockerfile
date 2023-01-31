@@ -5,8 +5,6 @@ WORKDIR /
 COPY ["package.json", "package-lock.json*", "./"]
 
 RUN npm install
-RUN sudo apt-get update
-RUN apt-get install vim
 
 COPY . .
 

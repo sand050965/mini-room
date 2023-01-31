@@ -1,6 +1,8 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+@import "common.css";
+
 body,
 div,
 fieldset,
@@ -14,10 +16,7 @@ h6,
 html,
 img,
 p {
-  margin: 0;
-  padding: 0;
   overflow: hidden;
-  outline: 0 !important;
 }
 
 h1,
@@ -32,34 +31,6 @@ h6 {
 body {
   position: relative;
   background: #000;
-}
-
-.none {
-  display: none !important;
-}
-
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.vertical-center {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-/*--------------------------------------------------------------
-# Modal
---------------------------------------------------------------*/
-.modal .modal-dialog {
-  min-width: 550px !important;
-}
-
-.modal h1 {
-  color: #000;
 }
 
 /*--------------------------------------------------------------

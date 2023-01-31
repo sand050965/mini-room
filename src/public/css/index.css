@@ -1,7 +1,7 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
-@import url("https://fonts.googleapis.com/css2?family=Jost:wght@600;700&display=swap");
+@import "common.css";
 
 body {
   margin: 0;
@@ -25,23 +25,10 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Jost", sans-serif;
   margin-top: 0;
   margin-bottom: 0.5rem;
   font-weight: 500;
   line-height: 1.2;
-}
-
-li a {
-  line-height: 50px;
-}
-
-button {
-  font-family: "Jost", sans-serif;
-}
-
-.none {
-  display: none;
 }
 
 /*--------------------------------------------------------------
@@ -138,7 +125,7 @@ nav .avatar-container img {
 .hero .drop-down-btn {
   line-height: 40px;
   /* background: #0259f0; */
-  background: #70A9a1;
+  background: #70a9a1;
   color: #fff;
   font-size: 19px;
 }
@@ -188,7 +175,7 @@ nav .avatar-container img {
 .hero .disable {
   background: transparent;
   border: transparent;
-  color:rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .hero .img-fluid {

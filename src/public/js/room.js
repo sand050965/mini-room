@@ -1,12 +1,14 @@
-const socket = io("/");
 import Video from "./video.js";
+import { preload } from "./common.js";
+
+const socket = io("/");
 const video = new Video();
 let myStream;
 let cnt = 1;
 let peers = {};
 const myVideo = document.createElement("video");
 myVideo.muted = true;
-const videoContainer = document.querySelector("#videoContainer");
+const videosContainer = document.querySelector("#videosContainer");
 const audioBtn = document.querySelector("#audioBtn");
 const audioBtnIcon = document.querySelector("#audioBtnIcon");
 const videoBtn = document.querySelector("#videoBtn");
@@ -41,59 +43,54 @@ const bsOffcanvasArray = [
   BsChatOffcanvas,
 ];
 
+/**
+ * Init App
+ */
 const init = async () => {
   try {
     myStream = await navigator.mediaDevices.getUserMedia({
       video: true,
       audio: true,
     });
+    const videoItemContainer = document.createElement("div");
     const videoItem = document.createElement("div");
-    addStream(myVideo, myStream, videoItem, "You");
-  } catch (e) {}
+    const nameTag = document.createElement("div");
+    await addStream(
+      myVideo,
+      myStream,
+      videoItemContainer,
+      videoItem,
+      nameTag,
+      "You",
+      USER_ID
+    );
+  } catch (e) {
+    console.log(e.message);
+    preload();
+  }
 };
 
+/**
+ * Get Room Info
+ */
 const getRoomInfo = async () => {
   const response = await fetch(`/api/room/${ROOM_ID}`);
   const result = await response.json();
   cnt = result.data.length;
 };
 
+/**
+ * Get User Info
+ */
 const getUserInfo = async (userId) => {
   const response = await fetch(`/api/room/${ROOM_ID}/${userId}`);
   const result = await response.json();
   return result;
 };
 
-const videoGridStyle = (item, video) => {
-  if (cnt === 1) {
-    item.classList.add("item");
-    item.classList.add("one-video-container");
-    item.setAttribute("id", "firstVideoItem");
-    video.classList.add("one-video");
-    video.classList.add("video-rotate");
-    video.setAttribute("id", "firstVideo");
-  } else if (cnt === 2) {
-    const firstVideoItem = document.querySelector("#firstVideoItem");
-    const firstVideo = document.querySelector("#firstVideo");
-    item.classList.add("item");
-    firstVideoItem.classList.remove("one-video-container");
-    firstVideoItem.classList.add("two-video-container");
-    item.classList.add("one-video-container");
-    item.setAttribute("id", "secondVideo");
-    video.classList.add("one-video");
-    video.classList.remove("one-video");
-    video.classList.add("more-video");
-  } else {
-    const firstVideoItem = document.querySelector("#firstVideoItem");
-    const secondVideoItem = document.querySelector("#secondVideoItem");
-    firstVideoItem.classList.remove("two-video-container");
-    secondVideoItem.classList.remove("one-video-container");
-    item.classList.add("item");
-    item.classList.add("more-video-grid");
-    video.classList.add("more-video");
-  }
-};
-
+/**
+ * Button Control
+ */
 const btnControl = (e) => {
   // Modal Display
   // if (!audioAuth) {
@@ -106,7 +103,7 @@ const btnControl = (e) => {
   if (e.target.id.includes("audioBtn")) {
     video.muteUnmute(myStream, audioBtn, audioBtnIcon);
   } else if (e.target.id.includes("videoBtn")) {
-    video.playStopVideo(myStream, videoContainer, videoBtn, videoBtnIcon);
+    video.playStopVideo(myStream, videosContainer, videoBtn, videoBtnIcon);
   } else if (e.target.id.includes("shareBtn")) {
   } else if (e.target.id.includes("leaveBtn")) {
   } else if (e.target.id.includes("infoBtn")) {
@@ -120,6 +117,9 @@ const btnControl = (e) => {
   }
 };
 
+/**
+ * Keydow Control
+ */
 const keydowControl = (e) => {
   if (e.which === 13) {
     e.preventDefault();
@@ -127,6 +127,9 @@ const keydowControl = (e) => {
   }
 };
 
+/**
+ * Send Message Control
+ */
 const sendMsgControl = (e) => {
   if (e.target.value.trim().length === 0) {
     sendMsgBtn.classList.remove("send-msg-btn-able");
@@ -135,9 +138,12 @@ const sendMsgControl = (e) => {
   }
 };
 
+/**
+ * Toggle Side Bar
+ */
 const toggleSideBar = (tagetSideBar, tagetBsOffcanvas, btnId) => {
   let targetBtn;
-  const firstVideoItem = document.querySelector("#firstVideoItem");
+  const selfVideoItem = document.querySelector("#selfVideoItem");
 
   if (btnId.includes("Icon")) {
     targetBtn = document.querySelector(`#${btnId}`);
@@ -162,31 +168,132 @@ const toggleSideBar = (tagetSideBar, tagetBsOffcanvas, btnId) => {
     tagetBsOffcanvas.hide();
     mainContainer.classList.remove("main-container-grid");
     targetBtn.classList.remove("side-btn-clicked");
-    firstVideoItem.classList.remove("offcanvas-open");
+    selfVideoItem.classList.remove("offcanvas-open");
   } else {
     tagetBsOffcanvas.show();
     mainContainer.classList.add("main-container-grid");
     targetBtn.classList.add("side-btn-clicked");
-    if (cnt === 2) firstVideoItem.classList.add("offcanvas-open");
+    if (cnt === 2) selfVideoItem.classList.add("offcanvas-open");
   }
 };
 
-const addStream = (video, stream, item, userName) => {
+/**
+ * Video Grid Style
+ */
+const videoGridStyle = (itemContainer, item, video, userId) => {
+  if (cnt === 1) {
+    itemContainer.setAttribute("id", "selfVideoItemContainer");
+    itemContainer.classList.add("video-container");
+    item.setAttribute("id", "selfVideoItem");
+    item.classList.add("self-item");
+    video.setAttribute("id", "selfVideo");
+    video.classList.add("one-self-video");
+    video.classList.add("video-rotate");
+  } else if (cnt === 2) {
+    // self video
+    const selfVideoItemContainer = document.querySelector(
+      "#selfVideoItemContainer"
+    );
+    const selfVideoItem = document.querySelector("#selfVideoItem");
+    const selfVideo = document.querySelector("#selfVideo");
+    selfVideoItemContainer.classList.remove("video-container");
+    selfVideoItemContainer.classList.add("two-self-video-container");
+    selfVideo.classList.remove("one-self-video");
+    selfVideo.classList.add("video");
+
+    // other's video
+    itemContainer.setAttribute("id", `${userId}VideoItemContainer`);
+    itemContainer.setAttribute("name", "otherVideoItemContainer");
+    itemContainer.classList.add("video-container");
+    item.setAttribute("id", `${userId}VideoItem`);
+    item.setAttribute("name", "otherVideoItem");
+    item.classList.add("two-other-item");
+    video.setAttribute("id", `${userId}Video`);
+    video.setAttribute("name", "otherVideo");
+    video.classList.add("video");
+  } else {
+    // videosContainer
+    videosContainer.classList.add("flex-auto-wrap");
+    videosContainer.classList.add("more-videos-grid");
+
+    let columns;
+    if (cnt < 9) {
+      columns = parseInt(cnt / 2) + (cnt % 2);
+    } else {
+      columns = 3;
+    }
+
+    videosContainer.style.setProperty(
+      "grid-template-columns",
+      `repeat(${columns}, 1fr)`
+    );
+
+    // self video
+    const selfVideoItemContainer = document.querySelector(
+      "#selfVideoItemContainer"
+    );
+    const selfVideoItem = document.querySelector("#selfVideoItem");
+    const selfVideo = document.querySelector("#selfVideo");
+    selfVideoItemContainer.classList.remove("two-self-video-container");
+    selfVideoItemContainer.classList.add("video-container");
+    selfVideoItem.classList.remove("self-item");
+    selfVideoItem.classList.add("more-item");
+    selfVideo.classList.remove("one-self-video");
+    selfVideo.classList.add("video");
+
+    // other's video
+    const otherVideoItems = document.querySelectorAll(
+      "div[name='otherVideoItem']"
+    );
+    for (const item of otherVideoItems) {
+      item.classList.remove("two-other-item");
+      item.classList.add("more-item");
+    }
+
+    itemContainer.setAttribute("id", `${userId}VideoItemContainer`);
+    itemContainer.setAttribute("name", "otherVideoItemContainer");
+    itemContainer.classList.add("video-container");
+    item.setAttribute("id", `${userId}VideoItem`);
+    item.setAttribute("name", "otherVideoItem");
+    item.classList.add("more-item");
+    video.setAttribute("id", `${userId}Video`);
+    video.setAttribute("name", "otherVideo");
+    video.classList.add("video");
+  }
+};
+
+/**
+ * Add Stream
+ */
+const addStream = (
+  video,
+  stream,
+  videoItemContainer,
+  item,
+  nameTag,
+  userName,
+  userId
+) => {
   video.srcObject = stream;
-  video.addEventListener("loadedmetadata", () => {
-    video.play();
+  video.addEventListener("loadedmetadata", async () => {
+    await video.play();
+    preload();
   });
 
   item.appendChild(video);
-  item.classList.add("item");
-  videoGridStyle(item, video);
-  const nameTag = document.createElement("div");
+  item.classList.add("center");
+  videoGridStyle(videoItemContainer, item, video, userId);
   nameTag.textContent = userName;
   nameTag.classList.add("name-tag");
   item.appendChild(nameTag);
-  videoContainer.append(item);
+  videoItemContainer.appendChild(item);
+  videoItemContainer.classList.add("center");
+  videosContainer.append(videoItemContainer);
 };
 
+/**
+ * Display Message
+ */
 const displayMessage = (message, userId, userName) => {
   if (userId === USER_ID) {
     userName = "You";
@@ -206,6 +313,9 @@ const displayMessage = (message, userId, userName) => {
   messageContainer.appendChild(messageContent);
 };
 
+/**
+ * Scroll To Bottom
+ */
 const scrollToBottom = () => {
   const messageContainer = document.querySelector("#messageContainer");
   messageContainer.scrollTop = messageContainer.scrollHeight;
@@ -223,29 +333,39 @@ peer.on("open", (id) => {
 });
 
 // Receive Other User's Stream (Listen to one we get call)
-peer.on("call", (call) => {
+peer.on("call", async (call) => {
   // Answer call
-  call.answer(myStream);
+  await call.answer(myStream);
   peers[call.peer] = call;
 
   // Respond to stream that comes in
+  const videoItemCOntainer = document.createElement("div");
   const videoItem = document.createElement("div");
   const video = document.createElement("video");
-  
-  call.on("stream", async (userVideoStream) => {
+  const nameTag = document.createElement("div");
+
+  await call.on("stream", async (userVideoStream) => {
     await getRoomInfo();
     const userInfo = await getUserInfo(call.peer);
     const userName = userInfo.data.userName;
     // const otherUserIsMuted = userInfo.data.isMuted;
     // const otherUserIsVideo = userInfo.data.isVideo;
-    addStream(video, userVideoStream, videoItem, userName);
+    await addStream(
+      video,
+      userVideoStream,
+      videoItemCOntainer,
+      videoItem,
+      nameTag,
+      userName,
+      call.peer
+    );
   });
 });
 
 // new user connected
 socket.on("user-connected", async (userId, userName) => {
   await getRoomInfo();
-  connectToNewUser(userId, userName, myStream);
+  await connectToNewUser(userId, userName, myStream);
 });
 
 // create message
@@ -271,18 +391,28 @@ const sendMessage = () => {
 };
 
 // // Make Call
-const connectToNewUser = (userId, userName, stream) => {
+const connectToNewUser = async (userId, userName, stream) => {
   const call = peer.call(userId, stream);
+  const videoItemContainer = document.createElement("div");
   const videoItem = document.createElement("div");
   const video = document.createElement("video");
+  const nameTag = document.createElement("div");
 
   // Receive Other User's Stream (Listen to someone try to call us)
-  call.on("stream", async (userVideoStream) => {
+  await call.on("stream", async (userVideoStream) => {
     await getRoomInfo();
-    addStream(video, userVideoStream, videoItem, userName);
+    await addStream(
+      video,
+      userVideoStream,
+      videoItemContainer,
+      videoItem,
+      nameTag,
+      userName,
+      call.peer
+    );
   });
 
-  call.on("close", () => {
+  await call.on("close", () => {
     video.remove();
   });
 

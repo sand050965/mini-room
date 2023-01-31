@@ -1,3 +1,7 @@
+import { preload } from "./common.js";
+import getUserMediaStream from "./common.js";
+import Video from "./video.js";
+const video = new Video();
 const socket = io("/");
 const peer = new Peer(undefined, {
   host: "triptaipei.online",
@@ -20,7 +24,9 @@ const avatarContainer = document.querySelector("#avatarContainer");
 const title = document.querySelector("#title");
 const subtitle = document.querySelector("#subtitle");
 const audioBtn = document.querySelector("#audioBtn");
+const audioBtnIcon = document.querySelector("#audioBtnIcon");
 const videoBtn = document.querySelector("#videoBtn");
+const videoBtnIcon = document.querySelector("#videoBtnIcon");
 const btnsArray = [videoBtn, audioBtn];
 const userName = document.querySelector("#userName");
 const nameInput = document.querySelector("#nameInput");
@@ -35,7 +41,7 @@ peer.on("open", (id) => {
 // ============================
 
 // Init App
-const init = () => {
+const init = async () => {
   myVideo.muted = true;
 
   // AOS
@@ -59,17 +65,12 @@ const init = () => {
 // Process Video and Audio Stream
 const processUserStream = async () => {
   await getStream();
-  // await getAudioStream();
-  // await getVideoStream();
 };
 
 // Get Stream
 const getStream = async () => {
   try {
-    myStream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: true,
-    });
+    myStream = await getUserMediaStream();
     audioAuth = true;
     videoAuth = true;
     addStream(myVideo, myStream);
@@ -78,45 +79,16 @@ const getStream = async () => {
     videoAuth = false;
     mute();
     stopVideo();
+    preload();
   }
 };
-
-// Get Audio Stream
-// const getAudioStream = async () => {
-//   try {
-//     myAudioStream = await navigator.mediaDevices.getUserMedia({
-//       audio: true,
-//     });
-//     audioAuth = true;
-//     videoAuth = true;
-//   } catch (e) {
-//     if (myAudioStream === undefined) {
-//       audioAuth = false;
-//       mute();
-//     }
-//   }
-// };
-
-// Get Video Stream
-// const getVideoStream = async () => {
-//   try {
-//     myVideoStream = await navigator.mediaDevices.getUserMedia({
-//       video: true,
-//     });
-//     videoAuth = true;
-//   } catch (e) {
-//     if (myVideoStream === undefined) {
-//       videoAuth = false;
-//       stopVideo();
-//     }
-//   }
-// };
 
 // Add Stream on HTML
 const addStream = (video, stream) => {
   video.srcObject = stream;
-  video.addEventListener("loadedmetadata", () => {
-    video.play();
+  video.addEventListener("loadedmetadata", async () => {
+    await video.play();
+    preload();
   });
 
   videoContainer.appendChild(video);
@@ -136,10 +108,10 @@ const btnControl = (e) => {
 
   switch (e.target.id) {
     case "audioBtn":
-      muteUnmute();
+      video.muteUnmute(myStream, audioBtn, audioBtnIcon);
       break;
     case "videoBtn":
-      playStopVideo();
+      video.playStopVideo(myStream, videoContainer, videoBtn, videoBtnIcon);
       break;
   }
 };

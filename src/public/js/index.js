@@ -46,8 +46,10 @@ const startMeeting = async () => {
 const joinMeeting = async () => {
   let roomId = input.value.trim();
   if (roomId.startsWith("miniroom.online")) {
-    roomId.replace("miniroom.online/", "");
+    roomId = roomId.replace("miniroom.online/", "");
   }
+
+  console.log(roomId);
 
   const data = { roomId: roomId };
 

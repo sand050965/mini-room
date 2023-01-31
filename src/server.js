@@ -44,14 +44,23 @@ app.get("/", (req, res) => {
 
 // -------------Socket IO-------------
 io.on("connection", (socket) => {
-  socket.on("join-room", (roomId, userId, userName) => {
-    socket.join(roomId);
-    socket.to(roomId).emit("user-connected", userId, userName);
-    socket.on("message", (message) => {
-      io.to(roomId).emit("create-message", message, userId, userName);
+  
+  socket.on("join-room", (roomId, userId, userName) => { //user join room event
+
+    socket.join(roomId); //user join room event
+
+    socket.to(roomId).emit("user-connected", userId, userName); // emit to users in the room that a new user connected
+
+    socket.on("message", (message) => { // users send message event
+
+      io.to(roomId).emit("create-message", message, userId, userName); // emit to users in the room what message that user sent
+    
     });
-    socket.on("disconnect", () => {
-      socket.to(roomId).emit("user-disconnected", userId);
+
+    socket.on("disconnect", () => { // user disconnect event
+
+      socket.to(roomId).emit("user-disconnected", userId); // emit to users in the room that a user just leave
+    
     });
   });
 });
