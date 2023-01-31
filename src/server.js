@@ -2,15 +2,15 @@
 const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
+require("dotenv").config();
 const cors = require("cors");
-const { v4: uuidv4 } = require("uuid");
-const { connectToDB, disconnectToDB } = require("./utils/DBUtil");
-const premeetingRouter = require("./routes/premeeting");
-const roomRouter = require("./routes/room");
+const { connectToDB } = require("./utils/DBUtil");
+const premeetingRouter = require("./routes/premeetingRoute");
+const roomRouter = require("./routes/roomRoute");
+const pageRouter = require("./routes/pageRoute");
 
 // app, socket io, peer js and port config
 const app = express();
-const port = process.env.PORT || 3000;
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
 
@@ -26,12 +26,13 @@ app.use(
     saveUninitialized: true,
   })
 );
+
 app.use(express.static(`${__dirname}/public`));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use("/peerjs", peerServer);
+app.use("/", pageRouter);
 app.use("/api/premeeting", premeetingRouter);
-app.use("/", roomRouter);
+app.use("/api/room", roomRouter);
 
 // DB connection
 connectToDB();
@@ -41,34 +42,27 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-// start meeting
-app.get("/api/start", (req, res) => {
-  const newRoomId = uuidv4();
-  req.session.action = "start";
-  res.status(200).json({ roomId: newRoomId });
-});
-
-// join meeting
-app.post("/api/join", (req, res) => {
-  const joinRoomId = req.body.roomId;
-  req.session.action = "join";
-  // validation...
-  res.status(200).json({ ok: true });
-});
-
 // -------------Socket IO-------------
 io.on("connection", (socket) => {
-  socket.on("join-room", (roomId, userId, userName) => {
-    console.log("new user");
-    socket.join(roomId);
-    socket.to(roomId).emit("user-connected", userId, userName);
-    socket.on("message", (message) => {
-      io.to(roomId).emit("create-message", message, userId, userName);
+  
+  socket.on("join-room", (roomId, userId, userName) => { //user join room event
+
+    socket.join(roomId); //user join room event
+
+    socket.to(roomId).emit("user-connected", userId, userName); // emit to users in the room that a new user connected
+
+    socket.on("message", (message) => { // users send message event
+
+      io.to(roomId).emit("create-message", message, userId, userName); // emit to users in the room what message that user sent
+    
     });
-    socket.on("disconnect", () => {
-      socket.to(roomId).emit("user-disconnected", userId);
+
+    socket.on("disconnect", () => { // user disconnect event
+
+      socket.to(roomId).emit("user-disconnected", userId); // emit to users in the room that a user just leave
+    
     });
   });
 });
 
-server.listen(port);
+server.listen(process.env.PORT || 3000);

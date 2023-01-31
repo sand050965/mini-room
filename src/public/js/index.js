@@ -36,7 +36,7 @@ const showBtn = (e) => {
 
 // start meeting
 const startMeeting = async () => {
-  const respone = await fetch(`/api/start`);
+  const respone = await fetch(`/api/premeeting/start`);
   const result = await respone.json();
   const roomId = result.roomId;
   window.location = `/${roomId}`;
@@ -46,8 +46,10 @@ const startMeeting = async () => {
 const joinMeeting = async () => {
   let roomId = input.value.trim();
   if (roomId.startsWith("miniroom.online")) {
-    roomId.replace("miniroom.online/", "");
+    roomId = roomId.replace("miniroom.online/", "");
   }
+
+  console.log(roomId);
 
   const data = { roomId: roomId };
 
@@ -58,7 +60,7 @@ const joinMeeting = async () => {
     },
     body: JSON.stringify(data),
   };
-  const response = await fetch("/api/join", postData);
+  const response = await fetch("/api/premeeting/join", postData);
   const result = await response.json();
   if (result.ok) {
     window.location = `/${roomId}`;
