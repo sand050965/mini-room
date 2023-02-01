@@ -1,4 +1,15 @@
 /**
+ * Init AOS
+ */
+export const initAOS = (AOS) => {
+  AOS.init({
+    easing: "ease-in-out",
+    once: true,
+    mirror: false,
+  });
+};
+
+/**
  * Preloader
  */
 export const preload = () => {
@@ -9,13 +20,13 @@ export const preload = () => {
 };
 
 /**
- * Get User Media Stream
+ * Display Modal
  */
-const getUserMediaStream = () => {
-  return navigator.mediaDevices.getUserMedia({
-    video: true,
-    audio: true,
-  });
-};
+export const displayModal = (isDisplayModal) => {
+  const modal = new bootstrap.Modal(document.querySelector("#modalContainer"));
 
-export default getUserMediaStream;
+  if (isDisplayModal) {
+    modal.show();
+    return;
+  }
+};

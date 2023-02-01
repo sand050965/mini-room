@@ -151,40 +151,48 @@ body {
   width: 100%;
 }
 
-.side-bar .icons-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
-}
-
-.side-bar .icons-container i {
-  font-size: 32px;
+.side-bar i {
   color: #fff;
-  padding: 10px;
-  cursor: pointer;
 }
 
-.icons-container i:hover {
-  background-color: #333;
+.side-bar .fa-solid {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
 }
 
-.icons-container .disable {
-  font-size: 32px;
-  color: red !important;
+.premeeting-button-container .media-buttons-container {
+  display: grid;
+  grid-template-columns: repeat(2, 56px);
+  grid-template-rows: 56px;
+  gap: 30px;
+  margin-top: 24px;
 }
 
+.premeeting-button-container .media-buttons-container i {
+  font-size: 28px;
+  height: 100%;
+}
+
+.alert-init-diaplay {
+  opacity: 0;
+}
+
+/*--------------------------------------------------------------
+# Media Query
+--------------------------------------------------------------*/
 @media (max-width: 720px) {
   .premeetin-container .avatar-container,
   .premeetin-container .video-container {
     width: 100%;
-    height: calc(100vh - 350px);
+    height: calc(100vh - 500px);
   }
 
   .premeetin-container .side-bar {
     position: absolute;
-    top: calc(100vh - 350px) !important;
+    top: calc(100vh - 500px) !important;
     width: 100vw;
-    min-height: 350px !important;
+    min-height: 500px !important;
   }
 }
 

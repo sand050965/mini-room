@@ -1,5 +1,4 @@
-import { preload } from "./common.js";
-import getUserMediaStream from "./common.js";
+import { initAOS, preload, displayModal } from "./common.js";
 import Video from "./video.js";
 const video = new Video();
 const socket = io("/");
@@ -10,15 +9,11 @@ const peer = new Peer(undefined, {
 });
 
 let userId;
-let audioAuth = false;
-let videoAuth = false;
+let isPermissionDenied = true;
 let isMuted = false;
 let isStoppedVideo = false;
 let myStream = null;
-let myVideoStream = null;
-let myAudioStream = null;
 const myVideo = document.createElement("video");
-const modal = new bootstrap.Modal(document.querySelector("#modalContainer"));
 const videoContainer = document.querySelector("#videoContainer");
 const avatarContainer = document.querySelector("#avatarContainer");
 const title = document.querySelector("#title");
@@ -32,27 +27,26 @@ const userName = document.querySelector("#userName");
 const nameInput = document.querySelector("#nameInput");
 const confirmBtn = document.querySelector("#confirmBtn");
 
-// Peer JS
+/**
+ * Peer JS
+ */
 peer.on("open", (id) => {
   userId = id;
   userName.innerHTML = `${userId}`;
 });
 
-// ============================
+// =================================================================
 
-// Init App
+/**
+ * Init App
+ */
 const init = async () => {
   myVideo.muted = true;
 
-  // AOS
-  AOS.init();
-
-  // Hide Modal
-  modal.hide();
-
   // Process User Stream
-  processUserStream();
+  await getStream();
 
+  // Join Or Start Meeting
   if (ACTION === "start") {
     title.textContent = "Start The Meeting";
     subtitle.textContent = "Ready to start this meeting ?";
@@ -62,114 +56,100 @@ const init = async () => {
   }
 };
 
-// Process Video and Audio Stream
-const processUserStream = async () => {
-  await getStream();
-};
-
-// Get Stream
+/**
+ * Get Video and Audio Stream
+ */
 const getStream = async () => {
   try {
-    myStream = await getUserMediaStream();
-    audioAuth = true;
-    videoAuth = true;
+    myStream = await video.getUserMediaStream();
+    displayAlert(true);
+    isPermissionDenied = false;
     addStream(myVideo, myStream);
   } catch (e) {
-    audioAuth = false;
-    videoAuth = false;
-    mute();
-    stopVideo();
     preload();
+    displayAlert(false);
+    isPermissionDenied = true;
+    isMuted = video.mute(audioBtn, audioBtnIcon);
+    isStoppedVideo = video.stopVideo(
+      videoContainer,
+      avatarContainer,
+      videoBtn,
+      videoBtnIcon
+    );
   }
 };
 
-// Add Stream on HTML
-const addStream = (video, stream) => {
-  video.srcObject = stream;
-  video.addEventListener("loadedmetadata", async () => {
-    await video.play();
+/**
+ * Add Video and Audio Stream
+ */
+const addStream = (videoEl, stream) => {
+  videoEl.srcObject = stream;
+  videoEl.addEventListener("loadedmetadata", async () => {
+    await videoEl.play();
     preload();
   });
 
-  videoContainer.appendChild(video);
-  unmute();
-  playVideo();
+  videoContainer.appendChild(videoEl);
+  isMuted = video.unmute(audioBtn, audioBtnIcon);
+  isStoppedVideo = video.playVideo(
+    videoContainer,
+    avatarContainer,
+    videoBtn,
+    videoBtnIcon
+  );
 };
 
+/**
+ * Hotkeys Control
+ */
+const hotKeysControl = (e) => {
+  if (e.which === 13) {
+    e.preventDefault();
+    confirmState();
+  }
+};
+
+/**
+ * Buttons Control
+ */
 const btnControl = (e) => {
-  // Modal Display
-  if (!audioAuth) {
-    modal.show();
-    return;
-  } else if (!videoAuth) {
-    modal.show();
-    return;
-  }
+  displayModal(isPermissionDenied);
 
-  switch (e.target.id) {
-    case "audioBtn":
-      video.muteUnmute(myStream, audioBtn, audioBtnIcon);
-      break;
-    case "videoBtn":
-      video.playStopVideo(myStream, videoContainer, videoBtn, videoBtnIcon);
-      break;
+  if (e.target.id.includes("audioBtn")) {
+    isMuted = video.muteUnmute(myStream, audioBtn, audioBtnIcon);
+  } else if (e.target.id.includes("videoBtn")) {
+    isStoppedVideo = video.playStopVideo(
+      myStream,
+      videoContainer,
+      avatarContainer,
+      videoBtn,
+      videoBtnIcon
+    );
   }
 };
 
-const muteUnmute = () => {
-  const enabled = myStream.getAudioTracks()[0].enabled;
-  if (enabled) {
-    myStream.getAudioTracks()[0].enabled = false;
-    mute();
+/**
+ * Display Alert
+ */
+const displayAlert = (isSuccess) => {
+  const FailedAlert = document.querySelector("#FailedAlert");
+  const SuccessAlert = document.querySelector("#SuccessAlert");
+  if (isSuccess) {
+    SuccessAlert.classList.remove("none");
+    SuccessAlert.setAttribute("data-aos", "fade-up");
+    FailedAlert.classList.add("none");
+    initAOS(AOS);
   } else {
-    myStream.getAudioTracks()[0].enabled = true;
-    unmute();
+    FailedAlert.classList.remove("none");
+    FailedAlert.setAttribute("data-aos", "fade-up");
+    SuccessAlert.classList.add("none");
+    initAOS(AOS);
   }
 };
 
-const playStopVideo = () => {
-  const enabled = myStream.getVideoTracks()[0].enabled;
-  if (enabled) {
-    myStream.getVideoTracks()[0].enabled = false;
-    stopVideo();
-  } else {
-    myStream.getVideoTracks()[0].enabled = true;
-    playVideo();
-  }
-};
-
-const unmute = () => {
-  isMuted = false;
-  audioBtn.classList.add("fa-microphone");
-  audioBtn.classList.remove("fa-microphone-slash");
-  audioBtn.classList.remove("disable");
-};
-
-const mute = () => {
-  isMuted = true;
-  audioBtn.classList.remove("fa-microphone");
-  audioBtn.classList.add("fa-microphone-slash");
-  audioBtn.classList.add("disable");
-};
-
-const playVideo = () => {
-  isStoppedVideo = false;
-  videoContainer.classList.remove("none");
-  avatarContainer.classList.add("none");
-  videoBtn.classList.remove("fa-video-slash");
-  videoBtn.classList.remove("disable");
-  videoBtn.classList.add("fa-video");
-};
-
-const stopVideo = () => {
-  isStoppedVideo = true;
-  videoContainer.classList.add("none");
-  avatarContainer.classList.remove("none");
-  videoBtn.classList.remove("fa-video");
-  videoBtn.classList.add("fa-video-slash");
-  videoBtn.classList.add("disable");
-};
-
+/**
+ * Display Name
+ */
 const displayName = (e) => {
   if (e.target.value === "") {
     userName.textContent = `${userId}`;
@@ -178,18 +158,16 @@ const displayName = (e) => {
   userName.textContent = e.target.value;
 };
 
+/**
+ * Confirm State
+ */
 const confirmState = async () => {
-  if (!audioAuth && !videoAuth) {
-    modal.show();
-    return;
-  }
+  displayModal(isPermissionDenied);
 
   const data = {
     userId: userId,
     userName: userName.textContent.trim(),
     roomId: ROOM_ID.toString(),
-    videoAuth: videoAuth,
-    audioAuth: audioAuth,
     isMuted: isMuted,
     isStoppedVideo: isStoppedVideo,
     isReadyState: true,
@@ -209,7 +187,11 @@ const confirmState = async () => {
   }
 };
 
+// ========================== Event Listeners ==========================
+
 window.addEventListener("load", init);
+
+window.addEventListener("keydown", hotKeysControl);
 
 for (const btn of btnsArray) {
   btn.addEventListener("click", btnControl);

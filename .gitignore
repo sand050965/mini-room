@@ -2,7 +2,8 @@
 .DS_Store
 
 # VS Code
-launch.json
+.vscode
+**/launch.json
 
 # env
 .env

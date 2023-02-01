@@ -8,9 +8,9 @@
         <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
         <!-- Vendor CSS Files -->
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-        <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css"
-              rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+              rel="stylesheet">
+        <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css"
               rel="stylesheet">
         <!-- Template Main CSS File -->
         <link rel="stylesheet" href="/css/room.css">
@@ -18,8 +18,6 @@
             const ROOM_ID = '<%= roomId %>';
             const USER_ID = '<%= userId %>'
             const USER_NAME = '<%= userName %>';
-            const AUDIO_AUTH = '<%= audioAuth %>';
-            const VIDEO_AUTH = '<%= videoAuth %>';
             const IS_MUTED = '<%= isMuted %>';
             const IS_STOPPED_VIDEO = '<%= isStoppedVideo %>';
         </script>
@@ -29,8 +27,8 @@
         <!-- Preloader -->
         <div id="preloader" class="preloader"></div>
         <!-- Modal -->
-        <div class="modal fade"
-             id="modalContainer"
+        <div id="modalContainer"
+             class="modal fade"
              tabindex="-1"
              aria-labelledby="exampleModalLabel"
              aria-hidden="true">
@@ -44,7 +42,7 @@
                                 aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Mini Room needs access to your camera and microphone so that other participants can see and hear you.
+                        Mini Room needs access to your camera and microphone so that other participants can see and hear you. Mini Room will ask you to confirm this decision on each browser and computer you use.
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Dismiss</button>
@@ -117,7 +115,11 @@
                         <div id="messageContainer" class="message-container"></div>
                     </div>
                     <div id="messageInputContainer" class="message-input-container">
-                        <textarea id="messageInput" rows="1" type="text" class="message-input center" placeholder="Send a message to everyone"></textarea>
+                        <textarea id="messageInput"
+                                  rows="1"
+                                  type="text"
+                                  class="message-input center"
+                                  placeholder="Send a message to everyone"></textarea>
                         <span id="sendMsgBtn" type="btn" class="send-msg-btn center" type="button"><i class="fa-solid fa-paper-plane"></i></span>
                     </div>
                 </div>
@@ -161,7 +163,7 @@
     <!-- Vendor JS Files -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
-    <script src="https://WebRTC.github.io/adapter/adapter-latest.js"> </script>
+    <script src="https://WebRTC.github.io/adapter/adapter-latest.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://kit.fontawesome.com/8de498932c.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>

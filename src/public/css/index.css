@@ -3,22 +3,6 @@
 --------------------------------------------------------------*/
 @import "common.css";
 
-body {
-  margin: 0;
-  padding: 0;
-}
-
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.align-center {
-  display: flex;
-  align-items: center;
-}
-
 h1,
 h2,
 h3,

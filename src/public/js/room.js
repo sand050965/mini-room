@@ -48,10 +48,7 @@ const bsOffcanvasArray = [
  */
 const init = async () => {
   try {
-    myStream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
-    });
+    myStream = await video.getUserMedia();
     const videoItemContainer = document.createElement("div");
     const videoItem = document.createElement("div");
     const nameTag = document.createElement("div");
@@ -118,9 +115,9 @@ const btnControl = (e) => {
 };
 
 /**
- * Keydow Control
+ * Hotkeys Control
  */
-const keydowControl = (e) => {
+const hotKeysControl = (e) => {
   if (e.which === 13) {
     e.preventDefault();
     sendMessage();
@@ -245,6 +242,7 @@ const videoGridStyle = (itemContainer, item, video, userId) => {
     const otherVideoItems = document.querySelectorAll(
       "div[name='otherVideoItem']"
     );
+
     for (const item of otherVideoItems) {
       item.classList.remove("two-other-item");
       item.classList.add("more-item");
@@ -390,7 +388,7 @@ const sendMessage = () => {
   }
 };
 
-// // Make Call
+// Make Call
 const connectToNewUser = async (userId, userName, stream) => {
   const call = peer.call(userId, stream);
   const videoItemContainer = document.createElement("div");
@@ -419,9 +417,12 @@ const connectToNewUser = async (userId, userName, stream) => {
   peers[userId] = call;
 };
 
+/**
+ * Event Listeners
+ */
 window.addEventListener("load", init);
 
-window.addEventListener("keydown", keydowControl);
+window.addEventListener("keydown", hotKeysControl);
 
 messageInput.addEventListener("keyup", sendMsgControl);
 

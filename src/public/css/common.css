@@ -136,3 +136,38 @@ button {
     transform: rotate(360deg);
   }
 }
+
+/*--------------------------------------------------------------
+# Button Style
+--------------------------------------------------------------*/
+.circle-btn {
+  width: 100%;
+  height: 100%;
+  border-radius: 50px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.oval-btn {
+  width: 100%;
+  height: 100%;
+  border-radius: 40px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.btn-able {
+  background-color: #3c4043;
+}
+
+.btn-able:hover {
+  background-color: #4d5256;
+}
+
+.btn-disable {
+  background-color: #ea4335;
+}
+
+.btn-disable:hover {
+  background-color: #f44d44;
+}
