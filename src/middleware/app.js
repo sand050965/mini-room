@@ -7,7 +7,7 @@ const cors = require("cors");
 const path = require("path");
 const bodyParser = require("body-parser");
 const { connectToDB } = require("../utils/DBUtil");
-const pageRoutes = require("../routes/meetingRoutes");
+const meetingRoutes = require("../routes/meetingRoutes");
 const premeetingRoutes = require("../routes/premeetingRoutes");
 const roomRoutes = require("../routes/roomRoutes");
 
@@ -29,7 +29,7 @@ app.use(express.static(path.resolve(__dirname, "../public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compression());
-app.use("/", pageRoutes);
+app.use("/", meetingRoutes);
 app.use("/api/premeeting", premeetingRoutes);
 app.use("/api/room", roomRoutes);
 

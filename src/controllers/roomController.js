@@ -3,7 +3,7 @@ const express = require("express");
 const participantService = require("../services/participantService");
 
 module.exports = {
-  getRoomInfo: async (req, res) => {
+  getRoom: async (req, res) => {
     try {
       const roomId = req.params.roomId;
       const roomInfo = await participantService.getAllParticipants(roomId);
@@ -18,7 +18,7 @@ module.exports = {
     }
   },
 
-  getParticipantInfo: async (req, res) => {
+  getParticipant: async (req, res) => {
     try {
       const participantData = {
         roomId: req.params.roomId,
@@ -41,8 +41,8 @@ module.exports = {
   participantLeave: async (req, res) => {
     try {
       const participantData = {
-        roomId: req.params.roomId,
-        userId: req.params.userId,
+        roomId: req.body.roomId,
+        userId: req.body.userId,
       };
       await participantService.deleteParticipant(participantData);
       res.status(200).json({ ok: true });
@@ -58,7 +58,7 @@ module.exports = {
 
   closeRoom: async (req, res) => {
     try {
-      const roomId = req.params.roomId;
+      const roomId = req.body.roomId;
       await participantService.deleteAllParticipants(roomId);
       res.status(200).json({ ok: true });
     } catch (e) {

@@ -54,4 +54,8 @@ module.exports = {
         .json({ error: true, message: "Sorry, something went wrong!" });
     }
   },
+
+  getToThankyou: async (req, res) => {
+    res.render("thankyou");
+  },
 };

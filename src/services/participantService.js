@@ -10,10 +10,10 @@ module.exports = {
   },
 
   getParticipant: (data) => {
-    return Participant.find({ roomId: data.roomId, userId: data.userId });
+    return Participant.findOne({ roomId: data.roomId, userId: data.userId });
   },
 
-  insertParticipant: (data) => {
+  insertParticipant: async (data) => {
     const participant = new Participant({
       roomId: data.roomId,
       userId: data.userId,
@@ -22,20 +22,19 @@ module.exports = {
       isStoppedVideo: data.isStoppedVideo,
       isReadyState: data.isReadyState,
     });
-    return participant.save();
+    return await participant.save();
   },
 
-  deleteParticipant: (data) => {
-    Participant.deleteOne({
+  deleteParticipant: async (data) => {
+    await Participant.findOneAndRemove({
       roomId: data.roomId,
       userId: data.userId,
     });
   },
 
-  deleteAllParticipants: (data) => {
-    Participant.deleteOne({
+  deleteAllParticipants: async (data) => {
+    await Participant.deleteOne({
       roomId: data.roomId,
-      userId: data.serId,
     });
   },
 };

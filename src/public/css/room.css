@@ -35,8 +35,7 @@ textarea:focus {
   resize: none;
 }
 
-body,
-video {
+body {
   position: relative;
   background: #202124;
 }
@@ -68,6 +67,7 @@ video {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(1fr, max-content));
   gap: 20px;
+  margin: 0 30px;
 }
 
 .videos-container .offcanvas-open {
@@ -135,6 +135,38 @@ video {
 
 .videos-container .video {
   width: 100%;
+  height: 100%;
+}
+
+.videos-container .one-self-avatar-container {
+  width: 100%;
+  min-height: 100em;
+  background-color: #202124;
+}
+
+.videos-container .avatar-container {
+  width: 100%;
+  min-height: 100em;
+  background-color: #43454b;
+}
+
+.videos-container .more-video-avatar {
+  width: 4em;
+  height: 4em;
+  background-color: #2e2d2d;
+  border-radius: 50%;
+}
+
+.videos-container .default-avatar {
+  width: 10em;
+  height: 10em;
+  background-color: #2e2d2d;
+  border-radius: 50%;
+}
+
+.videos-container .avatar-img {
+  width: 100%;
+  height: 100%;
 }
 
 /*--------------------------------------------------------------
@@ -256,38 +288,6 @@ video {
   gap: 20px;
   height: 100%;
 }
-
-/* .main-control .circle-btn {
-  width: 100%;
-  height: 100%;
-  border-radius: 50px;
-  padding: 8px;
-  cursor: pointer;
-}
-
-.main-control .oval-btn {
-  width: 100%;
-  height: 100%;
-  border-radius: 40px;
-  padding: 8px 12px;
-  cursor: pointer;
-}
-
-.main-control .btn-able {
-  background-color: #3c4043;
-}
-
-.main-control .btn-able:hover {
-  background-color: #4d5256;
-}
-
-.main-control .btn-disable {
-  background-color: #ea4335;
-}
-
-.main-control .btn-disable:hover {
-  background-color: #f44d44;
-} */
 
 .main-control .rotate {
   -moz-transform: rotate(135deg);

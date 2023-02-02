@@ -3,19 +3,23 @@ const roomValidator = require("../validators/roomValidator");
 const roomController = require("../controllers/roomController");
 const router = express.Router();
 
-router
-  .get("/:roomId", roomValidator.roomIdValidator, roomController.getRoomInfo)
-  .delete("/:roomId", roomValidator.roomIdValidator, roomController.closeRoom);
+router.get("/:roomId", roomValidator.getRoomValidator, roomController.getRoom);
+
+router.delete(
+  "/room",
+  roomValidator.closeRoomValidator,
+  roomController.closeRoom
+);
 
 router
   .get(
     "/:roomId/:userId",
-    roomValidator.roomIdAndUserIdValidator,
-    roomController.getParticipantInfo
+    roomValidator.getParticipantValidator,
+    roomController.getParticipant
   )
   .delete(
-    "/:roomId/:userId",
-    roomValidator.roomIdAndUserIdValidator,
+    "/participant",
+    roomValidator.participantLeaveValidator,
     roomController.participantLeave
   );
 

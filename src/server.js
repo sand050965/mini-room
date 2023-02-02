@@ -14,6 +14,31 @@ io.on("connection", (socket) => {
 
     socket.to(roomId).emit("user-connected", userId, userName); // emit to users in the room that a new user connected
 
+    // users finished rendering event
+    socket.on("finished-render", () => {
+      socket.to(roomId).emit("user-finished-render", userId);
+    });
+
+    // users mute event
+    socket.on("mute", () => {
+      socket.to(roomId).emit("user-mute-unmute", userId);
+    });
+
+    // users unmute event
+    socket.on("unmute", () => {
+      socket.to(roomId).emit("user-mute-unmute", userId);
+    });
+
+    // users stop sharing video stream event
+    socket.on("stop-video", () => {
+      socket.to(roomId).emit("user-stop-video", userId);
+    });
+
+    // users play video stream event
+    socket.on("play-video", () => {
+      socket.to(roomId).emit("user-play-video", userId);
+    });
+
     // users send message event
     socket.on("message", (message) => {
       io.to(roomId).emit("create-message", message, userId, userName); // emit to users in the room what message that user sent

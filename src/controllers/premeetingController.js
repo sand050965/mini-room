@@ -61,7 +61,7 @@ module.exports = {
       const checkParticipant = await participantService.getParticipant(
         participantData
       );
-      if (checkParticipant.length !== 0) {
+      if (checkParticipant !== null) {
         res.status(409).json({ ok: false, message: "user id is duplicated!" });
       }
       const participant = await participantService.insertParticipant(

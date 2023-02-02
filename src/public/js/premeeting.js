@@ -13,7 +13,6 @@ let isPermissionDenied = true;
 let isMuted = false;
 let isStoppedVideo = false;
 let myStream = null;
-const myVideo = document.createElement("video");
 const videoContainer = document.querySelector("#videoContainer");
 const avatarContainer = document.querySelector("#avatarContainer");
 const title = document.querySelector("#title");
@@ -26,6 +25,15 @@ const btnsArray = [videoBtn, audioBtn];
 const userName = document.querySelector("#userName");
 const nameInput = document.querySelector("#nameInput");
 const confirmBtn = document.querySelector("#confirmBtn");
+const DOMElement = {
+  type: "premeeting",
+  audioBtn: audioBtn,
+  audioBtnIcon: audioBtnIcon,
+  videoContainer: videoContainer,
+  avatarContainer: avatarContainer,
+  videoBtn: videoBtn,
+  videoBtnIcon: videoBtnIcon,
+};
 
 /**
  * Peer JS
@@ -41,9 +49,11 @@ peer.on("open", (id) => {
  * Init App
  */
 const init = async () => {
+  const myVideo = document.createElement("video");
   myVideo.muted = true;
+  DOMElement.video = myVideo;
 
-  // Process User Stream
+  // Get User Stream
   await getStream();
 
   // Join Or Start Meeting
@@ -62,41 +72,36 @@ const init = async () => {
 const getStream = async () => {
   try {
     myStream = await video.getUserMediaStream();
+    DOMElement.stream = myStream;
     displayAlert(true);
     isPermissionDenied = false;
-    addStream(myVideo, myStream);
+    addStream(DOMElement);
   } catch (e) {
+    console.log(e);
     preload();
     displayAlert(false);
     isPermissionDenied = true;
-    isMuted = video.mute(audioBtn, audioBtnIcon);
-    isStoppedVideo = video.stopVideo(
-      videoContainer,
-      avatarContainer,
-      videoBtn,
-      videoBtnIcon
-    );
+    isMuted = video.mute(DOMElement);
+    isStoppedVideo = video.stopVideo(DOMElement);
   }
 };
 
 /**
  * Add Video and Audio Stream
  */
-const addStream = (videoEl, stream) => {
-  videoEl.srcObject = stream;
-  videoEl.addEventListener("loadedmetadata", async () => {
-    await videoEl.play();
+const addStream = (DOMElement) => {
+  const videoContainer = DOMElement.videoContainer;
+  const videoElement = DOMElement.video;
+  const stream = DOMElement.stream;
+  videoElement.srcObject = stream;
+  videoElement.addEventListener("loadedmetadata", async () => {
+    await videoElement.play();
     preload();
   });
 
-  videoContainer.appendChild(videoEl);
-  isMuted = video.unmute(audioBtn, audioBtnIcon);
-  isStoppedVideo = video.playVideo(
-    videoContainer,
-    avatarContainer,
-    videoBtn,
-    videoBtnIcon
-  );
+  videoContainer.appendChild(videoElement);
+  isMuted = video.unmute(DOMElement);
+  isStoppedVideo = video.playVideo(DOMElement);
 };
 
 /**
@@ -116,15 +121,9 @@ const btnControl = (e) => {
   displayModal(isPermissionDenied);
 
   if (e.target.id.includes("audioBtn")) {
-    isMuted = video.muteUnmute(myStream, audioBtn, audioBtnIcon);
+    isMuted = video.muteUnmute(DOMElement);
   } else if (e.target.id.includes("videoBtn")) {
-    isStoppedVideo = video.playStopVideo(
-      myStream,
-      videoContainer,
-      avatarContainer,
-      videoBtn,
-      videoBtnIcon
-    );
+    isStoppedVideo = video.playStopVideo(DOMElement);
   }
 };
 

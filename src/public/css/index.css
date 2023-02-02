@@ -254,20 +254,20 @@ nav .avatar-container img {
 
 @-webkit-keyframes up-down {
   0% {
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
 
   100% {
-    transform: translateY(-10px);
+    transform: translateY(-20px);
   }
 }
 
 @keyframes up-down {
   0% {
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
 
   100% {
-    transform: translateY(-10px);
+    transform: translateY(-20px);
   }
 }
