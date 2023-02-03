@@ -1,8 +1,10 @@
 import Video from "./video.js";
+import RoomView from "./RoomView.js";
 import { preload } from "./common.js";
 
 const socket = io("/");
 const video = new Video();
+const roomView = new RoomView();
 let myStream;
 let cnt = 1;
 let renderCnt = 0;
@@ -30,6 +32,7 @@ const messageInput = document.querySelector("#messageInput");
 
 const DOMElement = {
   type: "roomSelf",
+  cnt: cnt,
   videoBtn: videoBtn,
   videoBtnIcon: videoBtnIcon,
   audioBtn: audioBtn,
@@ -70,7 +73,6 @@ const init = async () => {
     const avatar = document.createElement("div");
     const avatarImg = document.createElement("img");
     const nameTag = document.createElement("div");
-    const participantInfo = await getParticipantInfo();
 
     // Add Element into DOMElement Object
     DOMElement.stream = myStream;
@@ -84,10 +86,11 @@ const init = async () => {
     DOMElement.nameTag = nameTag;
     DOMElement.userName = "You";
     DOMElement.userId = USER_ID;
-    DOMElement.isMuted = participantInfo.isMuted;
-    DOMElement.isStopped = participantInfo.isStoppedVideo;
+    DOMElement.isMuted = IS_MUTED;
+    DOMElement.isStoppedVideo = IS_STOPPED_VIDEO;
 
     await addRoomStream(DOMElement);
+    await initMediaControl(DOMElement);
     await getAllParticipants();
     if (cnt === 1) {
       preload();
@@ -151,7 +154,15 @@ const hotKeysControl = (e) => {
 };
 
 /**
- * video Control
+ * audio Control
+ */
+const initMediaControl = (DOMElement) => {
+  if (DOMElement.isMuted) video.muteUnmute(DOMElement);
+  if (DOMElement.isStoppedVideo) video.playStopVideo(DOMElement);
+};
+
+/**
+ * audio Control
  */
 const selfAudioControl = (isMuted) => {
   if (isMuted) {
@@ -282,9 +293,7 @@ const setRoomVideoGridStyle = (DOMElement) => {
     videoItemContainer.setAttribute("name", "otherVideoItemContainer");
     videoItemContainer.classList.add("video-container");
 
-    videoItem.setAttribute("name", "otherVideoItem");
     videoItem.classList.add("two-other-item");
-    video.setAttribute("name", "otherVideo");
     video.classList.add("video");
   } else {
     // videosContainer
@@ -407,7 +416,7 @@ const addRoomStream = async (DOMElement) => {
   await setRoomAvatarStyle(DOMElement);
 
   // video grid style
-  await setRoomVideoGridStyle(DOMElement);
+  await roomView.setRoomVideoGridStyle(DOMElement);
 
   // mute or unmute
   const audioEnabled = stream.getAudioTracks()[0].enabled;
@@ -435,56 +444,109 @@ const addRoomStream = async (DOMElement) => {
  * Close Video Grid
  */
 const closeVideoGrid = () => {
+  const selfVideoItemContainer = document.querySelector(
+    "#selfVideoItemContainer"
+  );
+  const selfVideoItem = document.querySelector("#selfVideoItem");
+  const selfVideo = document.querySelector("#selfVideo");
   if (cnt === 1) {
-    const selfVideoItemContainer = document.querySelector(
-      "#selfVideoItemContainer"
-    );
-    const selfVideoItem = document.querySelector("#selfVideoItem");
-    const selfVideo = document.querySelector("#selfVideo");
     selfVideoItemContainer.classList.remove("two-self-video-container");
     selfVideoItemContainer.classList.add("video-container");
     selfVideoItem.classList.remove("more-item");
     selfVideoItem.classList.remove("two-self-item");
     selfVideoItem.classList.remove("one-self-item");
     selfVideo.classList.remove("video");
+    selfVideo.classList.add("one-self-video");
     selfVideoItem.classList.add("one-self-item");
     videosContainer.classList.remove("more-videos-grid");
     videosContainer.style.removeProperty("grid-template-columns");
   } else if (cnt === 2) {
+    // self video
+    selfVideoItemContainer.classList.remove("video-container");
+    selfVideoItemContainer.classList.add("two-self-video-container");
+    selfVideoItem.classList.remove("more-item");
+    selfVideoItem.classList.remove("one-self-item");
+    selfVideoItem.classList.add("two-self-item");
+    selfVideo.classList.remove("one-self-video");
+    selfVideo.classList.add("video");
+
+    // other's video
+    const otherVideoItemContainer = document.querySelector(
+      '[name="otherVideoItemContainer"]'
+    );
+    const otherVideoItem = document.querySelector('[name="otherVideoItem"]');
+    const otherVideo = document.querySelector('[name="otherVideo"]');
+    otherVideoItemContainer.classList.add("video-container");
+    otherVideoItem.classList.remove("more-item");
+    otherVideoItem.classList.add("two-other-item");
+    otherVideo.classList.add("video");
+    videosContainer.classList.remove("more-videos-grid");
+    videosContainer.style.removeProperty("grid-template-columns");
   } else {
+    // videosContainer
+    videosContainer.classList.add("more-videos-grid");
+    let columns;
+    if (cnt < 9) {
+      columns = parseInt(cnt / 2) + (cnt % 2);
+    } else {
+      columns = 3;
+    }
+    videosContainer.style.setProperty(
+      "grid-template-columns",
+      `repeat(${columns}, 1fr)`
+    );
+    // self video
+    // selfVideoItemContainer.classList.remove("two-self-video-container");
+    selfVideoItemContainer.classList.add("video-container");
+    // selfVideoItem.classList.remove("one-self-item");
+    // selfVideoItem.classList.remove("two-self-item");
+    selfVideoItem.classList.add("more-item");
+    // selfVideo.classList.remove("one-self-video");
+    selfVideo.classList.add("video");
+
+    // other's video
+    const otherVideoItems = document.querySelectorAll(
+      "div[name='otherVideoItem']"
+    );
+    for (const item of otherVideoItems) {
+      item.classList.remove("two-other-item");
+      item.classList.add("more-item");
+    }
   }
 };
 
 /**
  * Close Window
  */
-const closeWindow = async () => {
-  await removeParticipant();
+const closeWindow = async (e) => {
+  e.preventDefault();
+  await removeParticipant(ROOM_ID, USER_ID);
 };
 
 /**
  * Leave Meeting Room
  */
 const leaveRoom = async () => {
-  await removeParticipant();
+  await removeParticipant(ROOM_ID, USER_ID);
   window.location = "/leave/thankyou";
 };
 
 /**
  * Remove Participant
  */
-const removeParticipant = async () => {
+const removeParticipant = async (roomId, userId) => {
   const deleteData = {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      roomId: ROOM_ID,
-      userId: USER_ID,
+      roomId: roomId,
+      userId: userId,
     }),
   };
   const response = await fetch("/api/room/participant", deleteData);
+  const result = await response.json();
   getAllParticipants();
 };
 
@@ -644,11 +706,11 @@ socket.on("user-disconnected", async (userId) => {
   if (peers[userId]) {
     peers[userId].close();
   }
+  await getAllParticipants();
   const videoItemContainer = document.getElementById(
     `${userId}VideoItemContainer`
   );
   await videoItemContainer.remove();
-  await getAllParticipants();
   closeVideoGrid();
 });
 
@@ -689,7 +751,7 @@ const connectToNewUser = async (userId, userName, stream) => {
     userId: userId,
   };
 
-  // Receive other oser's stream when they join room (Listen to someone try to call us)
+  // Receive other user's stream when they join room (Listen to someone try to call us)
   await call.on("stream", async (userVideoStream) => {
     peers[call.peer] = call;
     streams[call.peer] = userVideoStream;
@@ -699,7 +761,6 @@ const connectToNewUser = async (userId, userName, stream) => {
   });
 
   await call.on("close", async () => {
-    await removeParticipant();
     video.remove();
   });
 };
