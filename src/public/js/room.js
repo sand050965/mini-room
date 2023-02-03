@@ -5,8 +5,10 @@ const socket = io("/");
 const video = new Video();
 let myStream;
 let cnt = 1;
-let peers = {};
+let renderCnt = 0;
+let loadedCnt = 0;
 let streams = {};
+let peers = {};
 const videosContainer = document.querySelector("#videosContainer");
 const audioBtn = document.querySelector("#audioBtn");
 const audioBtnIcon = document.querySelector("#audioBtnIcon");
@@ -64,6 +66,7 @@ const init = async () => {
     const myVideo = document.createElement("video");
     myVideo.muted = true;
     const avatarContainer = document.createElement("div");
+    const avatarContent = document.createElement("div");
     const avatar = document.createElement("div");
     const avatarImg = document.createElement("img");
     const nameTag = document.createElement("div");
@@ -72,9 +75,10 @@ const init = async () => {
     // Add Element into DOMElement Object
     DOMElement.stream = myStream;
     DOMElement.videoItemContainer = videoItemContainer;
-    DOMElement.item = videoItem;
+    DOMElement.videoItem = videoItem;
     DOMElement.video = myVideo;
     DOMElement.avatarContainer = avatarContainer;
+    DOMElement.avatarContent = avatarContent;
     DOMElement.avatar = avatar;
     DOMElement.avatarImg = avatarImg;
     DOMElement.nameTag = nameTag;
@@ -84,6 +88,10 @@ const init = async () => {
     DOMElement.isStopped = participantInfo.isStoppedVideo;
 
     await addRoomStream(DOMElement);
+    await getAllParticipants();
+    if (cnt === 1) {
+      preload();
+    }
   } catch (e) {
     console.log(e.message);
     preload();
@@ -96,7 +104,7 @@ const init = async () => {
 const getAllParticipants = async () => {
   const response = await fetch(`/api/room/${ROOM_ID}`);
   const result = await response.json();
-  cnt = result.data.length;
+  cnt = await result.data.length;
 };
 
 /**
@@ -114,11 +122,9 @@ const getParticipantInfo = async (userId) => {
 const btnControl = async (e) => {
   if (e.target.id.includes("audioBtn")) {
     const isMuted = await video.muteUnmute(DOMElement);
-    myStream = DOMElement.stream;
     selfAudioControl(isMuted);
   } else if (e.target.id.includes("videoBtn")) {
     const isStoppedVideo = await video.playStopVideo(DOMElement);
-    myStream = DOMElement.stream;
     selfVideoControl(isStoppedVideo);
   } else if (e.target.id.includes("shareBtn")) {
   } else if (e.target.id.includes("leaveBtn")) {
@@ -221,20 +227,41 @@ const toggleSideBar = (tagetSideBar, tagetBsOffcanvas, btnId) => {
  */
 const setRoomVideoGridStyle = (DOMElement) => {
   const videoItemContainer = DOMElement.videoItemContainer;
-  const itemContainer = DOMElement.videoItemContainer;
-  const item = DOMElement.item;
+  const videoItem = DOMElement.videoItem;
   const video = DOMElement.video;
   const avatarContainer = DOMElement.avatarContainer;
   const nameTag = DOMElement.nameTag;
   const userName = DOMElement.userName;
   const userId = DOMElement.userId;
 
-  if (cnt === 1) {
-    itemContainer.setAttribute("id", "selfVideoItemContainer");
-    item.setAttribute("id", "selfVideoItem");
+  // append and add common class
+  videoItem.appendChild(video);
+  videoItem.classList.add("center");
+  nameTag.textContent = userName;
+  nameTag.classList.add("name-tag");
+  videoItem.appendChild(avatarContainer);
+  videoItem.appendChild(nameTag);
+  videoItemContainer.appendChild(videoItem);
+  videoItemContainer.classList.add("center");
+  videosContainer.append(videoItemContainer);
+
+  // set id
+  if (userId === USER_ID) {
+    videoItemContainer.setAttribute("id", "selfVideoItemContainer");
+    videoItem.setAttribute("id", "selfVideoItem");
     video.setAttribute("id", "selfVideo");
-    itemContainer.classList.add("video-container");
-    item.classList.add("self-item");
+  } else {
+    videoItemContainer.setAttribute("id", `${userId}VideoItemContainer`);
+    videoItemContainer.setAttribute("name", "otherVideoItemContainer");
+    videoItem.setAttribute("id", `${userId}VideoItem`);
+    videoItem.setAttribute("name", "otherVideoItem");
+    video.setAttribute("id", `${userId}Video`);
+    video.setAttribute("name", "otherVideo");
+  }
+
+  if (cnt === 1) {
+    videoItemContainer.classList.add("video-container");
+    videoItem.classList.add("one-self-item");
     video.classList.add("one-self-video");
     video.classList.add("video-rotate");
   } else if (cnt === 2) {
@@ -242,26 +269,25 @@ const setRoomVideoGridStyle = (DOMElement) => {
     const selfVideoItemContainer = document.querySelector(
       "#selfVideoItemContainer"
     );
-    // const selfVideoItem = document.querySelector("#selfVideoItem");
+    const selfVideoItem = document.querySelector("#selfVideoItem");
     const selfVideo = document.querySelector("#selfVideo");
     selfVideoItemContainer.classList.remove("video-container");
     selfVideoItemContainer.classList.add("two-self-video-container");
+    selfVideoItem.classList.remove("one-self-item");
+    selfVideoItem.classList.add("two-self-item");
     selfVideo.classList.remove("one-self-video");
     selfVideo.classList.add("video");
 
     // other's video
-    itemContainer.setAttribute("id", `${userId}VideoItemContainer`);
-    itemContainer.setAttribute("name", "otherVideoItemContainer");
-    itemContainer.classList.add("video-container");
-    item.setAttribute("id", `${userId}VideoItem`);
-    item.setAttribute("name", "otherVideoItem");
-    item.classList.add("two-other-item");
-    video.setAttribute("id", `${userId}Video`);
+    videoItemContainer.setAttribute("name", "otherVideoItemContainer");
+    videoItemContainer.classList.add("video-container");
+
+    videoItem.setAttribute("name", "otherVideoItem");
+    videoItem.classList.add("two-other-item");
     video.setAttribute("name", "otherVideo");
     video.classList.add("video");
   } else {
     // videosContainer
-    videosContainer.classList.add("flex-auto-wrap");
     videosContainer.classList.add("more-videos-grid");
 
     let columns;
@@ -284,12 +310,14 @@ const setRoomVideoGridStyle = (DOMElement) => {
     const selfVideo = document.querySelector("#selfVideo");
     selfVideoItemContainer.classList.remove("two-self-video-container");
     selfVideoItemContainer.classList.add("video-container");
-    selfVideoItem.classList.remove("self-item");
+    selfVideoItem.classList.remove("one-self-item");
+    selfVideoItem.classList.remove("two-self-item");
     selfVideoItem.classList.add("more-item");
     selfVideo.classList.remove("one-self-video");
     selfVideo.classList.add("video");
 
     // other's video
+    videoItemContainer.classList.add("video-container");
     const otherVideoItems = document.querySelectorAll(
       "div[name='otherVideoItem']"
     );
@@ -298,28 +326,8 @@ const setRoomVideoGridStyle = (DOMElement) => {
       item.classList.remove("two-other-item");
       item.classList.add("more-item");
     }
-
-    itemContainer.setAttribute("id", `${userId}VideoItemContainer`);
-    itemContainer.setAttribute("name", "otherVideoItemContainer");
-    itemContainer.classList.add("video-container");
-    item.setAttribute("id", `${userId}VideoItem`);
-    item.setAttribute("name", "otherVideoItem");
-    item.classList.add("more-item");
-    video.setAttribute("id", `${userId}Video`);
-    video.setAttribute("name", "otherVideo");
     video.classList.add("video");
   }
-
-  // append
-  item.appendChild(video);
-  item.appendChild(avatarContainer);
-  item.classList.add("center");
-  nameTag.textContent = userName;
-  nameTag.classList.add("name-tag");
-  item.appendChild(nameTag);
-  videoItemContainer.appendChild(item);
-  videoItemContainer.classList.add("center");
-  videosContainer.append(videoItemContainer);
 };
 
 /**
@@ -327,18 +335,21 @@ const setRoomVideoGridStyle = (DOMElement) => {
  */
 const setRoomAvatarStyle = (DOMElement) => {
   const avatarContainer = DOMElement.avatarContainer;
+  const avatarContent = DOMElement.avatarContent;
   const avatar = DOMElement.avatar;
   const avatarImg = DOMElement.avatarImg;
   const userId = DOMElement.userId;
 
   if (userId === USER_ID) {
-    avatarImg.setAttribute("id", "selfAvatarImg");
-    avatar.setAttribute("id", "selfAvatar");
     avatarContainer.setAttribute("id", "selfAvatarContainer");
+    avatarContent.setAttribute("id", "selfAvatarContent");
+    avatar.setAttribute("id", "selfAvatar");
+    avatarImg.setAttribute("id", "selfAvatarImg");
   } else {
-    avatarImg.setAttribute("id", `${userId}AvatarImg`);
-    avatar.setAttribute("id", `${userId}Avatar`);
     avatarContainer.setAttribute("id", `${userId}AvatarContainer`);
+    avatarContent.setAttribute("id", `${userId}AvatarContent`);
+    avatar.setAttribute("id", `${userId}Avatar`);
+    avatarImg.setAttribute("id", `${userId}AvatarImg`);
   }
 
   avatarImg.setAttribute(
@@ -347,21 +358,29 @@ const setRoomAvatarStyle = (DOMElement) => {
   );
 
   if (cnt === 1) {
-    avatarContainer.classList.add("one-self-avatar-container");
-    avatar.classList.add("default-avatar");
+    avatarContainer.classList.add("avatar-container");
+    avatarContent.classList.add("avatar-content");
+    avatar.classList.add("avatar");
   } else if (cnt === 2) {
-    const selfAvatarContainer = document.querySelector("#selfAvatarContainer");
-    selfAvatarContainer.classList.remove("one-self-avatar-container");
-    selfAvatarContainer.classList.add("avatar-container");
+    // self avatar
     const selfAvatar = document.querySelector("#selfAvatar");
-    selfAvatar.classList.remove("default-avatar");
-    selfAvatar.classList.add("more-video-avatar");
-    avatar.classList.add("more-video-avatar");
+    selfAvatar.classList.remove("avatar");
+    selfAvatar.classList.add("two-self-avatar");
+
+    // other avatar
+    avatarContainer.classList.add("avatar-container");
+    avatar.classList.add("avatar");
   } else {
+    // self avatar
+    const selfAvatarContainer = document.querySelector("#selfAvatarContainer");
     const selfAvatar = document.querySelector("#selfAvatar");
+    selfAvatarContainer.classList.add("avatar-container");
     selfAvatar.classList.remove("more-video-avatar");
-    selfAvatar.classList.add("default-avatar");
-    avatar.classList.add("default-avatar");
+    selfAvatar.classList.add("avatar");
+
+    // other avatar
+    avatarContainer.classList.add("avatar-container");
+    avatar.classList.add("avatar");
   }
 
   // append
@@ -369,7 +388,9 @@ const setRoomAvatarStyle = (DOMElement) => {
   avatarContainer.classList.add("center");
   avatarContainer.classList.add("none");
   avatar.appendChild(avatarImg);
-  avatarContainer.appendChild(avatar);
+  avatarContent.appendChild(avatar);
+  avatarContent.classList.add("center");
+  avatarContainer.appendChild(avatarContent);
 };
 
 /**
@@ -377,14 +398,10 @@ const setRoomAvatarStyle = (DOMElement) => {
  */
 const addRoomStream = async (DOMElement) => {
   const stream = DOMElement.stream;
-  const videoElement = DOMElement.video;
   const userId = DOMElement.userId;
-  streams.userId = stream;
+  const videoElement = DOMElement.video;
   videoElement.srcObject = stream;
-  videoElement.addEventListener("loadedmetadata", async () => {
-    await videoElement.play();
-    preload();
-  });
+  streams[userId] = stream;
 
   // avatar style
   await setRoomAvatarStyle(DOMElement);
@@ -403,12 +420,52 @@ const addRoomStream = async (DOMElement) => {
   if (!videoEnabled) {
     video.playStopVideo(DOMElement);
   }
+
+  videoElement.addEventListener("loadedmetadata", async () => {
+    await videoElement.play();
+    loadedCnt++;
+    if (renderCnt === loadedCnt) {
+      preload();
+      socket.emit("finished-render");
+    }
+  });
+};
+
+/**
+ * Close Video Grid
+ */
+const closeVideoGrid = () => {
+  if (cnt === 1) {
+    const selfVideoItemContainer = document.querySelector(
+      "#selfVideoItemContainer"
+    );
+    const selfVideoItem = document.querySelector("#selfVideoItem");
+    const selfVideo = document.querySelector("#selfVideo");
+    selfVideoItemContainer.classList.remove("two-self-video-container");
+    selfVideoItemContainer.classList.add("video-container");
+    selfVideoItem.classList.remove("more-item");
+    selfVideoItem.classList.remove("two-self-item");
+    selfVideoItem.classList.remove("one-self-item");
+    selfVideo.classList.remove("video");
+    selfVideoItem.classList.add("one-self-item");
+    videosContainer.classList.remove("more-videos-grid");
+    videosContainer.style.removeProperty("grid-template-columns");
+  } else if (cnt === 2) {
+  } else {
+  }
+};
+
+/**
+ * Close Window
+ */
+const closeWindow = async () => {
+  await removeParticipant();
 };
 
 /**
  * Leave Meeting Room
  */
-const leaveRoom = async (e) => {
+const leaveRoom = async () => {
   await removeParticipant();
   window.location = "/leave/thankyou";
 };
@@ -428,7 +485,6 @@ const removeParticipant = async () => {
     }),
   };
   const response = await fetch("/api/room/participant", deleteData);
-  const result = await response.json();
   getAllParticipants();
 };
 
@@ -480,20 +536,21 @@ peer.on("call", async (call) => {
   peers[call.peer] = call;
 
   const videoItemContainer = document.createElement("div");
-  const item = document.createElement("div");
+  const videoItem = document.createElement("div");
   const video = document.createElement("video");
   const avatarContainer = document.createElement("div");
+  const avatarContent = document.createElement("div");
   const avatar = document.createElement("div");
   const avatarImg = document.createElement("img");
   const nameTag = document.createElement("div");
 
   const newDOMElement = {
     type: "roomOther",
-    target: call.peer,
     videoItemContainer: videoItemContainer,
-    item: item,
+    videoItem: videoItem,
     video: video,
     avatarContainer: avatarContainer,
+    avatarContent: avatarContent,
     avatar: avatar,
     avatarImg: avatarImg,
     nameTag: nameTag,
@@ -502,13 +559,14 @@ peer.on("call", async (call) => {
 
   // Respond to stream that comes in
   await call.on("stream", async (userVideoStream) => {
+    streams[call.peer] = userVideoStream;
     await getAllParticipants();
     const userInfo = await getParticipantInfo(call.peer);
     const userName = userInfo.data.userName;
     newDOMElement.stream = userVideoStream;
     newDOMElement.userName = userName;
     await addRoomStream(newDOMElement);
-    socket.emit("finished-render");
+    renderCnt++;
   });
 });
 
@@ -531,9 +589,10 @@ socket.on("user-connected", async (userId, userName) => {
 
 // display other user mute
 socket.on("user-mute", async (userId) => {
+  console.log(streams);
   const newDOMElement = {
     type: "roomOther",
-    stream: streams.userId,
+    stream: streams[userId],
     video: document.getElementById(`${userId}Video`),
     avatarContainer: document.getElementById(`${userId}AvatarContainer`),
   };
@@ -544,7 +603,7 @@ socket.on("user-mute", async (userId) => {
 socket.on("user-unmute", async (userId) => {
   const newDOMElement = {
     type: "roomOther",
-    stream: streams.userId,
+    stream: streams[userId],
     video: document.getElementById(`${userId}Video`),
     avatarContainer: document.getElementById(`${userId}AvatarContainer`),
   };
@@ -553,9 +612,10 @@ socket.on("user-unmute", async (userId) => {
 
 // stop other user video
 socket.on("user-stop-video", async (userId) => {
+  console.log(streams);
   const newDOMElement = {
     type: "roomOther",
-    stream: streams.userId,
+    stream: streams[userId],
     video: document.getElementById(`${userId}Video`),
     avatarContainer: document.getElementById(`${userId}AvatarContainer`),
   };
@@ -566,7 +626,7 @@ socket.on("user-stop-video", async (userId) => {
 socket.on("user-play-video", async (userId) => {
   const newDOMElement = {
     type: "roomOther",
-    stream: streams.userId,
+    stream: streams[userId],
     video: document.getElementById(`${userId}Video`),
     avatarContainer: document.getElementById(`${userId}AvatarContainer`),
   };
@@ -584,6 +644,12 @@ socket.on("user-disconnected", async (userId) => {
   if (peers[userId]) {
     peers[userId].close();
   }
+  const videoItemContainer = document.getElementById(
+    `${userId}VideoItemContainer`
+  );
+  await videoItemContainer.remove();
+  await getAllParticipants();
+  closeVideoGrid();
 });
 
 // send message
@@ -601,20 +667,21 @@ const connectToNewUser = async (userId, userName, stream) => {
   const call = peer.call(userId, stream);
 
   const videoItemContainer = document.createElement("div");
-  const item = document.createElement("div");
+  const videoItem = document.createElement("div");
   const video = document.createElement("video");
   const avatarContainer = document.createElement("div");
+  const avatarContent = document.createElement("div");
   const avatar = document.createElement("div");
   const avatarImg = document.createElement("img");
   const nameTag = document.createElement("div");
 
   const newDOMElement = {
     type: "roomOther",
-    target: call.peer,
     videoItemContainer: videoItemContainer,
-    item: item,
+    videoItem: videoItem,
     video: video,
     avatarContainer: avatarContainer,
+    avatarContent: avatarContent,
     avatar: avatar,
     avatarImg: avatarImg,
     nameTag: nameTag,
@@ -624,12 +691,12 @@ const connectToNewUser = async (userId, userName, stream) => {
 
   // Receive other oser's stream when they join room (Listen to someone try to call us)
   await call.on("stream", async (userVideoStream) => {
+    peers[call.peer] = call;
+    streams[call.peer] = userVideoStream;
     newDOMElement.stream = userVideoStream;
     await getAllParticipants();
     await addRoomStream(newDOMElement);
   });
-
-  peers[userId] = call;
 
   await call.on("close", async () => {
     await removeParticipant();
@@ -644,7 +711,7 @@ window.addEventListener("load", init);
 
 window.addEventListener("keydown", hotKeysControl);
 
-window.addEventListener("beforeunload", leaveRoom);
+window.addEventListener("beforeunload", closeWindow);
 
 messageInput.addEventListener("keyup", sendMsgControl);
 
