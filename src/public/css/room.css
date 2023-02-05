@@ -28,13 +28,6 @@ h6 {
   color: #fff;
 }
 
-textarea,
-textarea:focus {
-  border: 0;
-  outline: 0;
-  resize: none;
-}
-
 body {
   position: relative;
   background: #202124;
@@ -78,7 +71,7 @@ video {
 }
 
 .videos-container .offcanvas-open {
-  right: 380px;
+  right: 380px !important;
 }
 
 .videos-container .video-container {
@@ -192,9 +185,8 @@ video {
 }
 
 .main-right .offcanvas-outlayer {
-  position: static !important;
   width: 340px;
-  height: calc(100vh - 80px);
+  height: calc(100vh - 120px);
   margin: 20px 0 0 20px;
   border-radius: 10px;
 }
@@ -208,7 +200,7 @@ video {
 --------------------------------------------------------------*/
 #chatOffcanvas .offcanvas-body {
   overflow: hidden;
-  max-height: calc(100% - 270px);
+  height: calc(100% - 300px);
 }
 
 #chatOffcanvas .warning {
@@ -220,42 +212,62 @@ video {
 }
 
 #chatOffcanvas .message-container {
+  width: 100%;
   max-height: 100%;
   overflow-y: scroll;
 }
 
 #chatOffcanvas .message-input-container {
   position: relative;
-  padding: 22px 12px 5px 12px;
+  padding: 22px;
+  height: 230px;
+}
+
+.message-container .message-content {
+  margin-bottom: 20px;
+  padding: 20px;
 }
 
 .message-container .message {
-  margin-bottom: 12px;
-  padding: 10px;
-}
-
-.message-input-container textarea {
   width: 100%;
-  background-color: rgb(244, 244, 244);
-  padding: 0 60px 0 12px;
-  line-height: 48px;
+  height: auto;
+  word-wrap: break-word;
 }
 
 .message-input-container .message-input {
-  min-height: 48px;
-  border-radius: 50px;
+  width: 100%;
+  height: 100px;
+  background-color: rgb(244, 244, 244);
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.message-input-container .message-btns {
+  display: grid;
+  grid-template-columns: 48px 48px auto 48px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.message-input-container .send-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: rgb(244, 244, 244);
 }
 
 .message-input-container .send-msg-btn {
   width: 48px;
   height: 48px;
-  position: absolute;
-  z-index: 3;
-  right: 12px;
-  bottom: 5px;
   border-radius: 50%;
   color: #babcbd;
-  padding: 12px;
+  font-size: 16px;
+  padding: 12px 20px 12px 12px;
   background-color: rgb(244, 244, 244);
 }
 
@@ -268,8 +280,9 @@ video {
   cursor: pointer;
 }
 
+.message-input-container .send-btn:hover,
 .message-input-container .send-msg-btn-able:hover {
-  background-color: rgb(244, 244, 244);
+  background-color: rgb(226, 224, 224);
 }
 
 /*--------------------------------------------------------------
@@ -341,4 +354,10 @@ video {
 
 .side-control i {
   font-size: 20px;
+}
+
+.tool-bar .participant-cnt {
+  top: 20px !important;
+  right: 80px !important;
+  z-index: 99;
 }

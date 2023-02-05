@@ -23,11 +23,14 @@ const participantBtn = document.querySelector("#participantBtn");
 const chatBtn = document.querySelector("#chatBtn");
 const sendMsgBtn = document.querySelector("#sendMsgBtn");
 const infoOffcanvas = document.querySelector("#infoOffcanvas");
+const infoCloseBtn = document.querySelector("#chatCloseBtn");
 const BsInfoOffcanvas = new bootstrap.Offcanvas(infoOffcanvas);
 const participantOffcanvas = document.querySelector("#participantOfcanvas");
 const BsParticipantOffcanvas = new bootstrap.Offcanvas(participantOffcanvas);
+const participantCloseBtn = document.querySelector("#chatCloseBtn");
 const chatOffcanvas = document.querySelector("#chatOffcanvas");
 const BsChatOffcanvas = new bootstrap.Offcanvas(chatOffcanvas);
+const chatCloseBtn = document.querySelector("#chatCloseBtn");
 const messageInput = document.querySelector("#messageInput");
 
 const DOMElement = {
@@ -48,6 +51,9 @@ const btnsArray = [
   participantBtn,
   chatBtn,
   sendMsgBtn,
+  infoCloseBtn,
+  participantCloseBtn,
+  chatCloseBtn,
 ];
 
 const sideBtnIconsArray = [infoBtnIcon, participantBtnIcon, chatBtnIcon];
@@ -57,6 +63,12 @@ const bsOffcanvasArray = [
   BsParticipantOffcanvas,
   BsChatOffcanvas,
 ];
+
+const bsOffcanvasObj = {
+  info: BsInfoOffcanvas,
+  participant: BsParticipantOffcanvas,
+  chat: BsInfoOffcanvas,
+};
 
 /**
  * Init App
@@ -86,15 +98,16 @@ const init = async () => {
     DOMElement.nameTag = nameTag;
     DOMElement.userName = "You";
     DOMElement.userId = USER_ID;
-    DOMElement.isMuted = IS_MUTED;
-    DOMElement.isStoppedVideo = IS_STOPPED_VIDEO;
+    DOMElement.isMuted = JSON.parse(IS_MUTED);
+    DOMElement.isStoppedVideo = JSON.parse(IS_STOPPED_VIDEO);
 
     await addRoomStream(DOMElement);
     await initMediaControl(DOMElement);
     await getAllParticipants();
-    if (cnt === 1) {
-      preload();
-    }
+    // if (cnt === 1) {
+    //   preload();
+    // }
+    preload();
   } catch (e) {
     console.log(e.message);
     preload();
@@ -108,6 +121,8 @@ const getAllParticipants = async () => {
   const response = await fetch(`/api/room/${ROOM_ID}`);
   const result = await response.json();
   cnt = await result.data.length;
+  const participantCnt = document.querySelector("#participantCnt");
+  participantCnt.textContent = cnt;
 };
 
 /**
@@ -133,11 +148,29 @@ const btnControl = async (e) => {
   } else if (e.target.id.includes("leaveBtn")) {
     leaveRoom();
   } else if (e.target.id.includes("infoBtn")) {
-    toggleSideBar(infoOffcanvas, BsInfoOffcanvas, e.target.id);
+    const offCanvasDOMElement = {
+      tagetSideBar: infoOffcanvas,
+      tagetBsOffcanvas: BsInfoOffcanvas,
+      btnId: e.target.id,
+    };
+    toggleOffCanvas(offCanvasDOMElement);
   } else if (e.target.id.includes("participantBtn")) {
-    toggleSideBar(participantOffcanvas, BsParticipantOffcanvas, e.target.id);
+    const offCanvasDOMElement = {
+      tagetSideBar: participantOffcanvas,
+      tagetBsOffcanvas: BsParticipantOffcanvas,
+      btnId: e.target.id,
+    };
+    toggleOffCanvas(offCanvasDOMElement);
   } else if (e.target.id.includes("chatBtn")) {
-    toggleSideBar(chatOffcanvas, BsChatOffcanvas, e.target.id);
+    const offCanvasDOMElement = {
+      tagetSideBar: chatOffcanvas,
+      tagetBsOffcanvas: BsChatOffcanvas,
+      btnId: e.target.id,
+    };
+    toggleOffCanvas(offCanvasDOMElement);
+  } else if (e.target.id.includes("closeBtn")) {
+    const mainContainer = document.querySelector("#mainContainer");
+    mainContainer.classList.remove("main-container-grid");
   } else if (e.target.id.includes("sendMsgBtn")) {
     sendMessage();
   }
@@ -186,8 +219,9 @@ const selfVideoControl = (isStoppedVideo) => {
 /**
  * Send Message Control
  */
-const sendMsgControl = (e) => {
-  if (e.target.value.trim().length === 0) {
+const sendMsgBtnControl = () => {
+  const messageInput = document.querySelector("#messageInput");
+  if (messageInput.value.trim().length === 0) {
     sendMsgBtn.classList.remove("send-msg-btn-able");
   } else {
     sendMsgBtn.classList.add("send-msg-btn-able");
@@ -195,11 +229,16 @@ const sendMsgControl = (e) => {
 };
 
 /**
- * Toggle Side Bar
+ * Toggle Offcanvas
  */
-const toggleSideBar = (tagetSideBar, tagetBsOffcanvas, btnId) => {
+const toggleOffCanvas = (offCanvasDOMElement) => {
   let targetBtn;
-  const selfVideoItem = document.querySelector("#selfVideoItem");
+  const tagetSideBar = offCanvasDOMElement.tagetSideBar;
+  const tagetBsOffcanvas = offCanvasDOMElement.tagetBsOffcanvas;
+  const btnId = offCanvasDOMElement.btnId;
+  const selfVideoItemContainer = document.querySelector(
+    "#selfVideoItemContainer"
+  );
 
   if (btnId.includes("Icon")) {
     targetBtn = document.querySelector(`#${btnId}`);
@@ -224,12 +263,12 @@ const toggleSideBar = (tagetSideBar, tagetBsOffcanvas, btnId) => {
     tagetBsOffcanvas.hide();
     mainContainer.classList.remove("main-container-grid");
     targetBtn.classList.remove("side-btn-clicked");
-    selfVideoItem.classList.remove("offcanvas-open");
+    selfVideoItemContainer.classList.remove("offcanvas-open");
   } else {
     tagetBsOffcanvas.show();
     mainContainer.classList.add("main-container-grid");
     targetBtn.classList.add("side-btn-clicked");
-    if (cnt === 2) selfVideoItem.classList.add("offcanvas-open");
+    if (cnt === 2) selfVideoItemContainer.classList.add("offcanvas-open");
   }
 };
 
@@ -300,10 +339,10 @@ const setRoomVideoGridStyle = (DOMElement) => {
     videosContainer.classList.add("more-videos-grid");
 
     let columns;
-    if (cnt < 9) {
-      columns = parseInt(cnt / 2) + (cnt % 2);
+    if (parseInt(Math.sqrt(cnt)) === parseFloat(Math.sqrt(cnt))) {
+      columns = Math.sqrt(cnt);
     } else {
-      columns = 3;
+      columns = parseInt(cnt / 2) + (cnt % 2);
     }
 
     videosContainer.style.setProperty(
@@ -416,7 +455,7 @@ const addRoomStream = async (DOMElement) => {
   await setRoomAvatarStyle(DOMElement);
 
   // video grid style
-  await roomView.setRoomVideoGridStyle(DOMElement);
+  await setRoomVideoGridStyle(DOMElement);
 
   // mute or unmute
   const audioEnabled = stream.getAudioTracks()[0].enabled;
@@ -438,6 +477,21 @@ const addRoomStream = async (DOMElement) => {
       socket.emit("finished-render");
     }
   });
+};
+
+/**
+ * Close Avatar
+ */
+const closeAvatar = () => {
+  if (cnt === 2) {
+    const selfAvatar = document.querySelector("#selfAvatar");
+    selfAvatar.classList.remove("avatar");
+    selfAvatar.classList.add("two-self-avatar");
+  } else {
+    const selfAvatar = document.querySelector("#selfAvatar");
+    selfAvatar.classList.add("avatar");
+    selfAvatar.classList.remove("two-self-avatar");
+  }
 };
 
 /**
@@ -546,7 +600,6 @@ const removeParticipant = async (roomId, userId) => {
     }),
   };
   const response = await fetch("/api/room/participant", deleteData);
-  const result = await response.json();
   getAllParticipants();
 };
 
@@ -565,10 +618,11 @@ const displayMessage = (message, userId, userName) => {
   const mainMessage = document.createElement("div");
   messageSender.textContent = userName;
   mainMessage.textContent = message;
+  mainMessage.classList.add("message");
   messageContent.appendChild(messageSender);
   messageContent.appendChild(br);
   messageContent.appendChild(mainMessage);
-  messageContent.classList.add("message");
+  messageContent.classList.add("message-content");
   messageContainer.appendChild(messageContent);
 };
 
@@ -622,7 +676,6 @@ peer.on("call", async (call) => {
   // Respond to stream that comes in
   await call.on("stream", async (userVideoStream) => {
     streams[call.peer] = userVideoStream;
-    await getAllParticipants();
     const userInfo = await getParticipantInfo(call.peer);
     const userName = userInfo.data.userName;
     newDOMElement.stream = userVideoStream;
@@ -651,7 +704,6 @@ socket.on("user-connected", async (userId, userName) => {
 
 // display other user mute
 socket.on("user-mute", async (userId) => {
-  console.log(streams);
   const newDOMElement = {
     type: "roomOther",
     stream: streams[userId],
@@ -674,7 +726,6 @@ socket.on("user-unmute", async (userId) => {
 
 // stop other user video
 socket.on("user-stop-video", async (userId) => {
-  console.log(streams);
   const newDOMElement = {
     type: "roomOther",
     stream: streams[userId],
@@ -712,6 +763,7 @@ socket.on("user-disconnected", async (userId) => {
   );
   await videoItemContainer.remove();
   closeVideoGrid();
+  closeAvatar();
 });
 
 // send message
@@ -721,6 +773,7 @@ const sendMessage = () => {
   if (message.length !== 0) {
     socket.emit("message", message);
     messageInput.value = "";
+    sendMsgBtnControl();
   }
 };
 
@@ -774,7 +827,7 @@ window.addEventListener("keydown", hotKeysControl);
 
 window.addEventListener("beforeunload", closeWindow);
 
-messageInput.addEventListener("keyup", sendMsgControl);
+messageInput.addEventListener("keyup", sendMsgBtnControl);
 
 for (const btn of btnsArray) {
   btn.addEventListener("click", btnControl);

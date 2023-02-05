@@ -5,14 +5,16 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- favicon -->
-        <link rel="icon" href="https://s3.amazonaws.com/www.miniroom.online/images/favicon.ico" type="image/x-icon">
+        <link rel="icon"
+              href="https://s3.amazonaws.com/www.miniroom.online/images/favicon.ico"
+              type="image/x-icon">
         <!-- Vendor CSS Files -->
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
               rel="stylesheet">
         <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css"
               rel="stylesheet">
-        <!-- Template Main CSS File -->
+        <!-- Main CSS File -->
         <link rel="stylesheet" href="/css/room.css">
         <script>
             const ROOM_ID = '<%= roomId %>';
@@ -50,10 +52,15 @@
                 </div>
             </div>
         </div>
+        <!-- / Modal Ends -->
+        <!-- Main Container -->
         <div id="mainContainer" class="main-container">
+            <!-- Main Left -->
             <div class="main-left center">
+                <!-- Videos Conntainer -->
                 <div id="videosContainer" class="videos-container"></div>
             </div>
+            <!-- Main Right -->
             <div class="main-right">
                 <!-- Info Offcanvas -->
                 <div id="infoOffcanvas"
@@ -63,7 +70,8 @@
                      aria-labelledby="offcanvasRightLabel">
                     <div class="offcanvas-header">
                         <h5 class="offcanvas-title" id="staticBackdropLabel">Meeting details</h5>
-                        <button type="button"
+                        <button id="infoCloseBtn"
+                                type="button"
                                 class="btn-close"
                                 data-bs-dismiss="offcanvas"
                                 data-bs-target="#infoSideBar"
@@ -83,7 +91,8 @@
                      aria-labelledby="offcanvasRightLabel">
                     <div class="offcanvas-header">
                         <h5 class="offcanvas-title" id="staticBackdropLabel">People</h5>
-                        <button type="button"
+                        <button id="participantCloseBtn"
+                                type="button"
                                 class="btn-close"
                                 data-bs-dismiss="offcanvas"
                                 data-bs-target="#participantsSideBar"
@@ -103,7 +112,8 @@
                      aria-labelledby="offcanvasRightLabel">
                     <div class="offcanvas-header">
                         <h5 class="offcanvas-title" id="staticBackdropLabel">In-call Messages</h5>
-                        <button type="button"
+                        <button id="chatCloseBtn"
+                                type="button"
                                 class="btn-close"
                                 data-bs-dismiss="offcanvas"
                                 data-bs-target="#chatSideBar"
@@ -116,18 +126,24 @@
                     </div>
                     <div id="messageInputContainer" class="message-input-container">
                         <textarea id="messageInput"
-                                  rows="1"
-                                  type="text"
-                                  class="message-input center"
-                                  placeholder="Send a message to everyone"></textarea>
-                        <span id="sendMsgBtn" type="btn" class="send-msg-btn center" type="button"><i class="fa-solid fa-paper-plane"></i></span>
+                                  class="form-control message-input"
+                                  placeholder="Send a message."></textarea>
+                        <div class="message-btns">
+                            <span id="sendFileBtn" type="btn" class="send-btn center" type="button"><i class="fa-solid fa-file"></i></span>
+                            <span id="sendImgBtn" type="btn" class="send-btn center" type="button"><i class="fa-solid fa-image"></i></span>
+                            <span id="sendEmojiBtn" type="btn" class="send-btn center" type="button"><i class="fa-regular fa-face-smile"></i></span>
+                            <span id="sendMsgBtn" type="btn" class="send-msg-btn center" type="button"><i class="fa-solid fa-paper-plane"></i></span>
+                        </div>
                     </div>
                 </div>
+                <!-- / Offcanvas Ends -->
             </div>
+            <!-- / Main Right Ends -->
         </div>
+        <!-- / Main Container Ends -->
         <div class="tool-bar">
             <div class="meeting-info"></div>
-            <div class="control-btns">
+            <div class="control-btns position-relative">
                 <div class="main-control-container center">
                     <div class="main-control">
                         <div id="audioBtn" class="center circle-btn btn-able">
@@ -150,13 +166,16 @@
                             <i id="infoBtnIcon" class="fa-solid fa-circle-info"></i>
                         </div>
                         <div id="participantBtn" class="center side-btn">
-                            <i id="participantBtnIcon" class="fa-solid fa-user-group"></i>
+                            <i id="participantBtnIcon" class="fa-solid fa-user-group">
+                            </i>
                         </div>
                         <div id="chatBtn" class="center side-btn">
                             <i id="chatBtnIcon" class="fa-solid fa-message"></i>
                         </div>
                     </div>
                 </div>
+                <span id="participantCnt"
+                      class="position-absolute translate-middle badge rounded-pill bg-secondary participant-cnt">1</span>
             </div>
         </body>
     </html>
@@ -166,6 +185,6 @@
     <script src="https://WebRTC.github.io/adapter/adapter-latest.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://kit.fontawesome.com/8de498932c.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Template Main JS File -->
     <script type="module" src="../js/room.js"></script>

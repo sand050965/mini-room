@@ -111,10 +111,10 @@ class RoomView {
     videosContainer.classList.add("more-videos-grid");
 
     let columns;
-    if (cnt < 9) {
-      columns = parseInt(cnt / 2) + (cnt % 2);
+    if (parseInt(Math.sqrt(cnt)) === parseFloat(Math.sqrt(cnt))) {
+      columns = Math.sqrt(cnt);
     } else {
-      columns = 3;
+      columns = parseInt(cnt / 2) + (cnt % 2);
     }
 
     videosContainer.style.setProperty(
