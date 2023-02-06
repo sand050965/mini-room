@@ -1,4 +1,4 @@
-import { initAOS, preload } from "./common.js";
+import { initAOS, preload } from "../utils/commonUtil.js";
 const input = document.querySelector("input");
 const startBtn = document.querySelector("#startBtn");
 const joinBtn = document.querySelector("#joinBtn");

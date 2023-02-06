@@ -1,6 +1,5 @@
-import Video from "./video.js";
-import RoomView from "./RoomView.js";
-import { preload } from "./common.js";
+import Video from "./utils/videoUtil.js";
+import { preload } from "./utils/commonUtil.js";
 
 const socket = io("/");
 const video = new Video();
@@ -607,20 +606,23 @@ const removeParticipant = async (roomId, userId) => {
  * Display Message
  */
 const displayMessage = (message, userId, userName) => {
-  if (userId === USER_ID) {
-    userName = "You";
-  }
-
   const messageContainer = document.querySelector("#messageContainer");
   const messageContent = document.createElement("div");
   const messageSender = document.createElement("b");
-  const br = document.createElement("br");
   const mainMessage = document.createElement("div");
+
+  if (userId === USER_ID) {
+    userName = "You";
+    mainMessage.classList.add("self-message");
+    messageContent.classList.add("self-message-content");
+  } else {
+    mainMessage.classList.add("other-message");
+  }
+
   messageSender.textContent = userName;
   mainMessage.textContent = message;
   mainMessage.classList.add("message");
   messageContent.appendChild(messageSender);
-  messageContent.appendChild(br);
   messageContent.appendChild(mainMessage);
   messageContent.classList.add("message-content");
   messageContainer.appendChild(messageContent);

@@ -224,14 +224,31 @@ video {
 }
 
 .message-container .message-content {
+  display: grid;
+  grid-template-rows: repeat(2, auto);
   margin-bottom: 20px;
+  gap: 10px;
   padding: 20px;
+}
+.message-container .self-message-content {
+  justify-items: right;
 }
 
 .message-container .message {
-  width: 100%;
+  width: 60%;
   height: auto;
   word-wrap: break-word;
+  padding: 10px;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.message-container .self-message {
+  background-color: #0761f2;
+}
+
+.message-container .other-message {
+  background-color: #78787a;
 }
 
 .message-input-container .message-input {
@@ -248,7 +265,6 @@ video {
   align-items: center;
   gap: 10px;
   padding: 10px;
-  margin-top: 10px;
 }
 
 .message-input-container .send-btn {

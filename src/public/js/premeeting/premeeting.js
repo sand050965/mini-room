@@ -1,12 +1,12 @@
-import { initAOS, preload, displayModal } from "./common.js";
-import Video from "./video.js";
-const video = new Video();
+import { initAOS, preload, displayModal } from "../utils/commonUtil.js";
+import Video from "../utils/videoUtil.js";
 const socket = io("/");
 const peer = new Peer(undefined, {
   host: "triptaipei.online",
   port: 443,
   secure: true,
 });
+const video = new Video();
 
 let userId;
 let isPermissionDenied = true;

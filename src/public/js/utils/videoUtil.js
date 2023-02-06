@@ -1,12 +1,5 @@
 class Video {
-  videoContainer = document.querySelector("#videoContainer");
-  avatarContainer = document.querySelector("#avatarContainer");
-
   constructor() {}
-
-  /**
-   * Get User Media Stream
-   */
   getUserMediaStream = () => {
     return navigator.mediaDevices.getUserMedia({
       video: true,
@@ -14,9 +7,6 @@ class Video {
     });
   };
 
-  /**
-   * Mute and Unmute
-   */
   muteUnmute = (DOMElement) => {
     const stream = DOMElement.stream;
     const enabled = stream.getAudioTracks()[0].enabled;
@@ -27,39 +17,6 @@ class Video {
     }
   };
 
-  /**
-   * Unmute
-   */
-  unmute = (DOMElement) => {
-    const stream = DOMElement.stream;
-    stream.getAudioTracks()[0].enabled = true;
-    const audioBtn = DOMElement.audioBtn;
-    const audioBtnIcon = DOMElement.audioBtnIcon;
-    audioBtnIcon.classList.add("fa-microphone");
-    audioBtnIcon.classList.remove("fa-microphone-slash");
-    audioBtn.classList.remove("btn-disable");
-    audioBtn.classList.add("btn-able");
-    return false;
-  };
-
-  /**
-   * Mute
-   */
-  mute = (DOMElement) => {
-    const stream = DOMElement.stream;
-    stream.getAudioTracks()[0].enabled = false;
-    const audioBtn = DOMElement.audioBtn;
-    const audioBtnIcon = DOMElement.audioBtnIcon;
-    audioBtnIcon.classList.remove("fa-microphone");
-    audioBtnIcon.classList.add("fa-microphone-slash");
-    audioBtn.classList.remove("btn-able");
-    audioBtn.classList.add("btn-disable");
-    return true;
-  };
-
-  /**
-   * Play and Stop Video
-   */
   playStopVideo = (DOMElement) => {
     const stream = DOMElement.stream;
     const enabled = stream.getVideoTracks()[0].enabled;
@@ -70,9 +27,62 @@ class Video {
     }
   };
 
-  /**
-   * Play Video
-   */
+  unmute = (DOMElement) => {
+    let audioBtn;
+    let audioBtnIcon;
+
+    const stream = DOMElement.stream;
+    stream.getAudioTracks()[0].enabled = true;
+    switch (DOMElement.type) {
+      case "premeeting":
+        audioBtn = DOMElement.audioBtn;
+        audioBtnIcon = DOMElement.audioBtnIcon;
+        audioBtnIcon.classList.add("fa-microphone");
+        audioBtnIcon.classList.remove("fa-microphone-slash");
+        audioBtn.classList.remove("btn-disable");
+        audioBtn.classList.add("btn-able");
+        return false;
+      case "roomSelf":
+        audioBtn = DOMElement.audioBtn;
+        audioBtnIcon = DOMElement.audioBtnIcon;
+        audioBtnIcon.classList.add("fa-microphone");
+        audioBtnIcon.classList.remove("fa-microphone-slash");
+        audioBtn.classList.remove("btn-disable");
+        audioBtn.classList.add("btn-able");
+        return false;
+      case "rooOther":
+        return false;
+    }
+  };
+
+  mute = (DOMElement) => {
+    let audioBtn;
+    let audioBtnIcon;
+
+    const stream = DOMElement.stream;
+    stream.getAudioTracks()[0].enabled = false;
+    switch (DOMElement.type) {
+      case "premeeting":
+        audioBtn = DOMElement.audioBtn;
+        audioBtnIcon = DOMElement.audioBtnIcon;
+        audioBtnIcon.classList.remove("fa-microphone");
+        audioBtnIcon.classList.add("fa-microphone-slash");
+        audioBtn.classList.remove("btn-able");
+        audioBtn.classList.add("btn-disable");
+        return true;
+      case "roomSelf":
+        audioBtn = DOMElement.audioBtn;
+        audioBtnIcon = DOMElement.audioBtnIcon;
+        audioBtnIcon.classList.remove("fa-microphone");
+        audioBtnIcon.classList.add("fa-microphone-slash");
+        audioBtn.classList.remove("btn-able");
+        audioBtn.classList.add("btn-disable");
+        return true;
+      case "rooOther":
+        return true;
+    }
+  };
+
   playVideo = (DOMElement) => {
     let videoBtn;
     let videoBtnIcon;
@@ -111,9 +121,6 @@ class Video {
     }
   };
 
-  /**
-   * Stop Video
-   */
   stopVideo = (DOMElement) => {
     let videoBtn;
     let videoBtnIcon;
