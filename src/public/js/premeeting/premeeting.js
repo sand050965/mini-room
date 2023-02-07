@@ -1,12 +1,12 @@
-import { initAOS, preload, displayModal } from "../utils/commonUtil.js";
-import Video from "../utils/videoUtil.js";
+import { initAOS, preload, displayModal } from "../modules/commonMod.js";
+import StreamMod from "../modules/streamMod.js";
 const socket = io("/");
 const peer = new Peer(undefined, {
   host: "triptaipei.online",
   port: 443,
   secure: true,
 });
-const video = new Video();
+const streamMod = new StreamMod();
 
 let userId;
 let isPermissionDenied = true;
@@ -71,7 +71,7 @@ const init = async () => {
  */
 const getStream = async () => {
   try {
-    myStream = await video.getUserMediaStream();
+    myStream = await streamMod.getUserMediaStream();
     DOMElement.stream = myStream;
     displayAlert(true);
     isPermissionDenied = false;
@@ -81,7 +81,7 @@ const getStream = async () => {
     preload();
     displayAlert(false);
     isPermissionDenied = true;
-    isMuted = video.mute(DOMElement);
+    isMuted = streamMod.mute(DOMElement);
     isStoppedVideo = video.stopVideo(DOMElement);
   }
 };
@@ -91,17 +91,17 @@ const getStream = async () => {
  */
 const addStream = (DOMElement) => {
   const videoContainer = DOMElement.videoContainer;
-  const videoElement = DOMElement.video;
+  const video = DOMElement.video;
   const stream = DOMElement.stream;
-  videoElement.srcObject = stream;
-  videoElement.addEventListener("loadedmetadata", async () => {
-    await videoElement.play();
+  video.srcObject = stream;
+  video.addEventListener("loadedmetadata", async () => {
+    await video.play();
     preload();
   });
 
-  videoContainer.appendChild(videoElement);
-  isMuted = video.unmute(DOMElement);
-  isStoppedVideo = video.playVideo(DOMElement);
+  videoContainer.appendChild(video);
+  isMuted = streamMod.unmute(DOMElement);
+  isStoppedVideo = streamMod.playVideo(DOMElement);
 };
 
 /**
@@ -121,9 +121,9 @@ const btnControl = (e) => {
   displayModal(isPermissionDenied);
 
   if (e.target.id.includes("audioBtn")) {
-    isMuted = video.muteUnmute(DOMElement);
+    isMuted = streamMod.muteUnmute(DOMElement);
   } else if (e.target.id.includes("videoBtn")) {
-    isStoppedVideo = video.playStopVideo(DOMElement);
+    isStoppedVideo = streamMod.playStopVideo(DOMElement);
   }
 };
 
@@ -131,17 +131,17 @@ const btnControl = (e) => {
  * Display Alert
  */
 const displayAlert = (isSuccess) => {
-  const FailedAlert = document.querySelector("#FailedAlert");
-  const SuccessAlert = document.querySelector("#SuccessAlert");
+  const failedAlert = document.querySelector("#FailedAlert");
+  const successAlert = document.querySelector("#SuccessAlert");
   if (isSuccess) {
-    SuccessAlert.classList.remove("none");
-    SuccessAlert.setAttribute("data-aos", "fade-up");
-    FailedAlert.classList.add("none");
+    successAlert.classList.remove("none");
+    successAlert.setAttribute("data-aos", "fade-up");
+    failedAlert.classList.add("none");
     initAOS(AOS);
   } else {
-    FailedAlert.classList.remove("none");
-    FailedAlert.setAttribute("data-aos", "fade-up");
-    SuccessAlert.classList.add("none");
+    failedAlert.classList.remove("none");
+    failedAlert.setAttribute("data-aos", "fade-up");
+    successAlert.classList.add("none");
     initAOS(AOS);
   }
 };

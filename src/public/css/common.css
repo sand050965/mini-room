@@ -171,3 +171,7 @@ button {
 .btn-disable:hover {
   background-color: #f44d44;
 }
+
+.btn-clicked {
+  color: #8ab4f8 !important;
+}

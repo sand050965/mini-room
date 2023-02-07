@@ -39,6 +39,16 @@ io.on("connection", (socket) => {
       socket.to(roomId).emit("user-play-video", userId);
     });
 
+    // users stop sharing screen stream event
+    socket.on("stop-screen-share", () => {
+      socket.to(roomId).emit("user-stop-screen-share", userId);
+    });
+
+    // users start sharing screen stream event
+    // socket.on("start-screen-share", () => {
+    //   socket.to(roomId).emit("user-start-screen-share", userId);
+    // });
+
     // users send message event
     socket.on("message", (message) => {
       io.to(roomId).emit("create-message", message, userId, userName); // emit to users in the room what message that user sent

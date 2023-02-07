@@ -1,4 +1,4 @@
-class ChatRoom {
+class ChatRoomMod {
   constructor() {}
 
   sendMsgBtnControl = () => {
@@ -50,4 +50,4 @@ class ChatRoom {
   };
 }
 
-export default ChatRoom;
+export default ChatRoomMod;

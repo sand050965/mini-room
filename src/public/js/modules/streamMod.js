@@ -1,9 +1,17 @@
-class Video {
+class StreamMod {
   constructor() {}
   getUserMediaStream = () => {
     return navigator.mediaDevices.getUserMedia({
       video: true,
       audio: true,
+    });
+  };
+
+  getDisplayMediaStream = () => {
+    return navigator.mediaDevices.getDisplayMedia({
+      video: {
+        cursor: "always",
+      },
     });
   };
 
@@ -24,6 +32,35 @@ class Video {
       return this.stopVideo(DOMElement);
     } else {
       return this.playVideo(DOMElement);
+    }
+  };
+
+  initMediaControl = (DOMElement) => {
+    if (!DOMElement.isMuted) {
+      this.unmute(DOMElement);
+    } else {
+      this.mute(DOMElement);
+    }
+    if (!DOMElement.isStoppedVideo) {
+      this.playVideo(DOMElement);
+    } else {
+      this.stopVideo(DOMElement);
+    }
+  };
+
+  selfAudioControl = (isMuted) => {
+    if (isMuted) {
+      socket.emit("mute");
+    } else {
+      socket.emit("unmute");
+    }
+  };
+
+  selfVideoControl = (isStoppedVideo) => {
+    if (isStoppedVideo) {
+      socket.emit("stop-video");
+    } else {
+      socket.emit("play-video");
     }
   };
 
@@ -159,4 +196,4 @@ class Video {
   };
 }
 
-export default Video;
+export default StreamMod;

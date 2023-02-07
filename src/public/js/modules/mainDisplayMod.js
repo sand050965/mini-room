@@ -1,100 +1,30 @@
-import Video from "../utils/videoUtil.js";
-import Participant from "../utils/participantUtil.js";
-import BtnsControl from "./btnsControl.js";
-import { preload } from "../utils/commonUtil.js";
+import StreamMod from "../modules/streamMod.js";
+import ScreenShareMod from "../modules/screenShareMod.js";
+import OffcanvasMod from "../modules/offcanvasMod.js";
+import ParticipantMod from "../modules/participantMod.js";
+import { preload } from "../modules/commonMod.js";
 
-class Display {
+class MainDisplayMod {
   constructor() {
-    this.myStream = null;
-    this.renderCnt = 0;
-    this.loadedCnt = 0;
-    this.video = new Video();
-    this.participant = new Participant();
-    this.btnsControl = new BtnsControl();
+    this.streamMod = new StreamMod();
+    this.offcanvasMod = new OffcanvasMod();
+    this.participantMod = new ParticipantMod();
   }
-
-  getRenderCnt = () => {
-    return this.renderCnt;
-  };
-
-  addRenderCnt = () => {
-    return this.renderCnt++;
-  };
-
-  getLoadedCnt = () => {
-    return this.renderCnt;
-  };
-
-  addLoadedCnt = () => {
-    return this.renderCnt++;
-  };
-
-  init = async () => {
-    try {
-      this.myStream = await this.video.getUserMediaStream();
-      const videoItemContainer = document.createElement("div");
-      const videoItem = document.createElement("div");
-      const myVideo = document.createElement("video");
-      myVideo.muted = true;
-      const avatarContainer = document.createElement("div");
-      const avatarContent = document.createElement("div");
-      const avatar = document.createElement("div");
-      const avatarImg = document.createElement("img");
-      const nameTag = document.createElement("div");
-
-      // Add Element into DOMElement Object
-      const DOMElement = {
-        type: "roomSelf",
-        videoBtn: document.querySelector("#videoBtn"),
-        videoBtnIcon: document.querySelector("#videoBtnIcon"),
-        audioBtn: document.querySelector("#audioBtn"),
-        audioBtnIcon: document.querySelector("#audioBtnIcon"),
-        stream: this.myStream,
-        videoItemContainer: videoItemContainer,
-        videoItem: videoItem,
-        video: myVideo,
-        avatarContainer: avatarContainer,
-        avatarContent: avatarContent,
-        avatar: avatar,
-        avatarImg: avatarImg,
-        nameTag: nameTag,
-        userName: "You",
-        userId: USER_ID,
-        isMuted: JSON.parse(IS_MUTED),
-        isStoppedVideo: JSON.parse(IS_STOPPED_VIDEO),
-      };
-
-      await this.addRoomStream(DOMElement);
-      await this.initMediaControl(DOMElement);
-      cnt = await this.participant.getAllParticipants();
-      preload();
-    } catch (e) {
-      console.log(e.message);
-      preload();
-    }
-  };
 
   addRoomStream = async (DOMElement) => {
     const stream = DOMElement.stream;
     const userId = DOMElement.userId;
-    const videoElement = DOMElement.video;
+    const video = DOMElement.video;
     const isMuted = DOMElement.isMuted;
     const isStoppedVideo = DOMElement.isStoppedVideo;
-    videoElement.srcObject = stream;
+    video.srcObject = stream;
 
     // avatar style
     await this.setRoomAvatarStyle(DOMElement);
 
     // video grid style
     await this.setRoomVideoGridStyle(DOMElement);
-    videoElement.addEventListener("loadedmetadata", async () => {
-      await videoElement.play();
-      this.loadedCnt++;
-      if (this.renderCnt === this.loadedCnt) {
-        preload();
-        socket.emit("finished-render");
-      }
-    });
+    this.listenOnVideoStream(DOMElement);
   };
 
   setRoomAvatarStyle = (DOMElement) => {
@@ -213,10 +143,8 @@ class Display {
       selfVideo.classList.remove("one-self-video");
       selfVideo.classList.add("video");
 
-      for (const offCanvas of this.btnsControl.offCanvasArray) {
-        if (offCanvas.classList.contains("show"))
-          selfVideoItemContainer.classList.add("offcanvas-open");
-      }
+      // check if any offcanvas open or anyone is sharing screen
+      this.mainContainerGrid();
 
       // other's video
       videoItemContainer.setAttribute("name", "otherVideoItemContainer");
@@ -268,16 +196,25 @@ class Display {
     }
   };
 
-  initMediaControl = (DOMElement) => {
-    if (!DOMElement.isMuted) {
-      this.video.unmute(DOMElement);
+  mainContainerGrid = () => {
+    if (isOffCanvasOpen) {
+      this.offcanvasMod.offCanvasOpenGrid();
     } else {
-      this.video.mute(DOMElement);
+      this.offcanvasMod.offCanvasCloseGrid();
     }
-    if (!DOMElement.isStoppedVideo) {
-      this.video.playVideo(DOMElement);
-    } else {
-      this.video.stopVideo(DOMElement);
+  };
+
+  listenOnVideoStream = (DOMElement) => {
+    const video = DOMElement.video;
+    video.addEventListener("loadedmetadata", this.startPlayVideo);
+  };
+
+  startPlayVideo = async (e) => {
+    await e.target.play();
+    loadedCnt++;
+    if (renderCnt === loadedCnt) {
+      preload();
+      socket.emit("finished-render");
     }
   };
 
@@ -322,10 +259,8 @@ class Display {
       selfVideo.classList.remove("one-self-video");
       selfVideo.classList.add("video");
 
-      for (const offCanvas of this.btnsControl.offCanvasArray) {
-        if (offCanvas.classList.contains("show"))
-          selfVideoItemContainer.classList.add("offcanvas-open");
-      }
+      // check if any offcanvas open or anyone is sharing screen
+      this.mainContainerGrid();
 
       // other's video
       const otherVideoItemContainer = document.querySelector(
@@ -373,4 +308,4 @@ class Display {
   };
 }
 
-export default Display;
+export default MainDisplayMod;

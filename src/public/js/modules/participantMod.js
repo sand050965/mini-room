@@ -1,4 +1,4 @@
-class Participant {
+class ParticipantMod {
   construcor() {}
 
   getAllParticipants = async () => {
@@ -32,4 +32,4 @@ class Participant {
   };
 }
 
-export default Participant;
+export default ParticipantMod;
