@@ -1,7 +1,7 @@
 import StreamMod from "../modules/streamMod.js";
 import MainDisplayMod from "../modules/mainDisplayMod.js";
 
-class ScreenShare {
+class ScreenShareMod {
   constructor() {
     this.streamMod = new StreamMod();
     this.mainDisplayMod = new MainDisplayMod();
@@ -21,6 +21,7 @@ class ScreenShare {
       isScreenSharing = true;
       await this.screenShareBtnControl();
       await this.makeScreenShareCall();
+      await this.mainDisplayMod.screenShareOpenVideoGrid();
     } catch (e) {
       console.log(e);
     }
@@ -37,6 +38,7 @@ class ScreenShare {
     };
     await this.addScreenShareStream(DOMElement);
     await this.listenOnScreenShare();
+    await this.mainDisplayMod.screenShareOpenVideoGrid();
   };
 
   /**
@@ -104,13 +106,16 @@ class ScreenShare {
   };
 
   screenShareBtnControl = () => {
+    const screenShareBtn = document.querySelector("#screenShareBtn");
     const screenShareBtnIcon = document.querySelector("#screenShareBtnIcon");
     if (isScreenSharing) {
-      screenShareBtnIcon.classList.add("btn-clicked");
+      screenShareBtn.classList.add("main-btn-clicked");
+      screenShareBtnIcon.classList.add("main-btn-icon-clicked");
     } else {
-      screenShareBtnIcon.classList.remove("btn-clicked");
+      screenShareBtn.classList.add("main-btn-clicked");
+      screenShareBtnIcon.classList.remove("main-btn-icon-clicked");
     }
   };
 }
 
-export default ScreenShare;
+export default ScreenShareMod;

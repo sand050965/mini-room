@@ -1,5 +1,4 @@
 import StreamMod from "../modules/streamMod.js";
-import ScreenShareMod from "../modules/screenShareMod.js";
 import OffcanvasMod from "../modules/offcanvasMod.js";
 import ParticipantMod from "../modules/participantMod.js";
 import { preload } from "../modules/commonMod.js";
@@ -13,82 +12,69 @@ class MainDisplayMod {
 
   addRoomStream = async (DOMElement) => {
     const stream = DOMElement.stream;
-    const userId = DOMElement.userId;
     const video = DOMElement.video;
-    const isMuted = DOMElement.isMuted;
-    const isStoppedVideo = DOMElement.isStoppedVideo;
     video.srcObject = stream;
 
     // avatar style
-    await this.setRoomAvatarStyle(DOMElement);
+    const avatarDOMElement = await this.setRoomAvatarAttribute(DOMElement);
+    await this.setRoomAvatarStyle(avatarDOMElement);
 
     // video grid style
-    await this.setRoomVideoGridStyle(DOMElement);
-    this.listenOnVideoStream(DOMElement);
+    const videoDOMElement = await this.setRoomVideoAttribute(DOMElement);
+    await this.setRoomVideoGridStyle(videoDOMElement);
+    await this.listenOnVideoStream(DOMElement);
   };
 
-  setRoomAvatarStyle = (DOMElement) => {
+  setRoomAvatarAttribute = (DOMElement) => {
+    let avatarDOMElement = {
+      otherAvatarContainers: [],
+      otherAvatars: [],
+    };
     const avatarContainer = DOMElement.avatarContainer;
     const avatarContent = DOMElement.avatarContent;
     const avatar = DOMElement.avatar;
     const avatarImg = DOMElement.avatarImg;
     const userId = DOMElement.userId;
 
-    if (userId === USER_ID) {
-      avatarContainer.setAttribute("id", "selfAvatarContainer");
-      avatarContent.setAttribute("id", "selfAvatarContent");
-      avatar.setAttribute("id", "selfAvatar");
-      avatarImg.setAttribute("id", "selfAvatarImg");
-    } else {
-      avatarContainer.setAttribute("id", `${userId}AvatarContainer`);
-      avatarContent.setAttribute("id", `${userId}AvatarContent`);
-      avatar.setAttribute("id", `${userId}Avatar`);
-      avatarImg.setAttribute("id", `${userId}AvatarImg`);
-    }
-
-    avatarImg.setAttribute(
-      "src",
-      "https://s3.amazonaws.com/www.miniroom.online/images/avatar.png"
-    );
-
-    if (cnt === 1) {
-      avatarContainer.classList.add("avatar-container");
-      avatarContent.classList.add("avatar-content");
-      avatar.classList.add("avatar");
-    } else if (cnt === 2) {
-      // self avatar
-      const selfAvatar = document.querySelector("#selfAvatar");
-      selfAvatar.classList.remove("avatar");
-      selfAvatar.classList.add("two-self-avatar");
-
-      // other avatar
-      avatarContainer.classList.add("avatar-container");
-      avatar.classList.add("avatar");
-    } else {
-      // self avatar
-      const selfAvatarContainer = document.querySelector(
-        "#selfAvatarContainer"
-      );
-      const selfAvatar = document.querySelector("#selfAvatar");
-      selfAvatarContainer.classList.add("avatar-container");
-      selfAvatar.classList.remove("more-video-avatar");
-      selfAvatar.classList.add("avatar");
-
-      // other avatar
-      avatarContainer.classList.add("avatar-container");
-      avatar.classList.add("avatar");
-    }
-
-    // append
+    // append and add common style
     avatar.classList.add("center");
     avatarContainer.classList.add("center");
     avatar.appendChild(avatarImg);
     avatarContent.appendChild(avatar);
     avatarContent.classList.add("center");
     avatarContainer.appendChild(avatarContent);
+
+    avatarImg.setAttribute(
+      "src",
+      "https://s3.amazonaws.com/www.miniroom.online/images/avatar.png"
+    );
+
+    // set DOM element id and name attributes
+    if (userId === USER_ID) {
+      avatarContainer.setAttribute("id", "selfAvatarContainer");
+      avatarContent.setAttribute("id", "selfAvatarContent");
+      avatar.setAttribute("id", "selfAvatar");
+      avatarImg.setAttribute("id", "selfAvatarImg");
+      avatarDOMElement.selfAvatarContainer = avatarContainer;
+      avatarDOMElement.selfAvatarContent = avatarContent;
+      avatarDOMElement.selfAvatar = avatar;
+    } else {
+      avatarContainer.setAttribute("id", `${userId}AvatarContainer`);
+      avatarContent.setAttribute("id", `${userId}AvatarContent`);
+      avatar.setAttribute("id", `${userId}Avatar`);
+      avatarImg.setAttribute("id", `${userId}AvatarImg`);
+      avatarDOMElement.otherAvatarContainers = [avatarContainer];
+      avatarDOMElement.otherAvatars = [avatarContent];
+    }
+    return avatarDOMElement;
   };
 
-  setRoomVideoGridStyle = (DOMElement) => {
+  setRoomVideoAttribute = (DOMElement) => {
+    const videoElement = {
+      otherVideoItemContainers: [],
+      otherVideoItems: [],
+      otherVideos: [],
+    };
     const videosContainer = document.querySelector("#videosContainer");
     const videoItemContainer = DOMElement.videoItemContainer;
     const videoItem = DOMElement.videoItem;
@@ -110,11 +96,14 @@ class MainDisplayMod {
     videoItemContainer.classList.add("center");
     videosContainer.append(videoItemContainer);
 
-    // set id
+    // set DOM element id and name attributes
     if (userId === USER_ID) {
       videoItemContainer.setAttribute("id", "selfVideoItemContainer");
       videoItem.setAttribute("id", "selfVideoItem");
       video.setAttribute("id", "selfVideo");
+      videoElement.selfVideoItemContainer = videoItemContainer;
+      videoElement.selfVideoItem = videoItem;
+      videoElement.selfVideo = video;
     } else {
       videoItemContainer.setAttribute("id", `${userId}VideoItemContainer`);
       videoItemContainer.setAttribute("name", "otherVideoItemContainer");
@@ -122,40 +111,100 @@ class MainDisplayMod {
       videoItem.setAttribute("name", "otherVideoItem");
       video.setAttribute("id", `${userId}Video`);
       video.setAttribute("name", "otherVideo");
+      videoElement.otherVideoItemContainers = [videoItemContainer];
+      videoElement.otherVideoItems = [videoItem];
+      videoElement.otherVideos = [video];
+    }
+    return videoElement;
+  };
+
+  setRoomAvatarStyle = (DOMElement) => {
+    // self avatart elements
+    const selfAvatarContainer = DOMElement.selfAvatarContainer;
+    const selfAvatarContent = DOMElement.selfAvatarContent;
+    const selfAvatar = DOMElement.selfAvatar;
+
+    // other avatar elements
+    const otherAvatarContainers = DOMElement.otherAvatarContainers;
+    const otherAvatars = DOMElement.otherAvatars;
+
+    // reset style
+    this.resetRoomAvatarStyle(DOMElement);
+
+    if (cnt === 1) {
+      // add slef avatar style
+      selfAvatarContainer.classList.add("avatar-container");
+      selfAvatarContent.classList.add("avatar-content");
+      selfAvatar.classList.add("avatar");
+    } else if (cnt === 2) {
+      // add self avatar style
+      selfAvatarContainer.classList.add("avatar-container");
+      selfAvatarContent.classList.add("avatar-content");
+      selfAvatar.classList.add("two-self-avatar");
+    } else {
+      // add self avatar style
+      selfAvatarContainer.classList.add("avatar-container");
+      selfAvatarContent.classList.add("avatar-content");
+      selfAvatar.classList.add("avatar");
+    }
+
+    // add other avatar style
+    for (const otherAvatarContainer of otherAvatarContainers) {
+      otherAvatarContainer.classList.add("avatar-container");
+    }
+
+    for (const otherAvatar of otherAvatars) {
+      otherAvatar.classList.add("avatar");
+    }
+  };
+
+  setRoomVideoGridStyle = (DOMElement) => {
+    const videosContainer = document.querySelector("#videosContainer");
+
+    // self video elements
+    const selfVideoItemContainer = DOMElement.selfVideoItemContainer;
+    const selfVideoItem = DOMElement.selfVideoItem;
+    const selfVideo = DOMElement.selfVideo;
+
+    // other's video elements
+    const otherVideoItemContainers = DOMElement.otherVideoItemContainers;
+    const otherVideoItems = DOMElement.otherVideoItems;
+    const otherVideos = DOMElement.otherVideos;
+
+    // reset style
+    this.resetVideoGrid(DOMElement);
+
+    // check if any offcanvas open or anyone is sharing screen to adjust style
+    this.mainContainerGrid();
+
+    // sharing screen style
+    if (isScreenSharing) {
+      this.screenShareOpenVideoGrid();
+      return;
     }
 
     if (cnt === 1) {
-      videoItemContainer.classList.add("video-container");
-      videoItem.classList.add("one-self-item");
-      video.classList.add("one-self-video");
-      video.classList.add("video-rotate");
-    } else if (cnt === 2) {
       // self video
-      const selfVideoItemContainer = document.querySelector(
-        "#selfVideoItemContainer"
-      );
-      const selfVideoItem = document.querySelector("#selfVideoItem");
-      const selfVideo = document.querySelector("#selfVideo");
-      selfVideoItemContainer.classList.remove("video-container");
+      selfVideoItemContainer.classList.add("video-container");
+      selfVideoItem.classList.add("one-self-item");
+      selfVideo.classList.add("one-self-video");
+      selfVideo.classList.add("video-rotate");
+    } else if (cnt === 2) {
       selfVideoItemContainer.classList.add("two-self-video-container");
-      selfVideoItem.classList.remove("one-self-item");
       selfVideoItem.classList.add("two-self-item");
-      selfVideo.classList.remove("one-self-video");
       selfVideo.classList.add("video");
 
-      // check if any offcanvas open or anyone is sharing screen
-      this.mainContainerGrid();
-
       // other's video
-      videoItemContainer.setAttribute("name", "otherVideoItemContainer");
-      videoItemContainer.classList.add("video-container");
-
-      videoItem.classList.add("two-other-item");
-      video.classList.add("video");
+      for (const otherVideoItemContainer of otherVideoItemContainers) {
+        otherVideoItemContainer.classList.add("video-container");
+      }
+      for (const otherVideoItem of otherVideoItems) {
+        otherVideoItem.classList.add("two-other-item");
+      }
+      for (const otherVideo of otherVideos) {
+        otherVideo.classList.add("video");
+      }
     } else {
-      // videosContainer
-      videosContainer.classList.add("more-videos-grid");
-
       let columns;
       if (parseInt(Math.sqrt(cnt)) === parseFloat(Math.sqrt(cnt))) {
         columns = Math.sqrt(cnt);
@@ -163,36 +212,130 @@ class MainDisplayMod {
         columns = parseInt(cnt / 2) + (cnt % 2);
       }
 
+      // set common style
+      videosContainer.classList.add("more-videos-grid");
       videosContainer.style.setProperty(
         "grid-template-columns",
         `repeat(${columns}, 1fr)`
       );
 
-      // self video
-      const selfVideoItemContainer = document.querySelector(
-        "#selfVideoItemContainer"
-      );
-      const selfVideoItem = document.querySelector("#selfVideoItem");
-      const selfVideo = document.querySelector("#selfVideo");
-      selfVideoItemContainer.classList.remove("two-self-video-container");
+      // set self video style
       selfVideoItemContainer.classList.add("video-container");
-      selfVideoItem.classList.remove("one-self-item");
-      selfVideoItem.classList.remove("two-self-item");
       selfVideoItem.classList.add("more-item");
-      selfVideo.classList.remove("one-self-video");
       selfVideo.classList.add("video");
 
-      // other's video
-      videoItemContainer.classList.add("video-container");
-      const otherVideoItems = document.querySelectorAll(
-        "div[name='otherVideoItem']"
-      );
-
-      for (const item of otherVideoItems) {
-        item.classList.remove("two-other-item");
-        item.classList.add("more-item");
+      // set other's video style
+      for (const otherVideoItem of otherVideoItems) {
+        otherVideoItem.classList.add("more-item");
       }
-      video.classList.add("video");
+
+      for (const otherVideo of otherVideos) {
+        otherVideo.classList.add("video");
+      }
+    }
+  };
+
+  screenShareOpenVideoGrid = (DOMElement) => {
+    const videosContainer = document.querySelector("#videosContainer");
+
+    // self video elements
+    const selfVideoItemContainer = document.querySelector(
+      "#selfVideoItemContainer"
+    );
+    const selfVideoItem = document.querySelector("#selfVideoItem");
+    const selfVideo = document.querySelector("#selfVideo");
+
+    // other video elements
+    const otherVideoItemContainers = document.querySelectorAll(
+      '[name="otherVideoItemContainer"]'
+    );
+    const otherVideoItems = document.querySelectorAll(
+      '[name="otherVideoItem"]'
+    );
+    const otherVideos = document.querySelectorAll('[name="otherVideo"]');
+
+    const videoDOMElement = {
+      selfVideoItemContainer: selfVideoItemContainer,
+      selfVideoItem: selfVideoItem,
+      selfVideo: selfVideo,
+      otherVideoItemContainers: otherVideoItemContainers,
+      otherVideoItems: otherVideoItems,
+      otherVideos: otherVideos,
+    };
+
+    // reset all style
+    this.resetVideoGrid(videoDOMElement);
+
+    // add common style
+    videosContainer.classList.add("more-videos-grid");
+
+    // add self video style
+    selfVideoItemContainer.classList.add("video-container");
+    selfVideoItem.classList.add("more-item");
+    selfVideo.classList.add("video");
+
+    // add ther's video style
+    for (const otherVideoItemContainer of otherVideoItemContainers) {
+      otherVideoItemContainer.classList.remove("video-container");
+    }
+
+    for (const otherVideoItem of otherVideoItems) {
+      otherVideoItem.classList.add("more-item");
+    }
+
+    for (const otherVideo of otherVideos) {
+      otherVideo.classList.add("video");
+    }
+  };
+
+  resetRoomAvatarStyle = (DOMElement) => {
+    // self avatar elements
+    const selfAvatar = DOMElement.selfAvatar;
+
+    // remove self avatar style
+    selfAvatar.classList.remove("avatar");
+    selfAvatar.classList.remove("two-self-avatar");
+    selfAvatar.classList.remove("more-video-avatar");
+  };
+
+  resetVideoGrid = (DOMElement) => {
+    const videosContainer = document.querySelector("#videosContainer");
+
+    // self video elements
+    const selfVideoItemContainer = DOMElement.selfVideoItemContainer;
+    const selfVideoItem = DOMElement.selfVideoItem;
+    const selfVideo = DOMElement.selfVideo;
+
+    // other's video elements
+    const otherVideoItemContainers = DOMElement.otherVideoItemContainers;
+    const otherVideoItems = DOMElement.otherVideoItems;
+    const otherVideos = DOMElement.otherVideos;
+
+    // remove common style
+    videosContainer.classList.remove("more-videos-grid");
+    videosContainer.style.removeProperty("grid-template-columns");
+
+    // remove self video style
+    selfVideoItemContainer.classList.remove("video-container");
+    selfVideoItemContainer.classList.remove("two-self-video-container");
+    selfVideoItem.classList.remove("one-self-item");
+    selfVideoItem.classList.remove("two-self-item");
+    selfVideoItem.classList.remove("more-item");
+    selfVideo.classList.remove("video");
+    selfVideo.classList.remove("one-self-video");
+
+    // remove other's video style
+    for (const otherVideoItemContainer of otherVideoItemContainers) {
+      otherVideoItemContainer.classList.remove("video-container");
+    }
+
+    for (const otherVideoItem of otherVideoItems) {
+      otherVideoItem.classList.remove("two-other-item");
+      otherVideoItem.classList.remove("more-item");
+    }
+
+    for (const otherVideo of otherVideos) {
+      otherVideo.classList.remove("video");
     }
   };
 
@@ -215,95 +358,6 @@ class MainDisplayMod {
     if (renderCnt === loadedCnt) {
       preload();
       socket.emit("finished-render");
-    }
-  };
-
-  closeRoomAvatarStyle = () => {
-    if (cnt === 2) {
-      const selfAvatar = document.querySelector("#selfAvatar");
-      selfAvatar.classList.remove("avatar");
-      selfAvatar.classList.add("two-self-avatar");
-    } else {
-      const selfAvatar = document.querySelector("#selfAvatar");
-      selfAvatar.classList.add("avatar");
-      selfAvatar.classList.remove("two-self-avatar");
-    }
-  };
-
-  closeVideoGridStyle = () => {
-    const videosContainer = document.querySelector("#videosContainer");
-    const selfVideoItemContainer = document.querySelector(
-      "#selfVideoItemContainer"
-    );
-    const selfVideoItem = document.querySelector("#selfVideoItem");
-    const selfVideo = document.querySelector("#selfVideo");
-    if (cnt === 1) {
-      selfVideoItemContainer.classList.remove("two-self-video-container");
-      selfVideoItemContainer.classList.add("video-container");
-      selfVideoItemContainer.classList.remove("offcanvas-open");
-      selfVideoItem.classList.remove("more-item");
-      selfVideoItem.classList.remove("two-self-item");
-      selfVideoItem.classList.remove("one-self-item");
-      selfVideo.classList.remove("video");
-      selfVideo.classList.add("one-self-video");
-      selfVideoItem.classList.add("one-self-item");
-      videosContainer.classList.remove("more-videos-grid");
-      videosContainer.style.removeProperty("grid-template-columns");
-    } else if (cnt === 2) {
-      // self video
-      selfVideoItemContainer.classList.remove("video-container");
-      selfVideoItemContainer.classList.add("two-self-video-container");
-      selfVideoItem.classList.remove("more-item");
-      selfVideoItem.classList.remove("one-self-item");
-      selfVideoItem.classList.add("two-self-item");
-      selfVideo.classList.remove("one-self-video");
-      selfVideo.classList.add("video");
-
-      // check if any offcanvas open or anyone is sharing screen
-      this.mainContainerGrid();
-
-      // other's video
-      const otherVideoItemContainer = document.querySelector(
-        '[name="otherVideoItemContainer"]'
-      );
-      const otherVideoItem = document.querySelector('[name="otherVideoItem"]');
-      const otherVideo = document.querySelector('[name="otherVideo"]');
-      otherVideoItemContainer.classList.add("video-container");
-      otherVideoItem.classList.remove("more-item");
-      otherVideoItem.classList.add("two-other-item");
-      otherVideo.classList.add("video");
-      videosContainer.classList.remove("more-videos-grid");
-      videosContainer.style.removeProperty("grid-template-columns");
-    } else {
-      // videosContainer
-      videosContainer.classList.add("more-videos-grid");
-      let columns;
-      if (parseInt(Math.sqrt(cnt)) === parseFloat(Math.sqrt(cnt))) {
-        columns = Math.sqrt(cnt);
-      } else {
-        columns = parseInt(cnt / 2) + (cnt % 2);
-      }
-      videosContainer.style.setProperty(
-        "grid-template-columns",
-        `repeat(${columns}, 1fr)`
-      );
-      // self video
-      // selfVideoItemContainer.classList.remove("two-self-video-container");
-      selfVideoItemContainer.classList.add("video-container");
-      // selfVideoItem.classList.remove("one-self-item");
-      // selfVideoItem.classList.remove("two-self-item");
-      selfVideoItem.classList.add("more-item");
-      // selfVideo.classList.remove("one-self-video");
-      selfVideo.classList.add("video");
-
-      // other's video
-      const otherVideoItems = document.querySelectorAll(
-        "div[name='otherVideoItem']"
-      );
-      for (const item of otherVideoItems) {
-        item.classList.remove("two-other-item");
-        item.classList.add("more-item");
-      }
     }
   };
 }

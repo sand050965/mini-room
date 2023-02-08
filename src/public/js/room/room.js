@@ -266,6 +266,26 @@ socket.on("user-disconnected", async (userId) => {
   );
   cnt = await participantMod.getAllParticipants();
   await videoItemContainer.remove();
-  mainDisplayMod.closeVideoGridStyle();
-  mainDisplayMod.closeRoomAvatarStyle();
+  const avatarDOMElement = {
+    selfAvatarContainer: document.querySelector("#selfAvatarContainer"),
+    selfAvatarContent: document.querySelector("#selfAvatarContent"),
+    selfAvatar: document.querySelector("#selfAvatar"),
+    otherAvatarContainers: document.querySelectorAll(
+      '[name="otherAvatarContainer"]'
+    ),
+    otherAvatars: document.querySelectorAll('[name="otherAvatar"]'),
+  };
+  mainDisplayMod.setRoomAvatarStyle(avatarDOMElement);
+
+  const videoDOMElement = {
+    selfVideoItemContainer: document.querySelector("#selfVideoItemContainer"),
+    selfVideoItem: document.querySelector("#selfVideoItem"),
+    selfVideo: document.querySelector("#selfVideo"),
+    otherVideoItemContainers: document.querySelector(
+      '[name="otherVideoItemContainer"]'
+    ),
+    otherVideoItems: document.querySelectorAll("div[name='otherVideoItem']"),
+    otherVideos: document.querySelectorAll('[name="otherVideo"]'),
+  };
+  mainDisplayMod.setRoomVideoGridStyle(videoDOMElement);
 });

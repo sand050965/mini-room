@@ -24,14 +24,15 @@ const peers = {};
 
 const screenShareMap = new Map();
 
-const infoOffcanvas = document.querySelector("#infoOffcanvas");
-const BsInfoOffcanvas = new bootstrap.Offcanvas(infoOffcanvas);
-const participantOffcanvas = document.querySelector("#participantOfcanvas");
-const BsParticipantOffcanvas = new bootstrap.Offcanvas(participantOffcanvas);
-const chatOffcanvas = document.querySelector("#chatOffcanvas");
-const BsChatOffcanvas = new bootstrap.Offcanvas(chatOffcanvas);
-
-const offCanvasArray = [infoOffcanvas, participantOffcanvas, chatOffcanvas];
+const BsInfoOffcanvas = new bootstrap.Offcanvas(
+  document.querySelector("#infoOffcanvas")
+);
+const BsParticipantOffcanvas = new bootstrap.Offcanvas(
+  document.querySelector("#participantOfcanvas")
+);
+const BsChatOffcanvas = new bootstrap.Offcanvas(
+  document.querySelector("#chatOffcanvas")
+);
 
 const bsOffcanvasArray = [
   BsInfoOffcanvas,

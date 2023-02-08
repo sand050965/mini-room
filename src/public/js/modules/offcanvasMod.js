@@ -27,18 +27,18 @@ class OffcanvasMod {
     }
 
     for (const sideBtnIcon of sideBtnIconsArray) {
-      sideBtnIcon.classList.remove("btn-clicked");
+      sideBtnIcon.classList.remove("side-btn-clicked");
     }
 
     if (isOffCanvasOpen) {
       tagetBsOffcanvas.hide();
-      targetBtn.classList.remove("btn-clicked");
+      targetBtn.classList.remove("side-btn-clicked");
       selfVideoItemContainer.classList.remove("offcanvas-open");
       this.offCanvasCloseGrid();
       isOffCanvasOpen = false;
     } else {
       tagetBsOffcanvas.show();
-      targetBtn.classList.add("btn-clicked");
+      targetBtn.classList.add("side-btn-clicked");
       this.offCanvasOpenGrid();
       isOffCanvasOpen = true;
     }

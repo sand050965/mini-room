@@ -172,6 +172,14 @@ button {
   background-color: #f44d44;
 }
 
-.btn-clicked {
+.main-btn-clicked {
+  background-color: #176cf5 !important;
+}
+
+.main-btn-icon-clicked {
+  color: #fff !important;
+}
+
+.side-btn-clicked {
   color: #8ab4f8 !important;
 }
