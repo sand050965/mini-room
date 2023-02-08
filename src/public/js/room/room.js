@@ -5,7 +5,6 @@ import RoomController from "../controllers/roomController.js";
 import StreamMod from "../modules/streamMod.js";
 import ScreenShareMod from "../modules/screenShareMod.js";
 import MainDisplayMod from "../modules/mainDisplayMod.js";
-import OffcanvasMod from "../modules/offcanvasMod.js";
 import ChatRoomMod from "../modules/chatRoomMod.js";
 import ParticipantMod from "../modules/participantMod.js";
 
@@ -20,7 +19,6 @@ const roomController = new RoomController();
 const streamMod = new StreamMod();
 const screenShareMod = new ScreenShareMod();
 const mainDisplayMod = new MainDisplayMod();
-const offcanvasMod = new OffcanvasMod();
 const chatRoomMod = new ChatRoomMod();
 const participantMod = new ParticipantMod();
 
@@ -83,6 +81,7 @@ peer.on("call", async (call) => {
         await mainDisplayMod.addRoomStream(newDOMElement);
         await streamMod.initMediaControl(newDOMElement);
         renderCnt++;
+        console.log("renderCnt", renderCnt);
       }
     } else if (call.metadata.type === "screensharing") {
       screenShareMap.set("screenSharing", call.peer);
@@ -151,7 +150,6 @@ const connectToNewUser = async (DOMElement) => {
  * user finish render
  */
 socket.on("user-finished-render", (userId) => {
-  // const myStream = document.getElementById("selfVideo").srcObject;
   if (!myStream.getAudioTracks()[0].enabled) {
     socket.emit("mute");
   }
@@ -161,7 +159,9 @@ socket.on("user-finished-render", (userId) => {
   }
 
   if (
-    !document.querySelector("#screenShareBtn").classList.contains("btn-clicked")
+    !document
+      .querySelector("#screenShareBtn")
+      .classList.contains("main-btn-clicked")
   ) {
     socket.emit("stop-screen-share");
   }
@@ -243,7 +243,9 @@ socket.on("user-play-video", async (userId) => {
  * stop share other user screen
  */
 socket.on("user-stop-screen-share", async (userId) => {
-  screenShareMod.stopSreenShareVideo();
+  if (screenShareMap.get("screenSharing") === userId) {
+    screenShareMod.stopSreenShareVideo();
+  }
 });
 
 /**
@@ -266,6 +268,11 @@ socket.on("user-disconnected", async (userId) => {
   );
   cnt = await participantMod.getAllParticipants();
   await videoItemContainer.remove();
+
+  if (screenShareMap.get("screenSharing") === userId) {
+    await screenShareMod.stopSreenShareVideo();
+  }
+
   const avatarDOMElement = {
     selfAvatarContainer: document.querySelector("#selfAvatarContainer"),
     selfAvatarContent: document.querySelector("#selfAvatarContent"),
@@ -273,19 +280,22 @@ socket.on("user-disconnected", async (userId) => {
     otherAvatarContainers: document.querySelectorAll(
       '[name="otherAvatarContainer"]'
     ),
+    otherAvatarContents: document.querySelectorAll(
+      '[name="otherAvatarContents"]'
+    ),
     otherAvatars: document.querySelectorAll('[name="otherAvatar"]'),
   };
-  mainDisplayMod.setRoomAvatarStyle(avatarDOMElement);
+  await mainDisplayMod.setRoomAvatarStyle(avatarDOMElement);
 
   const videoDOMElement = {
     selfVideoItemContainer: document.querySelector("#selfVideoItemContainer"),
     selfVideoItem: document.querySelector("#selfVideoItem"),
     selfVideo: document.querySelector("#selfVideo"),
-    otherVideoItemContainers: document.querySelector(
+    otherVideoItemContainers: document.querySelectorAll(
       '[name="otherVideoItemContainer"]'
     ),
     otherVideoItems: document.querySelectorAll("div[name='otherVideoItem']"),
     otherVideos: document.querySelectorAll('[name="otherVideo"]'),
   };
-  mainDisplayMod.setRoomVideoGridStyle(videoDOMElement);
+  await mainDisplayMod.setRoomVideoGridStyle(videoDOMElement);
 });

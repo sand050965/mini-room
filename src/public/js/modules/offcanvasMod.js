@@ -1,65 +1,79 @@
 class OffcanvasMod {
   constructor() {}
 
-  toggleOffCanvas = (offCanvasDOMElement) => {
-    let targetBtn;
-    const tagetSideBar = offCanvasDOMElement.tagetSideBar;
-    const tagetBsOffcanvas = offCanvasDOMElement.tagetBsOffcanvas;
-    const btnId = offCanvasDOMElement.btnId;
-    const selfVideoItemContainer = document.querySelector(
-      "#selfVideoItemContainer"
-    );
-
-    if (btnId.includes("Icon")) {
-      targetBtn = document.querySelector(`#${btnId}`);
-    } else {
-      targetBtn = document.querySelector(`#${btnId}Icon`);
-    }
+  toggleOffcanvas = (offcanvasDOMElement) => {
+    const btnId = offcanvasDOMElement.btnId;
+    const tagetBsOffcanvas = offcanvasDOMElement.tagetBsOffcanvas;
 
     for (const bsOffcanvas of bsOffcanvasArray) {
       if (bsOffcanvas === tagetBsOffcanvas) {
         continue;
       }
       bsOffcanvas.hide();
-      isOffCanvasOpen = false;
+    }
+    if (offcanvasMap.get("isOpen") !== btnId) {
+      isOffcanvasOpen = false;
     }
 
     for (const sideBtnIcon of sideBtnIconsArray) {
       sideBtnIcon.classList.remove("side-btn-clicked");
     }
 
-    if (isOffCanvasOpen) {
+    if (isOffcanvasOpen) {
       tagetBsOffcanvas.hide();
-      targetBtn.classList.remove("side-btn-clicked");
-      selfVideoItemContainer.classList.remove("offcanvas-open");
-      this.offCanvasCloseGrid();
-      isOffCanvasOpen = false;
+      this.offcanvasCloseControl(offcanvasDOMElement);
+      this.offcanvasCloseGrid();
     } else {
       tagetBsOffcanvas.show();
-      targetBtn.classList.add("side-btn-clicked");
-      this.offCanvasOpenGrid();
-      isOffCanvasOpen = true;
+      this.offcanvasOpenControl(offcanvasDOMElement);
+      this.offcanvasOpenGrid(offcanvasDOMElement);
     }
   };
 
-  offCanvasOpenGrid = () => {
+  offcanvasCloseControl = (offcanvasDOMElement) => {
+    const targetBtn = document.querySelector(
+      `#${offcanvasDOMElement.btnId}Icon`
+    );
+    const selfVideoItemContainer = document.querySelector(
+      "#selfVideoItemContainer"
+    );
+
+    targetBtn.classList.remove("side-btn-clicked");
+    selfVideoItemContainer.classList.remove("offcanvas-open");
+  };
+
+  offcanvasOpenControl = (offcanvasDOMElement) => {
+    const targetBtn = document.querySelector(
+      `#${offcanvasDOMElement.btnId}Icon`
+    );
+    targetBtn.classList.add("side-btn-clicked");
+  };
+
+  offcanvasOpenGrid = (offcanvasDOMElement) => {
+    const btnId = offcanvasDOMElement.btnId;
     const mainContainer = document.querySelector("#mainContainer");
+
     if (isScreenSharing) {
       mainContainer.classList.remove("main-middle");
       mainContainer.classList.remove("main-left-middle");
       mainContainer.classList.remove("main-middle-right");
       mainContainer.classList.add("main-left-middle-right");
     } else {
-      if (cnt === 2) selfVideoItemContainer.classList.add("offcanvas-open");
+      if (cnt === 2) {
+        selfVideoItemContainer.classList.add("offcanvas-open");
+      }
       mainContainer.classList.remove("main-middle");
       mainContainer.classList.remove("main-left-middle");
       mainContainer.classList.add("main-middle-right");
       mainContainer.classList.remove("main-left-middle-right");
     }
+    isOffcanvasOpen = true;
+    offcanvasMap.set("isOpen", btnId);
   };
 
-  offCanvasCloseGrid = () => {
+  offcanvasCloseGrid = () => {
     const mainContainer = document.querySelector("#mainContainer");
+
     if (isScreenSharing) {
       mainContainer.classList.remove("main-middle");
       mainContainer.classList.add("main-left-middle");
@@ -71,6 +85,8 @@ class OffcanvasMod {
       mainContainer.classList.remove("main-middle-right");
       mainContainer.classList.remove("main-left-middle-right");
     }
+    isOffcanvasOpen = false;
+    offcanvasMap.clear();
   };
 }
 

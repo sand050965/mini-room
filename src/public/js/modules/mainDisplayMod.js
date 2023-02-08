@@ -26,11 +26,12 @@ class MainDisplayMod {
   };
 
   setRoomAvatarAttribute = (DOMElement) => {
-    let avatarDOMElement = {
+    const avatarDOMElement = {
       selfAvatarContainer: document.querySelector("#selfAvatarContainer"),
       selfAvatarContent: document.querySelector("#selfAvatarContent"),
       selfAvatar: document.querySelector("#selfAvatar"),
       otherAvatarContainers: [],
+      otherAvatarContents: [],
       otherAvatars: [],
     };
     const avatarContainer = DOMElement.avatarContainer;
@@ -67,7 +68,8 @@ class MainDisplayMod {
       avatar.setAttribute("id", `${userId}Avatar`);
       avatarImg.setAttribute("id", `${userId}AvatarImg`);
       avatarDOMElement.otherAvatarContainers = [avatarContainer];
-      avatarDOMElement.otherAvatars = [avatarContent];
+      avatarDOMElement.otherAvatarContents = [avatarContent];
+      avatarDOMElement.otherAvatars = [avatar];
     }
     return avatarDOMElement;
   };
@@ -133,31 +135,30 @@ class MainDisplayMod {
 
     // other avatar elements
     const otherAvatarContainers = DOMElement.otherAvatarContainers;
+    const otherAvatarContents = DOMElement.otherAvatarContents;
     const otherAvatars = DOMElement.otherAvatars;
 
     // reset style
     this.resetRoomAvatarStyle(DOMElement);
 
-    if (cnt === 1) {
-      // add slef avatar style
-      selfAvatarContainer.classList.add("avatar-container");
-      selfAvatarContent.classList.add("avatar-content");
-      selfAvatar.classList.add("avatar");
-    } else if (cnt === 2) {
+    // add self avatar style
+    selfAvatarContainer.classList.add("avatar-container");
+    selfAvatarContent.classList.add("avatar-content");
+
+    if (cnt === 2) {
       // add self avatar style
-      selfAvatarContainer.classList.add("avatar-container");
-      selfAvatarContent.classList.add("avatar-content");
       selfAvatar.classList.add("two-self-avatar");
     } else {
-      // add self avatar style
-      selfAvatarContainer.classList.add("avatar-container");
-      selfAvatarContent.classList.add("avatar-content");
       selfAvatar.classList.add("avatar");
     }
 
     // add other avatar style
     for (const otherAvatarContainer of otherAvatarContainers) {
       otherAvatarContainer.classList.add("avatar-container");
+    }
+
+    for (const otherAvatarContent of otherAvatarContents) {
+      otherAvatarContent.classList.add("avatar-content");
     }
 
     for (const otherAvatar of otherAvatars) {
@@ -179,14 +180,15 @@ class MainDisplayMod {
     const otherVideos = DOMElement.otherVideos;
 
     // reset style
-    this.resetVideoGrid(DOMElement);
+    this.resetRoomVideoGrid(DOMElement);
 
     // check if any offcanvas open or anyone is sharing screen to adjust style
     this.mainContainerGrid();
 
     // sharing screen style
     if (isScreenSharing) {
-      this.screenShareOpenVideoGrid();
+      this.setScreenShareAvatarStyle();
+      this.setScreenShareGridStyle();
       return;
     }
 
@@ -242,7 +244,22 @@ class MainDisplayMod {
     }
   };
 
-  screenShareOpenVideoGrid = (DOMElement) => {
+  setScreenShareAvatarStyle = () => {
+    //self avatar elements
+    const selfAvatar = document.querySelector("#selfAvatar");
+
+    const avatarDOMElement = {
+      selfAvatar: selfAvatar,
+    };
+
+    // reset all style
+    this.resetRoomAvatarStyle(avatarDOMElement);
+
+    // add self avatart style
+    selfAvatar.classList.add("avatar");
+  };
+
+  setScreenShareGridStyle = () => {
     const videosContainer = document.querySelector("#videosContainer");
 
     // self video elements
@@ -253,13 +270,16 @@ class MainDisplayMod {
     const selfVideo = document.querySelector("#selfVideo");
 
     // other video elements
-    const otherVideoItemContainers = document.querySelectorAll(
-      '[name="otherVideoItemContainer"]'
-    );
-    const otherVideoItems = document.querySelectorAll(
-      '[name="otherVideoItem"]'
-    );
-    const otherVideos = document.querySelectorAll('[name="otherVideo"]');
+    let otherVideoItemContainers = [];
+    let otherVideoItems = [];
+    let otherVideos = [];
+    if (cnt !== 1) {
+      otherVideoItemContainers = document.querySelectorAll(
+        '[name="otherVideoItemContainer"]'
+      );
+      otherVideoItems = document.querySelectorAll('[name="otherVideoItem"]');
+      otherVideos = document.querySelectorAll('[name="otherVideo"]');
+    }
 
     const videoDOMElement = {
       selfVideoItemContainer: selfVideoItemContainer,
@@ -271,7 +291,7 @@ class MainDisplayMod {
     };
 
     // reset all style
-    this.resetVideoGrid(videoDOMElement);
+    this.resetRoomVideoGrid(videoDOMElement);
 
     // add common style
     videosContainer.classList.add("more-videos-grid");
@@ -283,7 +303,7 @@ class MainDisplayMod {
 
     // add ther's video style
     for (const otherVideoItemContainer of otherVideoItemContainers) {
-      otherVideoItemContainer.classList.remove("video-container");
+      otherVideoItemContainer.classList.add("video-container");
     }
 
     for (const otherVideoItem of otherVideoItems) {
@@ -302,10 +322,9 @@ class MainDisplayMod {
     // remove self avatar style
     selfAvatar.classList.remove("avatar");
     selfAvatar.classList.remove("two-self-avatar");
-    selfAvatar.classList.remove("more-video-avatar");
   };
 
-  resetVideoGrid = (DOMElement) => {
+  resetRoomVideoGrid = (DOMElement) => {
     const videosContainer = document.querySelector("#videosContainer");
 
     // self video elements
@@ -347,10 +366,10 @@ class MainDisplayMod {
   };
 
   mainContainerGrid = () => {
-    if (isOffCanvasOpen) {
-      this.offcanvasMod.offCanvasOpenGrid();
+    if (isOffcanvasOpen) {
+      this.offcanvasMod.offcanvasOpenGrid();
     } else {
-      this.offcanvasMod.offCanvasCloseGrid();
+      this.offcanvasMod.offcanvasCloseGrid();
     }
   };
 
@@ -362,7 +381,8 @@ class MainDisplayMod {
   startPlayVideo = async (e) => {
     await e.target.play();
     loadedCnt++;
-    if (renderCnt === loadedCnt) {
+    console.log("loadedCnt", loadedCnt);
+    if (renderCnt === loadedCnt - 1) {
       preload();
       socket.emit("finished-render");
     }

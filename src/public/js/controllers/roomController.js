@@ -55,8 +55,8 @@ class RoomController {
       await this.streamMod.initMediaControl(DOMElement);
       cnt = await this.participantMod.getAllParticipants();
       preload();
-    } catch (e) {
-      console.log(e.message);
+    } catch (err) {
+      console.log(err);
       preload();
     }
   };
@@ -89,30 +89,31 @@ class RoomController {
       this.participantMod.leaveRoom();
     } else if (e.target.id.includes("infoBtn")) {
       // info offcanvas btn is clicked
-      const offCanvasDOMElement = {
-        tagetSideBar: infoOffcanvas,
+      const offcanvasDOMElement = {
         tagetBsOffcanvas: BsInfoOffcanvas,
-        btnId: e.target.id,
+        btnId: e.target.id.replace("Icon", ""),
       };
-      this.offcanvasMod.toggleOffCanvas(offCanvasDOMElement);
+      this.offcanvasMod.toggleOffcanvas(offcanvasDOMElement);
     } else if (e.target.id.includes("participantBtn")) {
       // participant offcanvas btn is clicked
-      const offCanvasDOMElement = {
-        tagetSideBar: participantOffcanvas,
+      const offcanvasDOMElement = {
         tagetBsOffcanvas: BsParticipantOffcanvas,
-        btnId: e.target.id,
+        btnId: e.target.id.replace("Icon", ""),
       };
-      this.offcanvasMod.toggleOffCanvas(offCanvasDOMElement);
+      this.offcanvasMod.toggleOffcanvas(offcanvasDOMElement);
     } else if (e.target.id.includes("chatBtn")) {
       // chat offcanvas btn is clicked
-      const offCanvasDOMElement = {
-        tagetSideBar: chatOffcanvas,
+      const offcanvasDOMElement = {
         tagetBsOffcanvas: BsChatOffcanvas,
-        btnId: e.target.id,
+        btnId: e.target.id.replace("Icon", ""),
       };
-      this.offcanvasMod.toggleOffCanvas(offCanvasDOMElement);
-    } else if (e.target.id.includes("closeBtn")) {
+      this.offcanvasMod.toggleOffcanvas(offcanvasDOMElement);
+    } else if (e.target.id.includes("CloseBtn")) {
       // offcanvas close btn is clicked
+      const offcanvasDOMElement = {
+        btnId: e.target.id.replace("Close", ""),
+      };
+      this.offcanvasMod.offcanvasCloseControl(offcanvasDOMElement);
       this.offcanvasMod.offCanvasCloseGrid();
     } else if (e.target.id.includes("sendMsgBtn")) {
       // send msg btn is clicked
@@ -129,10 +130,16 @@ class RoomController {
 
   closeWindow = async (e) => {
     e.preventDefault();
+    if (screenShareMap.get("screenSharing") === USER_ID) {
+      await screenShareMod.stopSreenShareVideo();
+    }
     await this.participantMod.removeParticipant(ROOM_ID, USER_ID);
   };
 
   leaveRoom = async () => {
+    if (screenShareMap.get("screenSharing") === USER_ID) {
+      await screenShareMod.stopSreenShareVideo();
+    }
     await this.participantMod.removeParticipant(ROOM_ID, USER_ID);
     window.location = "/leave/thankyou";
   };

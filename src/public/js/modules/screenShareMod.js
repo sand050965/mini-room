@@ -21,9 +21,10 @@ class ScreenShareMod {
       isScreenSharing = true;
       await this.screenShareBtnControl();
       await this.makeScreenShareCall();
-      await this.mainDisplayMod.screenShareOpenVideoGrid();
-    } catch (e) {
-      console.log(e);
+      await this.mainDisplayMod.setScreenShareAvatarStyle();
+      await this.mainDisplayMod.setScreenShareGridStyle();
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -38,7 +39,8 @@ class ScreenShareMod {
     };
     await this.addScreenShareStream(DOMElement);
     await this.listenOnScreenShare();
-    await this.mainDisplayMod.screenShareOpenVideoGrid();
+    await this.mainDisplayMod.setScreenShareAvatarStyle();
+    await this.mainDisplayMod.setScreenShareGridStyle();
   };
 
   /**
@@ -96,24 +98,46 @@ class ScreenShareMod {
     isScreenSharing = false;
     const screenShareVideo = document.querySelector("#screenShareVideo");
     screenShareVideo.remove();
-    await this.mainDisplayMod.mainContainerGrid();
     if (screenShareMap.get("screenSharing") === USER_ID) {
       myScreenShareStream = null;
       this.screenShareBtnControl();
       socket.emit("stop-screen-share");
     }
+    await this.mainDisplayMod.mainContainerGrid();
+    const avatarElement = {
+      selfAvatarContainer: document.querySelector("#selfAvatarContainer"),
+      selfAvatarContent: document.querySelector("#selfAvatarContent"),
+      selfAvatar: document.querySelector("#selfAvatar"),
+      otherAvatarContainers: document.querySelectorAll(
+        '[name="otherAvatarContainer"]'
+      ),
+      otherAvatarContents: document.querySelectorAll(
+        '[name="otherAvatarContents"]'
+      ),
+      otherAvatars: document.querySelectorAll('[name="otherAvatar"]'),
+    };
+    await this.mainDisplayMod.setRoomAvatarStyle(avatarElement);
+
+    const videoElement = {
+      selfVideoItemContainer: document.querySelector("#selfVideoItemContainer"),
+      selfVideoItem: document.querySelector("#selfVideoItem"),
+      selfVideo: document.querySelector("#selfVideo"),
+      otherVideoItemContainers: document.querySelectorAll(
+        '[name="otherVideoItemContainer"]'
+      ),
+      otherVideoItems: document.querySelectorAll("div[name='otherVideoItem']"),
+      otherVideos: document.querySelectorAll('[name="otherVideo"]'),
+    };
+    await this.mainDisplayMod.setRoomVideoGridStyle(videoElement);
     screenShareMap.clear();
   };
 
   screenShareBtnControl = () => {
     const screenShareBtn = document.querySelector("#screenShareBtn");
-    const screenShareBtnIcon = document.querySelector("#screenShareBtnIcon");
     if (isScreenSharing) {
       screenShareBtn.classList.add("main-btn-clicked");
-      screenShareBtnIcon.classList.add("main-btn-icon-clicked");
     } else {
-      screenShareBtn.classList.add("main-btn-clicked");
-      screenShareBtnIcon.classList.remove("main-btn-icon-clicked");
+      screenShareBtn.classList.remove("main-btn-clicked");
     }
   };
 }

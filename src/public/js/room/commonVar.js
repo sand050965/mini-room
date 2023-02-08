@@ -8,7 +8,7 @@ let renderCnt = 0;
 
 let loadedCnt = 0;
 
-let isOffCanvasOpen = false;
+let isOffcanvasOpen = false;
 
 let isScreenSharing = false;
 
@@ -21,6 +21,8 @@ const peer = new Peer(USER_ID, {
 });
 
 const peers = {};
+
+const offcanvasMap = new Map();
 
 const screenShareMap = new Map();
 
@@ -55,8 +57,8 @@ const btnsArray = [
   document.querySelector("#participantBtn"),
   document.querySelector("#chatBtn"),
   document.querySelector("#sendMsgBtn"),
-  document.querySelector("#chatCloseBtn"),
-  document.querySelector("#chatCloseBtn"),
+  document.querySelector("#infoCloseBtn"),
+  document.querySelector("#participantCloseBtn"),
   document.querySelector("#chatCloseBtn"),
 ];
 
