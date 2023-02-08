@@ -27,6 +27,9 @@ class MainDisplayMod {
 
   setRoomAvatarAttribute = (DOMElement) => {
     let avatarDOMElement = {
+      selfAvatarContainer: document.querySelector("#selfAvatarContainer"),
+      selfAvatarContent: document.querySelector("#selfAvatarContent"),
+      selfAvatar: document.querySelector("#selfAvatar"),
       otherAvatarContainers: [],
       otherAvatars: [],
     };
@@ -71,10 +74,14 @@ class MainDisplayMod {
 
   setRoomVideoAttribute = (DOMElement) => {
     const videoElement = {
+      selfVideoItemContainer: document.querySelector("#selfVideoItemContainer"),
+      selfVideoItem: document.querySelector("#selfVideoItem"),
+      selfVideo: document.querySelector("#selfVideo"),
       otherVideoItemContainers: [],
       otherVideoItems: [],
       otherVideos: [],
     };
+
     const videosContainer = document.querySelector("#videosContainer");
     const videoItemContainer = DOMElement.videoItemContainer;
     const videoItem = DOMElement.videoItem;

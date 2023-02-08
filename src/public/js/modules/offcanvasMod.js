@@ -16,8 +16,6 @@ class OffcanvasMod {
       targetBtn = document.querySelector(`#${btnId}Icon`);
     }
 
-    const mainContainer = document.querySelector("#mainContainer");
-
     for (const bsOffcanvas of bsOffcanvasArray) {
       if (bsOffcanvas === tagetBsOffcanvas) {
         continue;

@@ -28,7 +28,7 @@ const BsInfoOffcanvas = new bootstrap.Offcanvas(
   document.querySelector("#infoOffcanvas")
 );
 const BsParticipantOffcanvas = new bootstrap.Offcanvas(
-  document.querySelector("#participantOfcanvas")
+  document.querySelector("#participantOffcanvas")
 );
 const BsChatOffcanvas = new bootstrap.Offcanvas(
   document.querySelector("#chatOffcanvas")
