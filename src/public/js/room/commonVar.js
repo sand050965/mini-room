@@ -59,6 +59,7 @@ const btnsArray = [
   document.querySelector("#sendMsgBtn"),
   document.querySelector("#infoCloseBtn"),
   document.querySelector("#participantCloseBtn"),
+  document.querySelector("#copyInfoBtn"),
   document.querySelector("#chatCloseBtn"),
 ];
 

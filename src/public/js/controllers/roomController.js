@@ -2,6 +2,7 @@ import StreamMod from "../modules/streamMod.js";
 import ScreenShareMod from "../modules/screenShareMod.js";
 import MainDisplayMod from "../modules/mainDisplayMod.js";
 import OffcanvasMod from "../modules/offcanvasMod.js";
+import RoomInfoMod from "../modules/roomInfoMod.js";
 import ChatRoomMod from "../modules/chatRoomMod.js";
 import ParticipantMod from "../modules/participantMod.js";
 import { preload } from "../modules/commonMod.js";
@@ -12,6 +13,7 @@ class RoomController {
     this.screenShareMod = new ScreenShareMod();
     this.mainDisplayMod = new MainDisplayMod();
     this.offcanvasMod = new OffcanvasMod();
+    this.roomInfoMod = new RoomInfoMod();
     this.chatRoomMod = new ChatRoomMod();
     this.participantMod = new ParticipantMod();
   }
@@ -50,7 +52,7 @@ class RoomController {
         isMuted: JSON.parse(IS_MUTED),
         isStoppedVideo: JSON.parse(IS_STOPPED_VIDEO),
       };
-
+      this.roomInfoMod.initInfo();
       await this.mainDisplayMod.addRoomStream(DOMElement);
       await this.streamMod.initMediaControl(DOMElement);
       cnt = await this.participantMod.getAllParticipants();
@@ -114,7 +116,9 @@ class RoomController {
         btnId: e.target.id.replace("Close", ""),
       };
       this.offcanvasMod.offcanvasCloseControl(offcanvasDOMElement);
-      this.offcanvasMod.offCanvasCloseGrid();
+      this.offcanvasMod.offcanvasCloseGrid();
+    } else if (e.target.id.includes("copyInfoBtn")) {
+      this.roomInfoMod.copyInfo();
     } else if (e.target.id.includes("sendMsgBtn")) {
       // send msg btn is clicked
       this.chatRoomMod.sendMessage();

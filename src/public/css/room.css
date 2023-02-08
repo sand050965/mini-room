@@ -233,6 +233,41 @@ video {
 }
 
 /*--------------------------------------------------------------
+# Info Offcanvas
+--------------------------------------------------------------*/
+#infoOffcanvas .hint {
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+#infoOffcanvas .room-path {
+  border-radius: 10px;
+  background-color: rgb(234, 232, 232);
+  padding: 10px;
+  margin-bottom: 30px;
+}
+
+#infoOffcanvas .copy-info-btn {
+  border-radius: 5px;
+  color: #0761f2;
+  cursor: pointer;
+  width: 200px;
+  padding: 10px;
+  margin-bottom: 30px;
+}
+
+#infoOffcanvas .copy-info-btn:hover {
+  color: #043e9b;
+  background-color: #dde7f8;
+}
+
+#infoOffcanvas .copy-info {
+}
+
+/*--------------------------------------------------------------
+# Participant Offcanvas
+--------------------------------------------------------------*/
+/*--------------------------------------------------------------
 # Chat Offcanvas
 --------------------------------------------------------------*/
 #chatOffcanvas .offcanvas-body {
