@@ -22,7 +22,7 @@ module.exports = {
     try {
       const participantData = {
         roomId: req.params.roomId,
-        userId: req.params.userId,
+        participantId: req.params.participantId,
       };
       const participantInfo = await participantService.getParticipant(
         participantData
@@ -42,7 +42,7 @@ module.exports = {
     try {
       const participantData = {
         roomId: req.body.roomId,
-        userId: req.body.userId,
+        participantId: req.body.participantId,
       };
       await participantService.deleteParticipant(participantData);
       res.status(200).json({ ok: true });

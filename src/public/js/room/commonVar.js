@@ -14,7 +14,7 @@ let isScreenSharing = false;
 
 const socket = io("/");
 
-const peer = new Peer(USER_ID, {
+const peer = new Peer(PARTICIPANT_ID, {
   host: "triptaipei.online",
   port: 443,
   secure: true,
@@ -26,6 +26,8 @@ const offcanvasMap = new Map();
 
 const screenShareMap = new Map();
 
+const participantMap = new Map();
+
 const BsInfoOffcanvas = new bootstrap.Offcanvas(
   document.querySelector("#infoOffcanvas")
 );
@@ -35,6 +37,14 @@ const BsParticipantOffcanvas = new bootstrap.Offcanvas(
 const BsChatOffcanvas = new bootstrap.Offcanvas(
   document.querySelector("#chatOffcanvas")
 );
+
+const copyInfoBtn = document.querySelector("#copyInfoBtn");
+
+const copyInfoBtnTooltip = new bootstrap.Tooltip(copyInfoBtn, {
+  trigger: "manual",
+});
+
+new ClipboardJS("#copyInfoBtn");
 
 const bsOffcanvasArray = [
   BsInfoOffcanvas,
@@ -59,7 +69,6 @@ const btnsArray = [
   document.querySelector("#sendMsgBtn"),
   document.querySelector("#infoCloseBtn"),
   document.querySelector("#participantCloseBtn"),
-  document.querySelector("#copyInfoBtn"),
   document.querySelector("#chatCloseBtn"),
 ];
 

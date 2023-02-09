@@ -241,10 +241,13 @@ video {
 }
 
 #infoOffcanvas .room-path {
-  border-radius: 10px;
-  background-color: rgb(234, 232, 232);
-  padding: 10px;
+  width: 100%;
   margin-bottom: 30px;
+  background-color: #f1f1f1;
+  padding: 10px;
+  border-radius: 5px;
+  outline: none !important;
+  border: 0 !important;
 }
 
 #infoOffcanvas .copy-info-btn {
@@ -261,12 +264,79 @@ video {
   background-color: #dde7f8;
 }
 
-#infoOffcanvas .copy-info {
-}
-
 /*--------------------------------------------------------------
 # Participant Offcanvas
 --------------------------------------------------------------*/
+#participantOffcanvas .invite-participant,
+#participantOffcanvas .search-participant-container,
+#participantOffcanvas .participant-list-title {
+  padding: 10px;
+  margin-bottom: 30px;
+}
+
+#participantOffcanvas .search-participant {
+  font-size: 16px;
+  border: 1px solid rgb(89, 88, 88);
+}
+
+#participantOffcanvas .participant-list {
+  overflow: scroll;
+}
+
+#participantOffcanvas .participant-container {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-items: center;
+  align-items: center;
+}
+
+#participantOffcanvas .participant-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #43454b;
+}
+
+#participantOffcanvas .participant-avatar-img {
+  width: 100%;
+  height: 100%;
+}
+
+#participantOffcanvas .participant-content {
+  display: grid;
+  align-items: center;
+}
+
+#participantOffcanvas .participant-name,
+#participantOffcanvas .participant-role {
+  padding: 0 10px;
+}
+
+#participantOffcanvas .participant-role {
+  font-size: 13px;
+  color: rgb(125, 125, 125);
+}
+
+#participantOffcanvas .media-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  justify-items: center;
+  align-items: center;
+  padding: 10px;
+}
+
+#participantOffcanvas .mute-unmute-container,
+#participantOffcanvas .play-stop-video-container {
+  padding: 5px;
+}
+
+#participantOffcanvas .mute-unmute,
+#participantOffcanvas .play-stop-video {
+  padding: 5px;
+  color: #43454b;
+}
+
 /*--------------------------------------------------------------
 # Chat Offcanvas
 --------------------------------------------------------------*/

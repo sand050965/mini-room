@@ -10,14 +10,19 @@ module.exports = {
   },
 
   getParticipant: (data) => {
-    return Participant.findOne({ roomId: data.roomId, userId: data.userId });
+    return Participant.findOne({
+      roomId: data.roomId,
+      participantId: data.participantId,
+    });
   },
 
   insertParticipant: async (data) => {
     const participant = new Participant({
       roomId: data.roomId,
-      userId: data.userId,
-      userName: data.userName,
+      participantId: data.participantId,
+      participantName: data.participantName,
+      role: data.role,
+      avatarImgUrl: data.avatarImgUrl,
       isMuted: data.isMuted,
       isStoppedVideo: data.isStoppedVideo,
       isReadyState: data.isReadyState,
@@ -28,7 +33,7 @@ module.exports = {
   deleteParticipant: async (data) => {
     await Participant.findOneAndRemove({
       roomId: data.roomId,
-      userId: data.userId,
+      participantId: data.participantId,
     });
   },
 

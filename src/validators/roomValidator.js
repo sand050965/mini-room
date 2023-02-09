@@ -7,7 +7,7 @@ const roomIdSchema = Joi.object({
 
 const roomIdAndUserIdSchema = Joi.object({
   roomId: Joi.string().required(),
-  userId: Joi.string().required(),
+  participantId: Joi.string().required(),
 });
 
 module.exports = {
@@ -38,7 +38,10 @@ module.exports = {
   },
 
   getParticipantValidator: (req, res, next) => {
-    const data = { roomId: req.params.roomId, userId: req.params.userId };
+    const data = {
+      roomId: req.params.roomId,
+      participantId: req.params.participantId,
+    };
 
     const { error, value } = roomIdAndUserIdSchema.validate(data, {
       abortEarly: false,
@@ -53,7 +56,10 @@ module.exports = {
   },
 
   participantLeaveValidator: (req, res, next) => {
-    const data = { roomId: req.body.roomId, userId: req.body.userId };
+    const data = {
+      roomId: req.body.roomId,
+      participantId: req.body.participantId,
+    };
 
     const { error, value } = roomIdAndUserIdSchema.validate(data, {
       abortEarly: false,

@@ -5,8 +5,10 @@ module.exports = {
   participantValidator: (req, res, next) => {
     const data = {
       roomId: req.body.roomId,
-      userId: req.body.userId,
-      userName: req.body.userName,
+      participantId: req.body.participantId,
+      participantName: req.body.participantName,
+      role: req.body.role,
+      avatarImgUrl: req.body.avatarImgUrl,
       isMuted: req.body.isMuted,
       isStoppedVideo: req.body.isStoppedVideo,
       isReadyState: req.body.isReadyState,
@@ -14,8 +16,10 @@ module.exports = {
 
     const schema = Joi.object({
       roomId: Joi.string().required(),
-      userId: Joi.string().required(),
-      userName: Joi.string().required(),
+      participantId: Joi.string().required(),
+      participantName: Joi.string().required(),
+      role: Joi.string().required(),
+      avatarImgUrl: Joi.string().required(),
       isMuted: Joi.boolean().required(),
       isStoppedVideo: Joi.boolean().required(),
       isReadyState: Joi.boolean().required(),

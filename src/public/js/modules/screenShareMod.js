@@ -8,7 +8,10 @@ class ScreenShareMod {
   }
 
   doMyScreenShare = async () => {
-    if (isScreenSharing && screenShareMap.get("screenSharing") == USER_ID) {
+    if (
+      isScreenSharing &&
+      screenShareMap.get("screenSharing") == PARTICIPANT_ID
+    ) {
       myScreenShareStream.getTracks().forEach((track) => track.stop());
       this.stopSreenShareVideo();
       return;
@@ -16,7 +19,7 @@ class ScreenShareMod {
 
     try {
       myScreenShareStream = await this.streamMod.getDisplayMediaStream();
-      screenShareMap.set("screenSharing", USER_ID);
+      screenShareMap.set("screenSharing", PARTICIPANT_ID);
       await this.doScreenShare(myScreenShareStream);
       isScreenSharing = true;
       await this.screenShareBtnControl();
@@ -48,7 +51,7 @@ class ScreenShareMod {
    */
   makeScreenShareCall = () => {
     for (const key of Object.keys(peers)) {
-      if (key === USER_ID) continue;
+      if (key === PARTICIPANT_ID) continue;
       peer.call(key, myScreenShareStream, {
         metadata: { type: "screensharing" },
       });
@@ -79,7 +82,7 @@ class ScreenShareMod {
       "loadedmetadata",
       this.playScreenShareVideo
     );
-    if (screenShareMap.get("screenSharing") == USER_ID) {
+    if (screenShareMap.get("screenSharing") == PARTICIPANT_ID) {
       screenShareVideo.srcObject
         .getVideoTracks()[0]
         .addEventListener("ended", this.stopSreenShareVideo);
@@ -89,7 +92,7 @@ class ScreenShareMod {
   playScreenShareVideo = async () => {
     const screenShareVideo = document.querySelector("#screenShareVideo");
     await screenShareVideo.play();
-    if (screenShareMap.get("screenSharing") === USER_ID) {
+    if (screenShareMap.get("screenSharing") === PARTICIPANT_ID) {
       socket.emit("start-screen-share");
     }
   };
@@ -98,7 +101,7 @@ class ScreenShareMod {
     isScreenSharing = false;
     const screenShareVideo = document.querySelector("#screenShareVideo");
     screenShareVideo.remove();
-    if (screenShareMap.get("screenSharing") === USER_ID) {
+    if (screenShareMap.get("screenSharing") === PARTICIPANT_ID) {
       myScreenShareStream = null;
       this.screenShareBtnControl();
       socket.emit("stop-screen-share");

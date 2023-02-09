@@ -8,13 +8,13 @@ module.exports = {
     try {
       let isReadyState = false;
       let participantInfo = null;
-      let action = req.session.action;
-      const userId = req.session.userId;
+      let role = req.session.role;
+      const participantId = req.session.participantId;
       const roomId = req.params.roomId;
       const dataId = req.session.dataId;
 
-      if (action === null) {
-        action = "join";
+      if (role === null || role === undefined) {
+        role = "participant";
       }
 
       if (dataId) {
@@ -25,13 +25,15 @@ module.exports = {
       if (
         isReadyState &&
         roomId === participantInfo.roomId &&
-        userId === participantInfo.userId
+        participantId === participantInfo.participantId
       ) {
         req.session.destroy();
         res.render("room", {
           roomId: participantInfo.roomId,
-          userId: participantInfo.userId,
-          userName: participantInfo.userName,
+          participantId: participantInfo.participantId,
+          participantName: participantInfo.participantName,
+          role: participantInfo.role,
+          avatarImgUrl: participantInfo.avatarImgUrl,
           audioAuth: participantInfo.audioAuth,
           videoAuth: participantInfo.videoAuth,
           isMuted: participantInfo.isMuted,
@@ -43,7 +45,7 @@ module.exports = {
       // premeeting
       res.render("premeeting", {
         roomId: roomId,
-        action: action,
+        role: role,
       });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {

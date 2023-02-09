@@ -8,7 +8,7 @@ const peer = new Peer(undefined, {
 });
 const streamMod = new StreamMod();
 
-let userId;
+let participantId;
 let isPermissionDenied = true;
 let isMuted = false;
 let isStoppedVideo = false;
@@ -22,7 +22,8 @@ const audioBtnIcon = document.querySelector("#audioBtnIcon");
 const videoBtn = document.querySelector("#videoBtn");
 const videoBtnIcon = document.querySelector("#videoBtnIcon");
 const btnsArray = [videoBtn, audioBtn];
-const userName = document.querySelector("#userName");
+const avatarImg = document.querySelector("#avatarImg");
+const participantName = document.querySelector("#participantName");
 const nameInput = document.querySelector("#nameInput");
 const confirmBtn = document.querySelector("#confirmBtn");
 const DOMElement = {
@@ -39,8 +40,8 @@ const DOMElement = {
  * Peer JS
  */
 peer.on("open", (id) => {
-  userId = id;
-  userName.innerHTML = `${userId}`;
+  participantId = id;
+  participantName.innerHTML = `${participantId}`;
 });
 
 // =================================================================
@@ -57,7 +58,7 @@ const init = async () => {
   await getStream();
 
   // Join Or Start Meeting
-  if (ACTION === "start") {
+  if (ROLE === "host") {
     title.textContent = "Start The Meeting";
     subtitle.textContent = "Ready to start this meeting ?";
   } else {
@@ -151,10 +152,10 @@ const displayAlert = (isSuccess) => {
  */
 const displayName = (e) => {
   if (e.target.value === "") {
-    userName.textContent = `${userId}`;
+    participantName.textContent = `${participantId}`;
     return;
   }
-  userName.textContent = e.target.value;
+  participantName.textContent = e.target.value;
 };
 
 /**
@@ -164,8 +165,10 @@ const confirmState = async () => {
   displayModal(isPermissionDenied);
 
   const data = {
-    userId: userId,
-    userName: userName.textContent.trim(),
+    participantId: participantId,
+    participantName: participantName.textContent.trim(),
+    role: ROLE,
+    avatarImgUrl: avatarImg.src,
     roomId: ROOM_ID.toString(),
     isMuted: isMuted,
     isStoppedVideo: isStoppedVideo,

@@ -47,14 +47,16 @@ class RoomController {
         avatar: avatar,
         avatarImg: avatarImg,
         nameTag: nameTag,
-        userName: "You",
-        userId: USER_ID,
+        participantName: "You",
+        participantId: PARTICIPANT_ID,
         isMuted: JSON.parse(IS_MUTED),
         isStoppedVideo: JSON.parse(IS_STOPPED_VIDEO),
       };
       this.roomInfoMod.initInfo();
       await this.mainDisplayMod.addRoomStream(DOMElement);
       await this.streamMod.initMediaControl(DOMElement);
+      await this.participantMod.setParticipantMap(PARTICIPANT_ID);
+      await this.participantMod.addParticipantList(PARTICIPANT_ID);
       cnt = await this.participantMod.getAllParticipants();
       preload();
     } catch (err) {
@@ -73,6 +75,12 @@ class RoomController {
       videoBtnIcon: document.querySelector("#videoBtnIcon"),
       audioBtn: document.querySelector("#audioBtn"),
       audioBtnIcon: document.querySelector("#audioBtnIcon"),
+      participantMuteUnmute: document.getElementById(
+        "#selfParticipantMuteUnmute"
+      ),
+      participantPlayStopVideo: document.getElementById(
+        "#selfParticipantPlayStopVideo"
+      ),
     };
 
     if (e.target.id.includes("audioBtn")) {
@@ -117,8 +125,6 @@ class RoomController {
       };
       this.offcanvasMod.offcanvasCloseControl(offcanvasDOMElement);
       this.offcanvasMod.offcanvasCloseGrid();
-    } else if (e.target.id.includes("copyInfoBtn")) {
-      this.roomInfoMod.copyInfo();
     } else if (e.target.id.includes("sendMsgBtn")) {
       // send msg btn is clicked
       this.chatRoomMod.sendMessage();
@@ -134,17 +140,17 @@ class RoomController {
 
   closeWindow = async (e) => {
     e.preventDefault();
-    if (screenShareMap.get("screenSharing") === USER_ID) {
+    if (screenShareMap.get("screenSharing") === PARTICIPANT_ID) {
       await screenShareMod.stopSreenShareVideo();
     }
-    await this.participantMod.removeParticipant(ROOM_ID, USER_ID);
+    await this.participantMod.removeParticipant(ROOM_ID, PARTICIPANT_ID);
   };
 
   leaveRoom = async () => {
-    if (screenShareMap.get("screenSharing") === USER_ID) {
+    if (screenShareMap.get("screenSharing") === PARTICIPANT_ID) {
       await screenShareMod.stopSreenShareVideo();
     }
-    await this.participantMod.removeParticipant(ROOM_ID, USER_ID);
+    await this.participantMod.removeParticipant(ROOM_ID, PARTICIPANT_ID);
     window.location = "/leave/thankyou";
   };
 }

@@ -13,7 +13,7 @@ router.delete(
 
 router
   .get(
-    "/:roomId/:userId",
+    "/:roomId/:participantId",
     roomValidator.getParticipantValidator,
     roomController.getParticipant
   )

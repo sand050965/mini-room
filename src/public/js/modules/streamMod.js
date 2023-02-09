@@ -67,6 +67,7 @@ class StreamMod {
   unmute = (DOMElement) => {
     let audioBtn;
     let audioBtnIcon;
+    let participantMuteUnmute;
 
     const stream = DOMElement.stream;
     stream.getAudioTracks()[0].enabled = true;
@@ -82,12 +83,16 @@ class StreamMod {
       case "roomSelf":
         audioBtn = DOMElement.audioBtn;
         audioBtnIcon = DOMElement.audioBtnIcon;
+        participantMuteUnmute = DOMElement.participantMuteUnmute;
         audioBtnIcon.classList.add("fa-microphone");
         audioBtnIcon.classList.remove("fa-microphone-slash");
         audioBtn.classList.remove("btn-disable");
         audioBtn.classList.add("btn-able");
+        participantMuteUnmute.classList.remove("fa-microphone-slash");
+        participantMuteUnmute.classList.add("fa-microphone");
         return false;
-      case "rooOther":
+      case "roomOther":
+        participantMuteUnmute = DOMElement.participantMuteUnmute;
         return false;
     }
   };
@@ -95,6 +100,7 @@ class StreamMod {
   mute = (DOMElement) => {
     let audioBtn;
     let audioBtnIcon;
+    let participantMuteUnmute;
 
     const stream = DOMElement.stream;
     stream.getAudioTracks()[0].enabled = false;
@@ -110,12 +116,16 @@ class StreamMod {
       case "roomSelf":
         audioBtn = DOMElement.audioBtn;
         audioBtnIcon = DOMElement.audioBtnIcon;
+        participantMuteUnmute = DOMElement.participantMuteUnmute;
         audioBtnIcon.classList.remove("fa-microphone");
         audioBtnIcon.classList.add("fa-microphone-slash");
         audioBtn.classList.remove("btn-able");
         audioBtn.classList.add("btn-disable");
+        participantMuteUnmute.classList.remove("fa-microphone");
+        participantMuteUnmute.classList.add("fa-microphone-slash");
         return true;
-      case "rooOther":
+      case "roomOther":
+        participantMuteUnmute = DOMElement.participantMuteUnmute;
         return true;
     }
   };
@@ -123,6 +133,7 @@ class StreamMod {
   playVideo = (DOMElement) => {
     let videoBtn;
     let videoBtnIcon;
+    let participantPlayStopVideo;
     const video = DOMElement.video;
     const avatarContainer = DOMElement.avatarContainer;
 
@@ -144,16 +155,22 @@ class StreamMod {
       case "roomSelf":
         videoBtn = DOMElement.videoBtn;
         videoBtnIcon = DOMElement.videoBtnIcon;
+        participantPlayStopVideo = DOMElement.participantPlayStopVideo;
         avatarContainer.classList.add("none");
         video.classList.remove("none");
         videoBtnIcon.classList.remove("fa-video-slash");
         videoBtnIcon.classList.add("fa-video");
         videoBtn.classList.remove("btn-disable");
         videoBtn.classList.add("btn-able");
+        participantPlayStopVideo.classList.remove("fa-video-slash");
+        participantPlayStopVideo.classList.add("fa-video");
         return false;
       case "roomOther":
+        participantPlayStopVideo = DOMElement.participantPlayStopVideo;
         avatarContainer.classList.add("none");
         video.classList.remove("none");
+        participantPlayStopVideo.classList.remove("fa-video-slash");
+        participantPlayStopVideo.classList.add("fa-video");
         return false;
     }
   };
@@ -161,6 +178,7 @@ class StreamMod {
   stopVideo = (DOMElement) => {
     let videoBtn;
     let videoBtnIcon;
+    let participantPlayStopVideo;
     const video = DOMElement.video;
     const avatarContainer = DOMElement.avatarContainer;
     const stream = DOMElement.stream;
@@ -187,10 +205,14 @@ class StreamMod {
         videoBtnIcon.classList.add("fa-video-slash");
         videoBtn.classList.remove("btn-able");
         videoBtn.classList.add("btn-disable");
+        participantPlayStopVideo.classList.remove("fa-video");
+        participantPlayStopVideo.classList.add("fa-video-slash");
         return true;
       case "roomOther":
         avatarContainer.classList.remove("none");
         video.classList.add("none");
+        participantPlayStopVideo.classList.remove("fa-video");
+        participantPlayStopVideo.classList.add("fa-video-slash");
         return true;
     }
   };

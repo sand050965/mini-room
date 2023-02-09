@@ -5,6 +5,7 @@ import RoomController from "../controllers/roomController.js";
 import StreamMod from "../modules/streamMod.js";
 import ScreenShareMod from "../modules/screenShareMod.js";
 import MainDisplayMod from "../modules/mainDisplayMod.js";
+import RoomInfoMod from "../modules/roomInfoMod.js";
 import ChatRoomMod from "../modules/chatRoomMod.js";
 import ParticipantMod from "../modules/participantMod.js";
 
@@ -19,6 +20,7 @@ const roomController = new RoomController();
 const streamMod = new StreamMod();
 const screenShareMod = new ScreenShareMod();
 const mainDisplayMod = new MainDisplayMod();
+const roomInfoMod = new RoomInfoMod();
 const chatRoomMod = new ChatRoomMod();
 const participantMod = new ParticipantMod();
 
@@ -33,6 +35,10 @@ window.addEventListener("beforeunload", roomController.closeWindow);
 
 messageInput.addEventListener("keyup", chatRoomMod.sendMsgBtnControl);
 
+copyInfoBtn.addEventListener("mouseout", roomInfoMod.hideTooltips);
+
+copyInfoBtn.addEventListener("click", roomInfoMod.showTooltips);
+
 for (const btn of btnsArray) {
   btn.addEventListener("click", roomController.btnControl);
 }
@@ -42,7 +48,7 @@ for (const btn of btnsArray) {
  */
 
 peer.on("open", (id) => {
-  socket.emit("join-room", ROOM_ID, id, USER_NAME);
+  socket.emit("join-room", ROOM_ID, id, PARTICIPANT_NAME);
 });
 
 /**
@@ -64,7 +70,7 @@ peer.on("call", async (call) => {
     avatar: document.createElement("div"),
     avatarImg: document.createElement("img"),
     nameTag: document.createElement("div"),
-    userId: call.peer,
+    participantId: call.peer,
   };
 
   // Respond to stream that comes in
@@ -74,8 +80,11 @@ peer.on("call", async (call) => {
         peers[call.peer] = call;
         const userInfo = await participantMod.getParticipantInfo(call.peer);
         cnt = await participantMod.getAllParticipants();
+        await participantMod.setParticipantMap(call.peer);
+        await participantMod.addParticipantList(call.peer);
         newDOMElement.stream = userStream;
-        newDOMElement.userName = userInfo.data.userName;
+        newDOMElement.participantName = userInfo.data.participantName;
+        newDOMElement.avatarImgUrl = userInfo.data.avatarImgUrl;
         newDOMElement.isMuted = userInfo.data.isMuted;
         newDOMElement.isStoppedVideo = userInfo.data.isStoppedVideo;
         await mainDisplayMod.addRoomStream(newDOMElement);
@@ -96,17 +105,17 @@ peer.on("call", async (call) => {
  * 3. liset the call we made and get stream from new connected user
  */
 const connectToNewUser = async (DOMElement) => {
-  const userId = DOMElement.userId;
-  const userName = DOMElement.userName;
+  const participantId = DOMElement.participantId;
+  const participantName = DOMElement.participantName;
   const videoStream = DOMElement.videoStream;
   const screenShareStream = DOMElement.screenShareStream;
 
-  const call = peer.call(userId, videoStream, {
+  const call = peer.call(participantId, videoStream, {
     metadata: { type: "video" },
   });
 
   if (myScreenShareStream) {
-    peer.call(userId, screenShareStream, {
+    peer.call(participantId, screenShareStream, {
       metadata: { type: "screensharing" },
     });
   }
@@ -121,8 +130,8 @@ const connectToNewUser = async (DOMElement) => {
     avatar: document.createElement("div"),
     avatarImg: document.createElement("img"),
     nameTag: document.createElement("div"),
-    userName: userName,
-    userId: userId,
+    participantName: participantName,
+    participantId: participantId,
   };
 
   // Receive new connected user's stream when they join room (Listen to someone answer our call)
@@ -130,8 +139,11 @@ const connectToNewUser = async (DOMElement) => {
     if (!peers[call.peer]) {
       peers[call.peer] = call;
       cnt = await participantMod.getAllParticipants();
+      await participantMod.setParticipantMap(call.peer);
+      await participantMod.addParticipantList(call.peer);
       const userInfo = await participantMod.getParticipantInfo(call.peer);
       newDOMElement.stream = userVideoStream;
+      newDOMElement.avatarImgUrl = userInfo.data.avatarImgUrl;
       newDOMElement.isMuted = userInfo.data.isMuted;
       newDOMElement.isStoppedVideo = userInfo.data.isStoppedVideo;
       await mainDisplayMod.addRoomStream(newDOMElement);
@@ -140,8 +152,8 @@ const connectToNewUser = async (DOMElement) => {
   });
 
   await call.on("close", async () => {
-    const userId = call.peer;
-    const video = document.getElementById(`${userId}Video`);
+    const participantId = call.peer;
+    const video = document.getElementById(`${participantId}Video`);
     video.remove();
   });
 };
@@ -149,7 +161,7 @@ const connectToNewUser = async (DOMElement) => {
 /**
  * user finish render
  */
-socket.on("user-finished-render", (userId) => {
+socket.on("user-finished-render", (participantId) => {
   if (!myStream.getAudioTracks()[0].enabled) {
     socket.emit("mute");
   }
@@ -170,12 +182,12 @@ socket.on("user-finished-render", (userId) => {
 /**
  * new user connected
  */
-socket.on("user-connected", async (userId, userName) => {
+socket.on("user-connected", async (participantId, participantName) => {
   // ************** todo... ****************
   // need to improve get participants method
   const DOMElement = {
-    userId: userId,
-    userName: userName,
+    participantId: participantId,
+    participantName: participantName,
     videoStream: myStream,
     screenShareStream: myScreenShareStream,
   };
@@ -186,13 +198,19 @@ socket.on("user-connected", async (userId, userName) => {
 /**
  * display other user mute
  */
-socket.on("user-mute", async (userId) => {
-  const stream = document.getElementById(`${userId}Video`).srcObject;
+socket.on("user-mute", async (participantId) => {
+  const stream = document.getElementById(`${participantId}Video`).srcObject;
   const newDOMElement = {
     type: "roomOther",
     stream: stream,
-    video: document.getElementById(`${userId}Video`),
-    avatarContainer: document.getElementById(`${userId}AvatarContainer`),
+    video: document.getElementById(`${participantId}Video`),
+    avatarContainer: document.getElementById(`${participantId}AvatarContainer`),
+    participantMuteUnmute: document.getElementById(
+      `${participantId}ParticipantMuteUnmute`
+    ),
+    participantPlayStopVideo: document.getElementById(
+      `${participantId}ParticipantPlayStopVideo`
+    ),
   };
   await streamMod.mute(newDOMElement);
 });
@@ -200,13 +218,19 @@ socket.on("user-mute", async (userId) => {
 /**
  * display other user unmute
  */
-socket.on("user-unmute", async (userId) => {
-  const stream = document.getElementById(`${userId}Video`).srcObject;
+socket.on("user-unmute", async (participantId) => {
+  const stream = document.getElementById(`${participantId}Video`).srcObject;
   const newDOMElement = {
     type: "roomOther",
     stream: stream,
-    video: document.getElementById(`${userId}Video`),
-    avatarContainer: document.getElementById(`${userId}AvatarContainer`),
+    video: document.getElementById(`${participantId}Video`),
+    avatarContainer: document.getElementById(`${participantId}AvatarContainer`),
+    participantMuteUnmute: document.getElementById(
+      `${participantId}ParticipantMuteUnmute`
+    ),
+    participantPlayStopVideo: document.getElementById(
+      `${participantId}ParticipantPlayStopVideo`
+    ),
   };
   await streamMod.unmute(newDOMElement);
 });
@@ -214,13 +238,19 @@ socket.on("user-unmute", async (userId) => {
 /**
  * stop other user video
  */
-socket.on("user-stop-video", async (userId) => {
-  const stream = document.getElementById(`${userId}Video`).srcObject;
+socket.on("user-stop-video", async (participantId) => {
+  const stream = document.getElementById(`${participantId}Video`).srcObject;
   const newDOMElement = {
     type: "roomOther",
     stream: stream,
-    video: document.getElementById(`${userId}Video`),
-    avatarContainer: document.getElementById(`${userId}AvatarContainer`),
+    video: document.getElementById(`${participantId}Video`),
+    avatarContainer: document.getElementById(`${participantId}AvatarContainer`),
+    participantMuteUnmute: document.getElementById(
+      `${participantId}ParticipantMuteUnmute`
+    ),
+    participantPlayStopVideo: document.getElementById(
+      `${participantId}ParticipantPlayStopVideo`
+    ),
   };
   await streamMod.stopVideo(newDOMElement);
 });
@@ -228,13 +258,19 @@ socket.on("user-stop-video", async (userId) => {
 /**
  * play other user video
  */
-socket.on("user-play-video", async (userId) => {
-  const stream = document.getElementById(`${userId}Video`).srcObject;
+socket.on("user-play-video", async (participantId) => {
+  const stream = document.getElementById(`${participantId}Video`).srcObject;
   const newDOMElement = {
     type: "roomOther",
     stream: stream,
-    video: document.getElementById(`${userId}Video`),
-    avatarContainer: document.getElementById(`${userId}AvatarContainer`),
+    video: document.getElementById(`${participantId}Video`),
+    avatarContainer: document.getElementById(`${participantId}AvatarContainer`),
+    participantMuteUnmute: document.getElementById(
+      `${participantId}ParticipantMuteUnmute`
+    ),
+    participantPlayStopVideo: document.getElementById(
+      `${participantId}ParticipantPlayStopVideo`
+    ),
   };
   await streamMod.playVideo(newDOMElement);
 });
@@ -242,8 +278,8 @@ socket.on("user-play-video", async (userId) => {
 /**
  * stop share other user screen
  */
-socket.on("user-stop-screen-share", async (userId) => {
-  if (screenShareMap.get("screenSharing") === userId) {
+socket.on("user-stop-screen-share", async (participantId) => {
+  if (screenShareMap.get("screenSharing") === participantId) {
     screenShareMod.stopSreenShareVideo();
   }
 });
@@ -251,25 +287,25 @@ socket.on("user-stop-screen-share", async (userId) => {
 /**
  * create message
  */
-socket.on("create-message", (message, userId, userName) => {
-  chatRoomMod.displayMessage(message, userId, userName);
+socket.on("create-message", (message, participantId, participantName) => {
+  chatRoomMod.displayMessage(message, participantId, participantName);
   chatRoomMod.scrollToBottom();
 });
 
 /**
  * user disconnected
  */
-socket.on("user-disconnected", async (userId) => {
-  if (peers[userId]) {
-    peers[userId].close();
+socket.on("user-disconnected", async (participantId) => {
+  if (peers[participantId]) {
+    peers[participantId].close();
   }
   const videoItemContainer = document.getElementById(
-    `${userId}VideoItemContainer`
+    `${participantId}VideoItemContainer`
   );
   cnt = await participantMod.getAllParticipants();
   await videoItemContainer.remove();
 
-  if (screenShareMap.get("screenSharing") === userId) {
+  if (screenShareMap.get("screenSharing") === participantId) {
     await screenShareMod.stopSreenShareVideo();
   }
 

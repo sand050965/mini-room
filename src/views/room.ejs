@@ -18,8 +18,10 @@
         <link rel="stylesheet" href="/css/room.css">
         <script>
             const ROOM_ID = '<%= roomId %>';
-            const USER_ID = '<%= userId %>'
-            const USER_NAME = '<%= userName %>';
+            const PARTICIPANT_ID = '<%= participantId %>'
+            const PARTICIPANT_NAME = '<%= participantName %>';
+            const ROLE = '<%= role %>';
+            const AVATAR_IMG_URL = '<%= avatarImgUrl %>';
             const IS_MUTED = '<%= isMuted %>';
             const IS_STOPPED_VIDEO = '<%= isStoppedVideo %>';
         </script>
@@ -87,12 +89,18 @@
                     </div>
                     <div class="offcanvas-body">
                         <div class="hint">How to join this meeting</div>
-                        <div id="roomPath" class="room-path"></div>
-                        <div id="copyInfoBtn" class="copy-info-btn">
+                        <textarea id="roomPath" class="room-path" type="text" readonly></textarea>
+                        <button id="copyInfoBtn"
+                                type="button"
+                                class="btn copy-info-btn"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="bottom"
+                                data-bs-title="Copied Success!"
+                                data-clipboard-target="#roomPath">
                             <i class="fa-regular fa-clone"></i>
                             &nbsp;&nbsp;
                             <span class="copy-info">Copy joining info</span>
-                        </div>
+                        </button>
                     </div>
                 </div>
                 <!-- Participants Offcanvas -->
@@ -112,8 +120,24 @@
                         </button>
                     </div>
                     <div class="offcanvas-body">
-                        <div class="warning">I will not close if you click outside of me.</div>
-                        <div></div>
+                        <div class="invite-participant">
+                            <button type="button" class="btn btn-outline-primary center">
+                                <i class="fa-solid fa-user-plus"></i>
+                                &nbsp;&nbsp;
+                                <span>Add people</span>
+                            </button>
+                        </div>
+                        <div class="input-group input-group-lg mb-3 search-participant-container">
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="Search for people"
+                                   aria-describedby="button-addon2">
+                            <button class="btn btn-outline-secondary" type="button" id="button-addon2">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                        <div class="participant-list-title ">In call</div>
+                        <div id="participantList" class="participant-list"></div>
                     </div>
                 </div>
                 <!-- Chat Offcanvas -->
@@ -193,10 +217,11 @@
     </html>
     <!-- Vendor JS Files -->
     <script src="/socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
     <script src="https://WebRTC.github.io/adapter/adapter-latest.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://kit.fontawesome.com/8de498932c.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Template Main JS File -->
     <script type="text/javascript" src="../js/room/commonVar.js"></script>

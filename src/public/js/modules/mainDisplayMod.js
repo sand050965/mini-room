@@ -38,7 +38,8 @@ class MainDisplayMod {
     const avatarContent = DOMElement.avatarContent;
     const avatar = DOMElement.avatar;
     const avatarImg = DOMElement.avatarImg;
-    const userId = DOMElement.userId;
+    const avatarImgUrl = DOMElement.avatarImgUrl;
+    const participantId = DOMElement.participantId;
 
     // append and add common style
     avatar.classList.add("center");
@@ -48,13 +49,10 @@ class MainDisplayMod {
     avatarContent.classList.add("center");
     avatarContainer.appendChild(avatarContent);
 
-    avatarImg.setAttribute(
-      "src",
-      "https://s3.amazonaws.com/www.miniroom.online/images/avatar.png"
-    );
+    avatarImg.setAttribute("src", avatarImgUrl);
 
     // set DOM element id and name attributes
-    if (userId === USER_ID) {
+    if (participantId === PARTICIPANT_ID) {
       avatarContainer.setAttribute("id", "selfAvatarContainer");
       avatarContent.setAttribute("id", "selfAvatarContent");
       avatar.setAttribute("id", "selfAvatar");
@@ -63,10 +61,10 @@ class MainDisplayMod {
       avatarDOMElement.selfAvatarContent = avatarContent;
       avatarDOMElement.selfAvatar = avatar;
     } else {
-      avatarContainer.setAttribute("id", `${userId}AvatarContainer`);
-      avatarContent.setAttribute("id", `${userId}AvatarContent`);
-      avatar.setAttribute("id", `${userId}Avatar`);
-      avatarImg.setAttribute("id", `${userId}AvatarImg`);
+      avatarContainer.setAttribute("id", `${participantId}AvatarContainer`);
+      avatarContent.setAttribute("id", `${participantId}AvatarContent`);
+      avatar.setAttribute("id", `${participantId}Avatar`);
+      avatarImg.setAttribute("id", `${participantId}AvatarImg`);
       avatarDOMElement.otherAvatarContainers = [avatarContainer];
       avatarDOMElement.otherAvatarContents = [avatarContent];
       avatarDOMElement.otherAvatars = [avatar];
@@ -90,14 +88,14 @@ class MainDisplayMod {
     const video = DOMElement.video;
     const avatarContainer = DOMElement.avatarContainer;
     const nameTag = DOMElement.nameTag;
-    const userName = DOMElement.userName;
-    const userId = DOMElement.userId;
+    const participantName = DOMElement.participantName;
+    const participantId = DOMElement.participantId;
 
     // append and add common class
     video.classList.add("none");
     videoItem.appendChild(video);
     videoItem.classList.add("center");
-    nameTag.textContent = userName;
+    nameTag.textContent = participantName;
     nameTag.classList.add("name-tag");
     videoItem.appendChild(avatarContainer);
     videoItem.appendChild(nameTag);
@@ -106,7 +104,7 @@ class MainDisplayMod {
     videosContainer.append(videoItemContainer);
 
     // set DOM element id and name attributes
-    if (userId === USER_ID) {
+    if (participantId === PARTICIPANT_ID) {
       videoItemContainer.setAttribute("id", "selfVideoItemContainer");
       videoItem.setAttribute("id", "selfVideoItem");
       video.setAttribute("id", "selfVideo");
@@ -114,11 +112,14 @@ class MainDisplayMod {
       videoElement.selfVideoItem = videoItem;
       videoElement.selfVideo = video;
     } else {
-      videoItemContainer.setAttribute("id", `${userId}VideoItemContainer`);
+      videoItemContainer.setAttribute(
+        "id",
+        `${participantId}VideoItemContainer`
+      );
       videoItemContainer.setAttribute("name", "otherVideoItemContainer");
-      videoItem.setAttribute("id", `${userId}VideoItem`);
+      videoItem.setAttribute("id", `${participantId}VideoItem`);
       videoItem.setAttribute("name", "otherVideoItem");
-      video.setAttribute("id", `${userId}Video`);
+      video.setAttribute("id", `${participantId}Video`);
       video.setAttribute("name", "otherVideo");
       videoElement.otherVideoItemContainers = [videoItemContainer];
       videoElement.otherVideoItems = [videoItem];

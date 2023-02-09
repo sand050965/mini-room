@@ -13,7 +13,7 @@ module.exports = {
       if (checkRoom.length !== 0) {
         newRoomId = uuidv4();
       }
-      req.session.action = "start";
+      req.session.role = "host";
       res.status(200).json({ roomId: newRoomId });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {
@@ -35,7 +35,7 @@ module.exports = {
           .status(400)
           .json({ error: true, message: "room id doesn't exist!" });
       }
-      req.session.action = "join";
+      req.session.role = "participant";
       res.status(200).json({ ok: true });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {
@@ -51,8 +51,10 @@ module.exports = {
     try {
       const participantData = {
         roomId: req.body.roomId,
-        userId: req.body.userId,
-        userName: req.body.userName,
+        participantId: req.body.participantId,
+        participantName: req.body.participantName,
+        role: req.body.role,
+        avatarImgUrl: req.body.avatarImgUrl,
         isMuted: req.body.isMuted,
         isStoppedVideo: req.body.isStoppedVideo,
         isReadyState: req.body.isReadyState,
@@ -67,7 +69,7 @@ module.exports = {
       const participant = await participantService.insertParticipant(
         participantData
       );
-      req.session.userId = req.body.userId;
+      req.session.participantId = req.body.participantId;
       req.session.dataId = participant.id;
       res.status(200).json({ ok: true });
     } catch (e) {

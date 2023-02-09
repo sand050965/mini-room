@@ -21,21 +21,21 @@ class ChatRoomMod {
     }
   };
 
-  displayMessage = (message, userId, userName) => {
+  displayMessage = (message, participantId, participantName) => {
     const messageContainer = document.querySelector("#messageContainer");
     const messageContent = document.createElement("div");
     const messageSender = document.createElement("b");
     const mainMessage = document.createElement("div");
 
-    if (userId === USER_ID) {
-      userName = "You";
+    if (participantId === PARTICIPANT_ID) {
+      participantName = "You";
       mainMessage.classList.add("self-message");
       messageContent.classList.add("self-message-content");
     } else {
       mainMessage.classList.add("other-message");
     }
 
-    messageSender.textContent = userName;
+    messageSender.textContent = participantName;
     mainMessage.textContent = message;
     mainMessage.classList.add("message");
     messageContent.appendChild(messageSender);

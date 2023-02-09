@@ -9,54 +9,59 @@ const PORT = process.env.PORT || 3000;
 // -------------Socket IO-------------
 io.on("connection", (socket) => {
   //user join room event
-  socket.on("join-room", (roomId, userId, userName) => {
+  socket.on("join-room", (roomId, participantId, participantName) => {
     socket.join(roomId); //user join room event
 
-    socket.to(roomId).emit("user-connected", userId, userName); // emit to users in the room that a new user connected
+    socket.to(roomId).emit("user-connected", participantId, participantName); // emit to users in the room that a new user connected
 
     // users finished rendering event
     socket.on("finished-render", () => {
-      socket.to(roomId).emit("user-finished-render", userId);
+      socket.to(roomId).emit("user-finished-render", participantId);
     });
 
     // users mute event
     socket.on("mute", () => {
-      socket.to(roomId).emit("user-mute-unmute", userId);
+      socket.to(roomId).emit("user-mute-unmute", participantId);
     });
 
     // users unmute event
     socket.on("unmute", () => {
-      socket.to(roomId).emit("user-mute-unmute", userId);
+      socket.to(roomId).emit("user-mute-unmute", participantId);
     });
 
     // users stop sharing video stream event
     socket.on("stop-video", () => {
-      socket.to(roomId).emit("user-stop-video", userId);
+      socket.to(roomId).emit("user-stop-video", participantId);
     });
 
     // users play video stream event
     socket.on("play-video", () => {
-      socket.to(roomId).emit("user-play-video", userId);
+      socket.to(roomId).emit("user-play-video", participantId);
     });
 
     // users stop sharing screen stream event
     socket.on("stop-screen-share", () => {
-      socket.to(roomId).emit("user-stop-screen-share", userId);
+      socket.to(roomId).emit("user-stop-screen-share", participantId);
     });
 
     // users start sharing screen stream event
     // socket.on("start-screen-share", () => {
-    //   socket.to(roomId).emit("user-start-screen-share", userId);
+    //   socket.to(roomId).emit("user-start-screen-share", participantId);
     // });
 
     // users send message event
     socket.on("message", (message) => {
-      io.to(roomId).emit("create-message", message, userId, userName); // emit to users in the room what message that user sent
+      io.to(roomId).emit(
+        "create-message",
+        message,
+        participantId,
+        participantName
+      ); // emit to users in the room what message that user sent
     });
 
     // user disconnect event
     socket.on("disconnect", () => {
-      socket.to(roomId).emit("user-disconnected", userId); // emit to users in the room that a user just leave
+      socket.to(roomId).emit("user-disconnected", participantId); // emit to users in the room that a user just leave
     });
   });
 });

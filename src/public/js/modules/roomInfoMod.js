@@ -2,15 +2,17 @@ class RoomInfoMod {
   constructor() {}
 
   initInfo = () => {
+    copyInfoBtnTooltip.hide();
     const roomPath = document.querySelector("#roomPath");
-    roomPath.textContent = window.location.href;
+    roomPath.value = window.location.href;
   };
 
-  copyInfo = () => {
-    const roomPath = document.querySelector("#roomPath");
-    roomPath.select();
-    roomPath.selectionRange(0, 99999999);
-    navigator.clipboard.setText(roomPath.textContent);
+  showTooltips = () => {
+    copyInfoBtnTooltip.show();
+  };
+
+  hideTooltips = () => {
+    copyInfoBtnTooltip.hide();
   };
 }
 
