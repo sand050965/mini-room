@@ -1,7 +1,7 @@
 class OffcanvasMod {
   constructor() {}
 
-  toggleOffcanvas = (offcanvasDOMElement) => {
+  toggleOffcanvas = async (offcanvasDOMElement) => {
     const btnId = offcanvasDOMElement.btnId;
     const tagetBsOffcanvas = offcanvasDOMElement.tagetBsOffcanvas;
 
@@ -21,12 +21,16 @@ class OffcanvasMod {
 
     if (isOffcanvasOpen) {
       tagetBsOffcanvas.hide();
-      this.offcanvasCloseControl(offcanvasDOMElement);
-      this.offcanvasCloseGrid();
+      await this.offcanvasCloseControl(offcanvasDOMElement);
+      await this.offcanvasCloseGrid();
+      isOffcanvasOpen = false;
+      offcanvasMap.clear();
     } else {
       tagetBsOffcanvas.show();
-      this.offcanvasOpenControl(offcanvasDOMElement);
-      this.offcanvasOpenGrid(offcanvasDOMElement);
+      await this.offcanvasOpenControl(offcanvasDOMElement);
+      await this.offcanvasOpenGrid();
+      isOffcanvasOpen = true;
+      offcanvasMap.set("isOpen", btnId);
     }
   };
 
@@ -49,8 +53,7 @@ class OffcanvasMod {
     targetBtn.classList.add("side-btn-clicked");
   };
 
-  offcanvasOpenGrid = (offcanvasDOMElement) => {
-    const btnId = offcanvasDOMElement.btnId;
+  offcanvasOpenGrid = () => {
     const mainContainer = document.querySelector("#mainContainer");
 
     if (isScreenSharing) {
@@ -67,8 +70,6 @@ class OffcanvasMod {
       mainContainer.classList.add("main-middle-right");
       mainContainer.classList.remove("main-left-middle-right");
     }
-    isOffcanvasOpen = true;
-    offcanvasMap.set("isOpen", btnId);
   };
 
   offcanvasCloseGrid = () => {
@@ -85,8 +86,6 @@ class OffcanvasMod {
       mainContainer.classList.remove("main-middle-right");
       mainContainer.classList.remove("main-left-middle-right");
     }
-    isOffcanvasOpen = false;
-    offcanvasMap.clear();
   };
 }
 

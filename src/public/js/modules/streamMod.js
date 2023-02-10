@@ -88,11 +88,17 @@ class StreamMod {
         audioBtnIcon.classList.remove("fa-microphone-slash");
         audioBtn.classList.remove("btn-disable");
         audioBtn.classList.add("btn-able");
-        participantMuteUnmute.classList.remove("fa-microphone-slash");
-        participantMuteUnmute.classList.add("fa-microphone");
+        if (participantMuteUnmute) {
+          participantMuteUnmute.classList.remove("fa-microphone-slash");
+          participantMuteUnmute.classList.add("fa-microphone");
+        }
         return false;
       case "roomOther":
         participantMuteUnmute = DOMElement.participantMuteUnmute;
+        if (participantMuteUnmute) {
+          participantMuteUnmute.classList.remove("fa-microphone-slash");
+          participantMuteUnmute.classList.add("fa-microphone");
+        }
         return false;
     }
   };
@@ -121,11 +127,17 @@ class StreamMod {
         audioBtnIcon.classList.add("fa-microphone-slash");
         audioBtn.classList.remove("btn-able");
         audioBtn.classList.add("btn-disable");
-        participantMuteUnmute.classList.remove("fa-microphone");
-        participantMuteUnmute.classList.add("fa-microphone-slash");
+        if (participantMuteUnmute) {
+          participantMuteUnmute.classList.remove("fa-microphone");
+          participantMuteUnmute.classList.add("fa-microphone-slash");
+        }
         return true;
       case "roomOther":
         participantMuteUnmute = DOMElement.participantMuteUnmute;
+        if (participantMuteUnmute) {
+          participantMuteUnmute.classList.remove("fa-microphone");
+          participantMuteUnmute.classList.add("fa-microphone-slash");
+        }
         return true;
     }
   };
@@ -162,15 +174,19 @@ class StreamMod {
         videoBtnIcon.classList.add("fa-video");
         videoBtn.classList.remove("btn-disable");
         videoBtn.classList.add("btn-able");
-        participantPlayStopVideo.classList.remove("fa-video-slash");
-        participantPlayStopVideo.classList.add("fa-video");
+        if (participantPlayStopVideo) {
+          participantPlayStopVideo.classList.remove("fa-video-slash");
+          participantPlayStopVideo.classList.add("fa-video");
+        }
         return false;
       case "roomOther":
         participantPlayStopVideo = DOMElement.participantPlayStopVideo;
         avatarContainer.classList.add("none");
         video.classList.remove("none");
-        participantPlayStopVideo.classList.remove("fa-video-slash");
-        participantPlayStopVideo.classList.add("fa-video");
+        if (participantPlayStopVideo) {
+          participantPlayStopVideo.classList.remove("fa-video-slash");
+          participantPlayStopVideo.classList.add("fa-video");
+        }
         return false;
     }
   };
@@ -199,20 +215,26 @@ class StreamMod {
       case "roomSelf":
         videoBtn = DOMElement.videoBtn;
         videoBtnIcon = DOMElement.videoBtnIcon;
+        participantPlayStopVideo = DOMElement.participantPlayStopVideo;
         avatarContainer.classList.remove("none");
         video.classList.add("none");
         videoBtnIcon.classList.remove("fa-video");
         videoBtnIcon.classList.add("fa-video-slash");
         videoBtn.classList.remove("btn-able");
         videoBtn.classList.add("btn-disable");
-        participantPlayStopVideo.classList.remove("fa-video");
-        participantPlayStopVideo.classList.add("fa-video-slash");
+        if (participantPlayStopVideo) {
+          participantPlayStopVideo.classList.remove("fa-video");
+          participantPlayStopVideo.classList.add("fa-video-slash");
+        }
         return true;
       case "roomOther":
+        participantPlayStopVideo = DOMElement.participantPlayStopVideo;
         avatarContainer.classList.remove("none");
         video.classList.add("none");
-        participantPlayStopVideo.classList.remove("fa-video");
-        participantPlayStopVideo.classList.add("fa-video-slash");
+        if (participantPlayStopVideo) {
+          participantPlayStopVideo.classList.remove("fa-video");
+          participantPlayStopVideo.classList.add("fa-video-slash");
+        }
         return true;
     }
   };

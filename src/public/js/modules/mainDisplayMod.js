@@ -345,6 +345,7 @@ class MainDisplayMod {
     // remove self video style
     selfVideoItemContainer.classList.remove("video-container");
     selfVideoItemContainer.classList.remove("two-self-video-container");
+    selfVideoItemContainer.classList.remove("offcanvas-open");
     selfVideoItem.classList.remove("one-self-item");
     selfVideoItem.classList.remove("two-self-item");
     selfVideoItem.classList.remove("more-item");
@@ -366,6 +367,13 @@ class MainDisplayMod {
     }
   };
 
+  removeRoomVideoItemContainer = (participantId) => {
+    const videoItemContainer = document.getElementById(
+      `${participantId}VideoItemContainer`
+    );
+    videoItemContainer.remove();
+  };
+
   mainContainerGrid = () => {
     if (isOffcanvasOpen) {
       this.offcanvasMod.offcanvasOpenGrid();
@@ -376,10 +384,10 @@ class MainDisplayMod {
 
   listenOnVideoStream = (DOMElement) => {
     const video = DOMElement.video;
-    video.addEventListener("loadedmetadata", this.startPlayVideo);
+    video.addEventListener("loadedmetadata", this.startPlayStream);
   };
 
-  startPlayVideo = async (e) => {
+  startPlayStream = async (e) => {
     await e.target.play();
     loadedCnt++;
     console.log("loadedCnt", loadedCnt);

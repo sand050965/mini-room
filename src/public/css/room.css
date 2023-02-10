@@ -254,7 +254,6 @@ video {
   border-radius: 5px;
   color: #0761f2;
   cursor: pointer;
-  width: 200px;
   padding: 10px;
   margin-bottom: 30px;
 }
@@ -268,25 +267,40 @@ video {
 # Participant Offcanvas
 --------------------------------------------------------------*/
 #participantOffcanvas .invite-participant,
-#participantOffcanvas .search-participant-container,
-#participantOffcanvas .participant-list-title {
+#participantOffcanvas .search-participant-container {
   padding: 10px;
   margin-bottom: 30px;
 }
 
+#participantOffcanvas .participant-list-result {
+  border-bottom: 1px solid rgb(168, 165, 165);
+}
+
+#participantOffcanvas .participant-list-title {
+  padding: 10px;
+}
+
 #participantOffcanvas .search-participant {
   font-size: 16px;
-  border: 1px solid rgb(89, 88, 88);
+  border: 1px solid rgb(89, 89, 89);
 }
 
 #participantOffcanvas .participant-list {
+  position: relative;
   overflow: scroll;
+  padding-top: 30px;
+}
+
+#participantOffcanvas .close-participant-list {
+  position: absolute;
+  right: 5px;
+  top: 5px;
 }
 
 #participantOffcanvas .participant-container {
   display: grid;
-  grid-template-columns: repeat(3, auto);
-  justify-items: center;
+  grid-template-columns: 40px calc(100% - 145px) 105px;
+  justify-items: start;
   align-items: center;
 }
 

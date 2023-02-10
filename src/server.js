@@ -21,12 +21,12 @@ io.on("connection", (socket) => {
 
     // users mute event
     socket.on("mute", () => {
-      socket.to(roomId).emit("user-mute-unmute", participantId);
+      socket.to(roomId).emit("user-mute", participantId);
     });
 
     // users unmute event
     socket.on("unmute", () => {
-      socket.to(roomId).emit("user-mute-unmute", participantId);
+      socket.to(roomId).emit("user-unmute", participantId);
     });
 
     // users stop sharing video stream event

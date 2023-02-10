@@ -64,12 +64,17 @@ const btnsArray = [
   document.querySelector("#screenShareBtn"),
   document.querySelector("#leaveBtn"),
   document.querySelector("#infoBtn"),
-  document.querySelector("#participantBtn"),
-  document.querySelector("#chatBtn"),
-  document.querySelector("#sendMsgBtn"),
   document.querySelector("#infoCloseBtn"),
-  document.querySelector("#participantCloseBtn"),
+  document.querySelector("#participantBtn"),
+  document.querySelector("#closeParticpantList"),
+  document.querySelector("#searchParticipantBtn"),
+  document.querySelector("#chatBtn"),
   document.querySelector("#chatCloseBtn"),
+  document.querySelector("#sendMsgBtn"),
 ];
 
 const messageInput = document.querySelector("#messageInput");
+
+const searchParticipantInput = document.querySelector(
+  "#searchParticipantInput"
+);

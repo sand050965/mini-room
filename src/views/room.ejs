@@ -128,16 +128,25 @@
                             </button>
                         </div>
                         <div class="input-group input-group-lg mb-3 search-participant-container">
-                            <input type="text"
+                            <input id="searchParticipantInput"
+                                   type="text"
                                    class="form-control"
                                    placeholder="Search for people"
                                    aria-describedby="button-addon2">
-                            <button class="btn btn-outline-secondary" type="button" id="button-addon2">
-                                <i class="fa-solid fa-magnifying-glass"></i>
+                            <button id="searchParticipantBtn"
+                                    class="btn btn-outline-secondary"
+                                    type="button"
+                                    id="button-addon2">
+                                <i id="searchParticipantBtnIcon" class="fa-solid fa-magnifying-glass"></i>
                             </button>
                         </div>
-                        <div class="participant-list-title ">In call</div>
-                        <div id="participantList" class="participant-list"></div>
+                        <div class="participant-list-title">In call</div>
+                        <div id="participantList" class="participant-list">
+                            <button id="closeParticpantList"
+                                    type="button"
+                                    class="btn-close close-participant-list none"
+                                    aria-label="Close"></button>
+                        </div>
                     </div>
                 </div>
                 <!-- Chat Offcanvas -->

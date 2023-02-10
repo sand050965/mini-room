@@ -8,7 +8,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const { connectToDB } = require("../utils/DBUtil");
 const meetingRoutes = require("../routes/meetingRoutes");
-const premeetingRoutes = require("../routes/premeetingRoutes");
+const participantRoutes = require("../routes/participantRoutes");
 const roomRoutes = require("../routes/roomRoutes");
 
 // view engine setup
@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compression());
 app.use("/", meetingRoutes);
-app.use("/api/premeeting", premeetingRoutes);
+app.use("/api/participant", participantRoutes);
 app.use("/api/room", roomRoutes);
 
 // DB connection

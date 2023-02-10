@@ -182,7 +182,7 @@ const confirmState = async () => {
     },
     body: JSON.stringify(data),
   };
-  const response = await fetch("/api/premeeting/ready", postData);
+  const response = await fetch("/api/participant/ready", postData);
   const result = await response.json();
   if (result.ok) {
     window.location = `/${ROOM_ID}`;

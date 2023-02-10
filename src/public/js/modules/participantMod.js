@@ -1,8 +1,12 @@
+import InputValidator from "../validators/inputValidator.js";
+
 class ParticipantMod {
-  construcor() {}
+  constructor() {
+    this.inputValidator = new InputValidator();
+  }
 
   getAllParticipants = async () => {
-    const response = await fetch(`/api/room/${ROOM_ID}`);
+    const response = await fetch(`/api/participant/${ROOM_ID}`);
     const result = await response.json();
     const cnt = await result.data.length;
     const participantCnt = document.querySelector("#participantCnt");
@@ -11,7 +15,9 @@ class ParticipantMod {
   };
 
   getParticipantInfo = async (participantId) => {
-    const response = await fetch(`/api/room/${ROOM_ID}/${participantId}`);
+    const response = await fetch(
+      `/api/participant/${ROOM_ID}/${participantId}`
+    );
     const result = await response.json();
     return result;
   };
@@ -27,20 +33,22 @@ class ParticipantMod {
         participantId: participantId,
       }),
     };
-    await fetch("/api/room/participant", deleteData);
+    await fetch("/api/participant", deleteData);
     return this.getAllParticipants();
   };
 
-  setParticipantMap = async (partcipantId) => {
-    const participantInfo = await this.getParticipantInfo(partcipantId);
-    await participantMap.set(partcipantId, {
+  setParticipantMap = async (DOMElement) => {
+    const participantInfo = await this.getParticipantInfo(
+      DOMElement.participantId
+    );
+    await participantMap.set(DOMElement.participantId, {
+      stream: DOMElement.stream,
       participantName: participantInfo.data.participantName,
       role: participantInfo.data.role,
-      avatarImgURL: participantInfo.data.avatarImgUrl,
+      avatarImgUrl: participantInfo.data.avatarImgUrl,
       isMuted: participantInfo.data.isMuted,
       isStoppedVideo: participantInfo.data.isStoppedVideo,
       role: participantInfo.data.role,
-      avatarImgURL: participantInfo.data.avatarImgUrl,
     });
   };
 
@@ -49,8 +57,8 @@ class ParticipantMod {
       participantId: partcipantId,
       participantName: participantMap.get(partcipantId).participantName,
       role: participantMap.get(partcipantId).role,
-      avatarImgURL: participantMap.get(partcipantId).avatarImgURL,
-      isMute: participantMap.get(partcipantId).isMute,
+      avatarImgUrl: participantMap.get(partcipantId).avatarImgUrl,
+      isMuted: participantMap.get(partcipantId).isMuted,
       isStoppedVideo: participantMap.get(partcipantId).isStoppedVideo,
       participantContainer: document.createElement("div"),
       participantAvatar: document.createElement("div"),
@@ -72,8 +80,8 @@ class ParticipantMod {
     const participantId = DOMElement.participantId;
     let participantName = DOMElement.participantName;
     const role = DOMElement.role;
-    const avatarImgURL = DOMElement.avatarImgURL;
-    const isMute = DOMElement.isMute;
+    const avatarImgUrl = DOMElement.avatarImgUrl;
+    const isMuted = DOMElement.isMuted;
     const isStoppedVideo = DOMElement.isStoppedVideo;
     const participantContainer = DOMElement.participantContainer;
     const participantAvatar = DOMElement.participantAvatar;
@@ -91,10 +99,11 @@ class ParticipantMod {
       "id",
       `${participantId}ParticipantContainer`
     );
+    participantContainer.setAttribute("name", "participantContainer");
     participantContainer.classList.add("participant-container");
     participantAvatar.classList.add("participant-avatar");
     participantAvatarImg.classList.add("participant-avatar-img");
-    participantAvatarImg.src = avatarImgURL;
+    participantAvatarImg.src = avatarImgUrl;
     participantContent.classList.add("participant-content");
     participantNameTag.classList.add("participant-name");
     participantMediaContainer.classList.add("media-container");
@@ -119,11 +128,11 @@ class ParticipantMod {
     participantContainer.appendChild(participantContent);
 
     if (participantId === PARTICIPANT_ID) {
-      muteUnmute.setAttribue("id", "selfParticipantMuteUnmute");
-      playStopVideo.setAttribue("id", "selfParticipantPlayStopVideo");
+      muteUnmute.setAttribute("id", "selfParticipantMuteUnmute");
+      playStopVideo.setAttribute("id", "selfParticipantPlayStopVideo");
     } else {
-      muteUnmute.setAttribue("id", `${participantId}ParticipantMuteUnmute`);
-      playStopVideo.setAttribue(
+      muteUnmute.setAttribute("id", `${participantId}ParticipantMuteUnmute`);
+      playStopVideo.setAttribute(
         "id",
         `${participantId}ParticipantPlayStopVideo`
       );
@@ -139,7 +148,7 @@ class ParticipantMod {
     muteUnmute.classList.add("mute-unmute");
     playStopVideo.classList.add("play-stop-video");
 
-    if (isMute) {
+    if (isMuted) {
       muteUnmute.classList.add("fa-microphone-slash");
     } else {
       muteUnmute.classList.add("fa-microphone");
@@ -155,8 +164,60 @@ class ParticipantMod {
     participantList.appendChild(participantContainer);
   };
 
-  searchParticipant = () => {
-    const participantList = document.querySelectorAll('[name="participant"]');
+  removeParticipantList = (participantId) => {
+    const participantContainer = document.getElementById(
+      `${participantId}ParticipantContainer`
+    );
+    participantContainer.remove();
+  };
+
+  searchParticipant = async () => {
+    try {
+      const participantName = document.querySelector(
+        "#searchParticipantInput"
+      ).value;
+      const participantContainers = document.querySelectorAll(
+        '[name="participantContainer"]'
+      );
+      const data = {
+        participantName: participantName,
+      };
+      this.inputValidator.searchParticipantValidator(data);
+      const response = await fetch(
+        `/api/participant?roomId=${ROOM_ID}&participantName=${participantName}`
+      );
+      const result = await response.json();
+      const resultData = result.data;
+
+      for (const participantContainer of participantContainers) {
+        const participantId = participantContainer.id.replace(
+          "ParticipantContainer",
+          ""
+        );
+        if (!resultData.includes(participantId)) {
+          participantContainer.classList.add("none");
+        } else {
+          participantContainer.classList.add("participant-list-result");
+        }
+      }
+      document.querySelector("#closeParticpantList").classList.remove("none");
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  cancelSearchParticipant = () => {
+    const participantContainers = document.querySelectorAll(
+      '[name="participantContainer"]'
+    );
+
+    for (const participantContainer of participantContainers) {
+      participantContainer.classList.remove("none");
+      participantContainer.classList.remove("participant-list-result");
+    }
+    document.querySelector("#searchParticipantInput").value = "";
+
+    document.querySelector("#closeParticpantList").classList.add("none");
   };
 }
 

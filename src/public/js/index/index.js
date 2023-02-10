@@ -41,7 +41,7 @@ const showBtn = (e) => {
 
 // start meeting
 const startMeeting = async () => {
-  const respone = await fetch(`/api/premeeting/start`);
+  const respone = await fetch(`/api/room/start`);
   const result = await respone.json();
   const roomId = result.roomId;
   window.location = `/${roomId}`;
@@ -65,7 +65,7 @@ const joinMeeting = async () => {
     },
     body: JSON.stringify(data),
   };
-  const response = await fetch("/api/premeeting/join", postData);
+  const response = await fetch("/api/room/join", postData);
   const result = await response.json();
   if (result.ok) {
     window.location = `/${roomId}`;

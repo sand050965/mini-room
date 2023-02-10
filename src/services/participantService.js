@@ -16,6 +16,14 @@ module.exports = {
     });
   },
 
+  getParticipantIdsByName: (data) => {
+    const regex = new RegExp(data.participantName, "i");
+    return Participant.find({
+      roomId: data.roomId,
+      participantName: regex,
+    }).select("participantId");
+  },
+
   insertParticipant: async (data) => {
     const participant = new Participant({
       roomId: data.roomId,
@@ -38,7 +46,7 @@ module.exports = {
   },
 
   deleteAllParticipants: async (data) => {
-    await Participant.deleteOne({
+    await Participant.deleteMany({
       roomId: data.roomId,
     });
   },

@@ -1,13 +1,31 @@
 require("dotenv").config();
+const { v4: uuidv4 } = require("uuid");
+const session = require("express-session");
 const express = require("express");
-const participantService = require("../services/participantService");
+const roomService = require("../services/roomService");
 
 module.exports = {
-  getRoom: async (req, res) => {
+  startMeeting: async (req, res) => {
     try {
-      const roomId = req.params.roomId;
-      const roomInfo = await participantService.getAllParticipants(roomId);
-      res.status(200).json({ data: roomInfo });
+      let roomId = uuidv4();
+      //   check if the roomId is duplicated
+      const checkData = {
+        roomId: roomId,
+      };
+      const checkRoom = await roomService.getValidRoom(checkData);
+
+      if (checkRoom !== null) {
+        roomId = uuidv4();
+      }
+
+      const roomData = {
+        roomId: roomId,
+        status: "start",
+      };
+      await roomService.createRoom(roomData);
+
+      req.session.role = "host";
+      res.status(200).json({ roomId: roomId });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {
         console.log(e);
@@ -18,33 +36,17 @@ module.exports = {
     }
   },
 
-  getParticipant: async (req, res) => {
+  joinMeeting: async (req, res) => {
     try {
-      const participantData = {
-        roomId: req.params.roomId,
-        participantId: req.params.participantId,
-      };
-      const participantInfo = await participantService.getParticipant(
-        participantData
-      );
-      res.status(200).json({ data: participantInfo });
-    } catch (e) {
-      if (process.env.NODE_ENV !== "development") {
-        console.log(e);
+      const joinRoomId = req.query.roomId;
+      //   check if the roomId exists
+      const checkRoom = await roomService.getValidRoom(joinRoomId);
+      if (checkRoom === null) {
+        res
+          .status(400)
+          .json({ error: true, message: "room id doesn't exist!" });
       }
-      res
-        .status(500)
-        .json({ error: true, message: "Sorry, something went wrong!" });
-    }
-  },
-
-  participantLeave: async (req, res) => {
-    try {
-      const participantData = {
-        roomId: req.body.roomId,
-        participantId: req.body.participantId,
-      };
-      await participantService.deleteParticipant(participantData);
+      req.session.role = "participant";
       res.status(200).json({ ok: true });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {
@@ -58,8 +60,11 @@ module.exports = {
 
   closeRoom: async (req, res) => {
     try {
-      const roomId = req.body.roomId;
-      await participantService.deleteAllParticipants(roomId);
+      const roomData = {
+        roomId: req.query.roomId,
+        status: "close",
+      };
+      await roomService.updateRoomStatus(roomData);
       res.status(200).json({ ok: true });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {
@@ -67,7 +72,7 @@ module.exports = {
       }
       res
         .status(500)
-        .json({ error: true, message: "Sorry, something went wrong." });
+        .json({ error: true, message: "Sorry, something went wrong!" });
     }
   },
 };

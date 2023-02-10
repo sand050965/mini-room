@@ -46,6 +46,7 @@ class RoomController {
         avatarContent: avatarContent,
         avatar: avatar,
         avatarImg: avatarImg,
+        avatarImgUrl: AVATAR_IMG_URL,
         nameTag: nameTag,
         participantName: "You",
         participantId: PARTICIPANT_ID,
@@ -53,10 +54,16 @@ class RoomController {
         isStoppedVideo: JSON.parse(IS_STOPPED_VIDEO),
       };
       this.roomInfoMod.initInfo();
+      await this.participantMod.setParticipantMap(DOMElement);
+      await this.participantMod.addParticipantList(PARTICIPANT_ID);
+      DOMElement.participantPlayStopVideo = document.querySelector(
+        "#selfParticipantPlayStopVideo"
+      );
+      DOMElement.participantMuteUnmute = document.querySelector(
+        "#selfParticipantMuteUnmute"
+      );
       await this.mainDisplayMod.addRoomStream(DOMElement);
       await this.streamMod.initMediaControl(DOMElement);
-      await this.participantMod.setParticipantMap(PARTICIPANT_ID);
-      await this.participantMod.addParticipantList(PARTICIPANT_ID);
       cnt = await this.participantMod.getAllParticipants();
       preload();
     } catch (err) {
@@ -75,10 +82,10 @@ class RoomController {
       videoBtnIcon: document.querySelector("#videoBtnIcon"),
       audioBtn: document.querySelector("#audioBtn"),
       audioBtnIcon: document.querySelector("#audioBtnIcon"),
-      participantMuteUnmute: document.getElementById(
+      participantMuteUnmute: document.querySelector(
         "#selfParticipantMuteUnmute"
       ),
-      participantPlayStopVideo: document.getElementById(
+      participantPlayStopVideo: document.querySelector(
         "#selfParticipantPlayStopVideo"
       ),
     };
@@ -125,6 +132,12 @@ class RoomController {
       };
       this.offcanvasMod.offcanvasCloseControl(offcanvasDOMElement);
       this.offcanvasMod.offcanvasCloseGrid();
+    } else if (e.target.id.includes("closeParticpantList")) {
+      // cancel search participant
+      this.participantMod.cancelSearchParticipant();
+    } else if (e.target.id.includes("searchParticipantBtn")) {
+      // search participant
+      this.participantMod.searchParticipant();
     } else if (e.target.id.includes("sendMsgBtn")) {
       // send msg btn is clicked
       this.chatRoomMod.sendMessage();
@@ -134,7 +147,17 @@ class RoomController {
   hotKeysControl = (e) => {
     if (e.which === 13) {
       e.preventDefault();
-      this.chatRoomMod.sendMessage();
+      if (messageInput.value.trim() !== "") {
+        this.chatRoomMod.sendMessage();
+      } else if (searchParticipantInput.value.trim() !== "") {
+        this.participantMod.searchParticipant();
+      }
+    }
+  };
+
+  clearSearchInput = (e) => {
+    if (e.target.value === "") {
+      this.participantMod.cancelSearchParticipant();
     }
   };
 
