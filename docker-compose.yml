@@ -19,10 +19,13 @@ services:
       - "3000:3000"
     environment:
       - PORT=${PORT}
+      - SECRET=${SECRET}
+      - NODE_ENV=${NODE_ENV}
       - DB_URI=${DB_URI}
       - DB_NAME=${DB_NAME}
       - DB_COLLECTION=${DB_COLLECTION}
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY_ID=${AWS_SECRET_ACCESS_KEY_ID}
       - AWS_CLOUDFRONT_URL=${AWS_CLOUDFRONT_URL}
+      - DEFAULT_AVATAR_IMG_URL=${DEFAULT_AVATAR_IMG_URL}
     restart: on-failure

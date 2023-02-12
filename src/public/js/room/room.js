@@ -27,7 +27,7 @@ const participantMod = new ParticipantMod();
 /**
  * ============================== Event Listeners ==============================
  */
-window.addEventListener("load", roomController.init);
+// window.addEventListener("load", roomController.init);
 
 window.addEventListener("keydown", roomController.hotKeysControl);
 
@@ -35,7 +35,7 @@ window.addEventListener("beforeunload", roomController.closeWindow);
 
 searchParticipantInput.addEventListener(
   "keyup",
-  roomController.clearSearchInput
+  roomController.searchInputControl
 );
 
 messageInput.addEventListener("keyup", chatRoomMod.sendMsgBtnControl);
@@ -51,8 +51,8 @@ for (const btn of btnsArray) {
 /**
  * ============================== Socket IO and Peer JS ==============================
  */
-
 peer.on("open", (id) => {
+  roomController.init();
   socket.emit("join-room", ROOM_ID, id, PARTICIPANT_NAME);
 });
 
@@ -140,12 +140,12 @@ const connectToNewUser = async (DOMElement) => {
   };
 
   // Receive new connected user's stream when they join room (Listen to someone answer our call)
-  await call.on("stream", async (userVideoStream) => {
+  await call.on("stream", async (userStream) => {
     if (!peers[call.peer]) {
       peers[call.peer] = call;
       cnt = await participantMod.getAllParticipants();
       const userInfo = await participantMod.getParticipantInfo(call.peer);
-      newDOMElement.stream = userVideoStream;
+      newDOMElement.stream = userStream;
       newDOMElement.avatarImgUrl = userInfo.data.avatarImgUrl;
       newDOMElement.isMuted = userInfo.data.isMuted;
       newDOMElement.isStoppedVideo = userInfo.data.isStoppedVideo;

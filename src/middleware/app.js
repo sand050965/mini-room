@@ -10,6 +10,7 @@ const { connectToDB } = require("../utils/DBUtil");
 const meetingRoutes = require("../routes/meetingRoutes");
 const participantRoutes = require("../routes/participantRoutes");
 const roomRoutes = require("../routes/roomRoutes");
+const mailRoutes = require("../routes/mailRoutes");
 
 // view engine setup
 const app = express();
@@ -32,6 +33,7 @@ app.use(compression());
 app.use("/", meetingRoutes);
 app.use("/api/participant", participantRoutes);
 app.use("/api/room", roomRoutes);
+app.use("/api/mail", mailRoutes);
 
 // DB connection
 connectToDB();

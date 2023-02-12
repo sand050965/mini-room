@@ -5,13 +5,7 @@ module.exports = {
     return Room.findOne({
       $and: [
         { roomId: data.roomId },
-        {
-          $or: [
-            { status: "start" },
-            { status: "inUse" },
-            { status: "preStart" },
-          ],
-        },
+        { status: ["start", "preStart", "inUse"] },
       ],
     });
   },

@@ -162,6 +162,12 @@ nav .avatar-container img {
   color: rgba(255, 255, 255, 0.6);
 }
 
+.hero .alert-container {
+  width: 500px;
+  position: absolute;
+  bottom: 200px;
+}
+
 .hero .img-fluid {
   max-width: 100%;
   height: auto;

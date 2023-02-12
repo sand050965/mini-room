@@ -3,6 +3,7 @@ import InputValidator from "../validators/inputValidator.js";
 class ParticipantMod {
   constructor() {
     this.inputValidator = new InputValidator();
+    this.inviteListArray = [];
   }
 
   getAllParticipants = async () => {
@@ -17,6 +18,21 @@ class ParticipantMod {
   getParticipantInfo = async (participantId) => {
     const response = await fetch(
       `/api/participant/${ROOM_ID}/${participantId}`
+    );
+    const result = await response.json();
+    return result;
+  };
+
+  searchParticipant = async () => {
+    const participantName = document.querySelector(
+      "#searchParticipantInput"
+    ).value;
+    const data = {
+      participantName: participantName,
+    };
+    this.inputValidator.searchParticipantValidator(data);
+    const response = await fetch(
+      `/api/participant?roomId=${ROOM_ID}&participantName=${participantName}`
     );
     const result = await response.json();
     return result;
@@ -52,7 +68,11 @@ class ParticipantMod {
     });
   };
 
-  addParticipantList = (partcipantId) => {
+  removeParticipantMap = async (participantId) => {
+    participantMap.delete(participantId);
+  };
+
+  addParticipantList = async (partcipantId) => {
     const DOMElement = {
       participantId: partcipantId,
       participantName: participantMap.get(partcipantId).participantName,
@@ -72,17 +92,16 @@ class ParticipantMod {
       playStopVideoContainer: document.createElement("div"),
       playStopVideo: document.createElement("i"),
     };
-    this.displayParticipantList(DOMElement);
+    await this.setParticipantListAttribute(DOMElement);
+    await this.setParticipantListStyle(DOMElement);
   };
 
-  displayParticipantList = (DOMElement) => {
+  setParticipantListAttribute = (DOMElement) => {
     const participantList = document.querySelector("#participantList");
     const participantId = DOMElement.participantId;
     let participantName = DOMElement.participantName;
     const role = DOMElement.role;
     const avatarImgUrl = DOMElement.avatarImgUrl;
-    const isMuted = DOMElement.isMuted;
-    const isStoppedVideo = DOMElement.isStoppedVideo;
     const participantContainer = DOMElement.participantContainer;
     const participantAvatar = DOMElement.participantAvatar;
     const participantAvatarImg = DOMElement.participantAvatarImg;
@@ -100,17 +119,9 @@ class ParticipantMod {
       `${participantId}ParticipantContainer`
     );
     participantContainer.setAttribute("name", "participantContainer");
-    participantContainer.classList.add("participant-container");
-    participantAvatar.classList.add("participant-avatar");
-    participantAvatarImg.classList.add("participant-avatar-img");
     participantAvatarImg.src = avatarImgUrl;
-    participantContent.classList.add("participant-content");
-    participantNameTag.classList.add("participant-name");
-    participantMediaContainer.classList.add("media-container");
-
     participantAvatar.appendChild(participantAvatarImg);
     participantContainer.appendChild(participantAvatar);
-
     if (participantName.length > 10) {
       participantName = `${participantName.substring(0, 10)}...`;
     }
@@ -120,8 +131,7 @@ class ParticipantMod {
     } else {
       participantNameTag.textContent = participantName;
     }
-    participantNameTag.classList.add("participant-name");
-    participantRoleTag.classList.add("participant-role");
+
     participantRoleTag.textContent = role;
     participantContent.appendChild(participantNameTag);
     participantContent.appendChild(participantRoleTag);
@@ -139,10 +149,38 @@ class ParticipantMod {
     }
     muteUnmuteContainer.appendChild(muteUnmute);
     playStopVideoContainer.appendChild(playStopVideo);
-    muteUnmuteContainer.classList.add("mute-unmute-container");
-    playStopVideoContainer.classList.add("play-stop-video-container");
     participantMediaContainer.appendChild(muteUnmuteContainer);
     participantMediaContainer.appendChild(playStopVideoContainer);
+    participantContainer.appendChild(participantMediaContainer);
+    participantList.appendChild(participantContainer);
+  };
+
+  setParticipantListStyle = (DOMElement) => {
+    const isMuted = DOMElement.isMuted;
+    const isStoppedVideo = DOMElement.isStoppedVideo;
+    const participantContainer = DOMElement.participantContainer;
+    const participantAvatar = DOMElement.participantAvatar;
+    const participantAvatarImg = DOMElement.participantAvatarImg;
+    const participantContent = DOMElement.participantContent;
+    const participantNameTag = DOMElement.participantNameTag;
+    const participantRoleTag = DOMElement.participantRoleTag;
+    const participantMediaContainer = DOMElement.participantMediaContainer;
+    const muteUnmuteContainer = DOMElement.muteUnmuteContainer;
+    const muteUnmute = DOMElement.muteUnmute;
+    const playStopVideoContainer = DOMElement.playStopVideoContainer;
+    const playStopVideo = DOMElement.playStopVideo;
+
+    participantContainer.classList.add("participant-container");
+    participantAvatar.classList.add("participant-avatar");
+    participantAvatarImg.classList.add("participant-avatar-img");
+    participantContent.classList.add("participant-content");
+    participantNameTag.classList.add("participant-name");
+    participantMediaContainer.classList.add("media-container");
+
+    participantNameTag.classList.add("participant-name");
+    participantRoleTag.classList.add("participant-role");
+    muteUnmuteContainer.classList.add("mute-unmute-container");
+    playStopVideoContainer.classList.add("play-stop-video-container");
     muteUnmute.classList.add("fa-solid");
     playStopVideo.classList.add("fa-solid");
     muteUnmute.classList.add("mute-unmute");
@@ -159,9 +197,6 @@ class ParticipantMod {
     } else {
       playStopVideo.classList.add("fa-video");
     }
-
-    participantContainer.appendChild(participantMediaContainer);
-    participantList.appendChild(participantContainer);
   };
 
   removeParticipantList = (participantId) => {
@@ -171,39 +206,55 @@ class ParticipantMod {
     participantContainer.remove();
   };
 
-  searchParticipant = async () => {
+  doSearchParticipant = async () => {
     try {
-      const participantName = document.querySelector(
-        "#searchParticipantInput"
-      ).value;
-      const participantContainers = document.querySelectorAll(
-        '[name="participantContainer"]'
-      );
-      const data = {
-        participantName: participantName,
-      };
-      this.inputValidator.searchParticipantValidator(data);
-      const response = await fetch(
-        `/api/participant?roomId=${ROOM_ID}&participantName=${participantName}`
-      );
-      const result = await response.json();
-      const resultData = result.data;
+      const resultData = await this.searchParticipant.data;
 
-      for (const participantContainer of participantContainers) {
-        const participantId = participantContainer.id.replace(
-          "ParticipantContainer",
-          ""
-        );
-        if (!resultData.includes(participantId)) {
-          participantContainer.classList.add("none");
-        } else {
-          participantContainer.classList.add("participant-list-result");
-        }
+      if (resultData.length === 0) {
+        throw "No result!";
       }
-      document.querySelector("#closeParticpantList").classList.remove("none");
+      this.displaySearchParticipant(resultData);
     } catch (e) {
       console.log(e);
+      this.displaySearchNoParticipant(e);
     }
+  };
+
+  displaySearchParticipant = async (resultData) => {
+    const participantContainers = document.querySelectorAll(
+      '[name="participantContainer"]'
+    );
+
+    for (const participantContainer of participantContainers) {
+      const participantId = participantContainer.id.replace(
+        "ParticipantContainer",
+        ""
+      );
+      if (!resultData.includes(participantId)) {
+        participantContainer.classList.add("none");
+      } else {
+        participantContainer.classList.add("participant-list-result");
+      }
+    }
+    document.querySelector("#closeParticpantList").classList.remove("none");
+  };
+
+  displaySearchNoParticipant = (msg) => {
+    const participantContainers = document.querySelectorAll(
+      '[name="participantContainer"]'
+    );
+    for (const participantContainer of participantContainers) {
+      participantContainer.classList.add("none");
+    }
+    document.querySelector("#closeParticpantList").classList.remove("none");
+
+    this.displaySearchMsg(msg);
+  };
+
+  displaySearchMsg = (msg) => {
+    const searchMsg = document.querySelector("#searchMsg");
+    searchMsg.textContent = msg;
+    searchMsg.classList.remove("none");
   };
 
   cancelSearchParticipant = () => {
@@ -215,6 +266,9 @@ class ParticipantMod {
       participantContainer.classList.remove("none");
       participantContainer.classList.remove("participant-list-result");
     }
+
+    document.querySelector("#searchMsg").classList.add("none");
+
     document.querySelector("#searchParticipantInput").value = "";
 
     document.querySelector("#closeParticpantList").classList.add("none");

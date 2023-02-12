@@ -1,11 +1,7 @@
 import { initAOS, preload, displayModal } from "../modules/commonMod.js";
 import StreamMod from "../modules/streamMod.js";
 const socket = io("/");
-const peer = new Peer(undefined, {
-  host: "triptaipei.online",
-  port: 443,
-  secure: true,
-});
+const peer = new Peer();
 const streamMod = new StreamMod();
 
 let participantId;
@@ -42,6 +38,7 @@ const DOMElement = {
 peer.on("open", (id) => {
   participantId = id;
   participantName.innerHTML = `${participantId}`;
+  init();
 });
 
 // =================================================================
@@ -190,8 +187,6 @@ const confirmState = async () => {
 };
 
 // ========================== Event Listeners ==========================
-
-window.addEventListener("load", init);
 
 window.addEventListener("keydown", hotKeysControl);
 

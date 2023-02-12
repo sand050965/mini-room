@@ -25,6 +25,7 @@ const hideBtn = (e) => {
 const showBtn = (e) => {
   switch (e.target.value.trim()) {
     case "":
+      document.querySelector("#alert").classList.add("none");
       joinBtn.disabled = true;
       joinBtn.classList.add("disable");
       joinBtn.classList.remove("none");
@@ -41,6 +42,15 @@ const showBtn = (e) => {
 
 // start meeting
 const startMeeting = async () => {
+  // const data = { roomId: roomId };
+
+  // const postData = {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify(data),
+  // };
   const respone = await fetch(`/api/room/start`);
   const result = await respone.json();
   const roomId = result.roomId;
@@ -50,31 +60,33 @@ const startMeeting = async () => {
 // join meeting
 const joinMeeting = async () => {
   let roomId = input.value.trim();
-  if (roomId.startsWith("miniroom.online")) {
+  if (roomId.startsWith("https://")) {
+    if (roomId.startsWith("miniroom.online")) {
+      roomId = roomId.replace("https://miniroom.online/", "");
+    } else {
+      return;
+    }
+  } else if (roomId.startsWith("miniroom.online/")) {
     roomId = roomId.replace("miniroom.online/", "");
   }
 
-  console.log(roomId);
-
-  const data = { roomId: roomId };
-
-  const postData = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  };
-  const response = await fetch("/api/room/join", postData);
+  const response = await fetch(`/api/room/join?roomId=${roomId}`);
   const result = await response.json();
   if (result.ok) {
     window.location = `/${roomId}`;
   } else {
+    document.querySelector("#alert").classList.remove("none");
+  }
+};
+
+const hotKeysControl = (e) => {
+  if (e.which === 13 && input.value.trim() !== "") {
+    joinMeeting();
   }
 };
 
 window.addEventListener("load", init);
-
+window.addEventListener("keydown", hotKeysControl);
 input.addEventListener("focus", showDisableBtn);
 input.addEventListener("blur", hideBtn);
 input.addEventListener("keyup", showBtn);

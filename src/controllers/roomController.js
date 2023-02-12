@@ -38,13 +38,16 @@ module.exports = {
 
   joinMeeting: async (req, res) => {
     try {
-      const joinRoomId = req.query.roomId;
+      const checkData = {
+        roomId: req.query.roomId,
+      };
       //   check if the roomId exists
-      const checkRoom = await roomService.getValidRoom(joinRoomId);
+      const checkRoom = await roomService.getValidRoom(checkData);
       if (checkRoom === null) {
         res
           .status(400)
           .json({ error: true, message: "room id doesn't exist!" });
+        return;
       }
       req.session.role = "participant";
       res.status(200).json({ ok: true });

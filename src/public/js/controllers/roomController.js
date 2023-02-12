@@ -5,6 +5,7 @@ import OffcanvasMod from "../modules/offcanvasMod.js";
 import RoomInfoMod from "../modules/roomInfoMod.js";
 import ChatRoomMod from "../modules/chatRoomMod.js";
 import ParticipantMod from "../modules/participantMod.js";
+import MailMod from "../modules/mailMod.js";
 import { preload } from "../modules/commonMod.js";
 
 class RoomController {
@@ -16,6 +17,7 @@ class RoomController {
     this.roomInfoMod = new RoomInfoMod();
     this.chatRoomMod = new ChatRoomMod();
     this.participantMod = new ParticipantMod();
+    this.mailMod = new MailMod();
   }
 
   init = async () => {
@@ -89,8 +91,11 @@ class RoomController {
         "#selfParticipantPlayStopVideo"
       ),
     };
-
-    if (e.target.id.includes("audioBtn")) {
+    if (e.target.id === "inviteModalCloseBtn") {
+      
+    } else if (e.target.id === "addInviteList") {
+    } else if (e.target.id === "sendEmail") {
+    } else if (e.target.id.includes("audioBtn")) {
       // muteUnmute btn is clicked
       const isMuted = await this.streamMod.muteUnmute(DOMElement);
       this.streamMod.selfAudioControl(isMuted);
@@ -132,12 +137,14 @@ class RoomController {
       };
       this.offcanvasMod.offcanvasCloseControl(offcanvasDOMElement);
       this.offcanvasMod.offcanvasCloseGrid();
+    } else if (e.target.id.includes("addParticipantBtn")) {
+      console.log("invite people");
     } else if (e.target.id.includes("closeParticpantList")) {
       // cancel search participant
       this.participantMod.cancelSearchParticipant();
     } else if (e.target.id.includes("searchParticipantBtn")) {
       // search participant
-      this.participantMod.searchParticipant();
+      this.participantMod.doSearchParticipant();
     } else if (e.target.id.includes("sendMsgBtn")) {
       // send msg btn is clicked
       this.chatRoomMod.sendMessage();
@@ -147,17 +154,33 @@ class RoomController {
   hotKeysControl = (e) => {
     if (e.which === 13) {
       e.preventDefault();
-      if (messageInput.value.trim() !== "") {
+      if (
+        offcanvasMap.get("isOpen").includes("chat") &&
+        messageInput.value.trim() !== ""
+      ) {
         this.chatRoomMod.sendMessage();
-      } else if (searchParticipantInput.value.trim() !== "") {
+      } else if (
+        offcanvasMap.get("isOpen").includes("participant") &&
+        searchParticipantInput.value.trim() !== ""
+      ) {
         this.participantMod.searchParticipant();
       }
     }
   };
 
-  clearSearchInput = (e) => {
+  searchInputControl = (e) => {
+    const searchParticipantBtn = document.querySelector(
+      "#searchParticipantBtn"
+    );
+
     if (e.target.value === "") {
       this.participantMod.cancelSearchParticipant();
+    }
+
+    if (e.target.value.trim() === "") {
+      searchParticipantBtn.classList.add("disabled");
+    } else {
+      searchParticipantBtn.classList.remove("disabled");
     }
   };
 

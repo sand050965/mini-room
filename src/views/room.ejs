@@ -31,25 +31,43 @@
         <!-- Preloader -->
         <div id="preloader" class="preloader"></div>
         <!-- Modal -->
-        <div id="modalContainer"
-             class="modal fade"
+        <div class="modal fade"
+             id="addParticipantModal"
              tabindex="-1"
-             aria-labelledby="exampleModalLabel"
+             aria-labelledby="inviteParticipantModal"
              aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Allow Mini Room to use your camera and microphone</h1>
-                        <button type="button"
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
+                        <button name="inviteModalCloseBtn"
+                                type="button"
                                 class="btn-close"
                                 data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Mini Room needs access to your camera and microphone so that other participants can see and hear you. Mini Room will ask you to confirm this decision on each browser and computer you use.
+                        <form>
+                            <div class="mb-3 input-container">
+                                <label for="recipient-name" class="col-form-label">Sent By:</label>
+                                <input id="senderName" type="text" class="form-control" id="sender-name">
+                            </div>
+                            <div class="mb-3 input-container">
+                                <label for="recipient-name" class="col-form-label">Email:</label>
+                                <input id="recipientEmail"
+                                       type="text"
+                                       class="form-control"
+                                       id="recipient-email">
+                            </div>
+                            <div class="mb-3 input-container">
+                                <label for="message-text" class="col-form-label">Invite List:</label>
+                                <textarea id="inviteList" class="form-control" id="message-text"></textarea>
+                            </div>
+                        </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Dismiss</button>
+                        <button id="addInviteList" type="button" class="btn btn-info">Add invite list</button>
+                        <button id="sendEmail" type="button" class="btn btn-primary">Send email</button>
                     </div>
                 </div>
             </div>
@@ -121,10 +139,14 @@
                     </div>
                     <div class="offcanvas-body">
                         <div class="invite-participant">
-                            <button type="button" class="btn btn-outline-primary center">
-                                <i class="fa-solid fa-user-plus"></i>
+                            <button id="addParticipantBtn"
+                                    type="button"
+                                    class="btn btn-outline-primary center"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#addParticipantModal">
+                                <i id="addParticipantBtnIcon" class="fa-solid fa-user-plus"></i>
                                 &nbsp;&nbsp;
-                                <span>Add people</span>
+                                <span id="addParticipantBtnContent">Add people</span>
                             </button>
                         </div>
                         <div class="input-group input-group-lg mb-3 search-participant-container">
@@ -134,7 +156,7 @@
                                    placeholder="Search for people"
                                    aria-describedby="button-addon2">
                             <button id="searchParticipantBtn"
-                                    class="btn btn-outline-secondary"
+                                    class="btn btn-primary disabled"
                                     type="button"
                                     id="button-addon2">
                                 <i id="searchParticipantBtnIcon" class="fa-solid fa-magnifying-glass"></i>
@@ -145,7 +167,9 @@
                             <button id="closeParticpantList"
                                     type="button"
                                     class="btn-close close-participant-list none"
-                                    aria-label="Close"></button>
+                                    aria-label="Close">
+                            </button>
+                            <div id="searchMsg" class="participant-list-title none"></div>
                         </div>
                     </div>
                 </div>
@@ -187,7 +211,8 @@
         </div>
         <!-- / Main Container Ends -->
         <div class="tool-bar">
-            <div class="meeting-info"></div>
+            <div class="meeting-info">
+            </div>
             <div class="control-btns position-relative">
                 <div class="main-control-container center">
                     <div class="main-control">

@@ -14,11 +14,7 @@ let isScreenSharing = false;
 
 const socket = io("/");
 
-const peer = new Peer(PARTICIPANT_ID, {
-  host: "triptaipei.online",
-  port: 443,
-  secure: true,
-});
+const peer = new Peer(PARTICIPANT_ID);
 
 const peers = {};
 
@@ -59,6 +55,9 @@ const sideBtnIconsArray = [
 ];
 
 const btnsArray = [
+  document.querySelector("#addInviteList"),
+  document.querySelector("#sendEmail"),
+  document.querySelector("#inviteModalCloseBtn"),
   document.querySelector("#audioBtn"),
   document.querySelector("#videoBtn"),
   document.querySelector("#screenShareBtn"),
@@ -66,7 +65,9 @@ const btnsArray = [
   document.querySelector("#infoBtn"),
   document.querySelector("#infoCloseBtn"),
   document.querySelector("#participantBtn"),
+  document.querySelector("#participantCloseBtn"),
   document.querySelector("#closeParticpantList"),
+  document.querySelector("#addParticipantBtn"),
   document.querySelector("#searchParticipantBtn"),
   document.querySelector("#chatBtn"),
   document.querySelector("#chatCloseBtn"),

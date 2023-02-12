@@ -41,6 +41,13 @@ video {
 }
 
 /*--------------------------------------------------------------
+# Modal
+--------------------------------------------------------------*/
+.modal .input-container {
+  padding: 10px;
+}
+
+/*--------------------------------------------------------------
 # Main Container
 --------------------------------------------------------------*/
 .main-container {
@@ -74,7 +81,7 @@ video {
 }
 
 /* Screen Share */
-.screen-share-container {
+.main-container .screen-share-container {
   min-width: 0;
   width: 100%;
   padding: 15px 30px;
@@ -382,7 +389,6 @@ video {
 .message-container .message-content {
   display: grid;
   grid-template-rows: repeat(2, auto);
-  margin-bottom: 20px;
   gap: 10px;
   padding: 20px;
 }
