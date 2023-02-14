@@ -239,6 +239,7 @@ const setConfirmBtnDisabled = () => {
 const setConfirmBtnEnabled = () => {
   const confirmBtn = document.querySelector("#confirmBtn");
   confirmBtn.disabled = false;
+  confirmBtn.textContent = "Enter Your Name";
 };
 
 // ========================== Event Listeners ==========================

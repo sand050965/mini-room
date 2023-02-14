@@ -23,15 +23,9 @@ class RoomController {
   init = async () => {
     try {
       myStream = await this.streamMod.getUserMediaStream();
-      const videoItemContainer = document.createElement("div");
-      const videoItem = document.createElement("div");
+      beforeCnt = await this.participantMod.getBeforeParticipants();
       const myVideo = document.createElement("video");
       myVideo.muted = true;
-      const avatarContainer = document.createElement("div");
-      const avatarContent = document.createElement("div");
-      const avatar = document.createElement("div");
-      const avatarImg = document.createElement("img");
-      const nameTag = document.createElement("div");
 
       // Add Element into DOMElement Object
       const DOMElement = {
@@ -41,23 +35,36 @@ class RoomController {
         audioBtn: document.querySelector("#audioBtn"),
         audioBtnIcon: document.querySelector("#audioBtnIcon"),
         stream: myStream,
-        videoItemContainer: videoItemContainer,
-        videoItem: videoItem,
+        videoItemContainer: document.createElement("div"),
+        videoItem: document.createElement("div"),
         video: myVideo,
-        avatarContainer: avatarContainer,
-        avatarContent: avatarContent,
-        avatar: avatar,
-        avatarImg: avatarImg,
+        avatarContainer: document.createElement("div"),
+        avatarContent: document.createElement("div"),
+        avatar: document.createElement("div"),
+        avatarImg: document.createElement("img"),
         avatarImgUrl: AVATAR_IMG_URL,
-        nameTag: nameTag,
+        nameTag: document.createElement("div"),
+        micStatus: document.createElement("div"),
+        micStatusIcon: document.createElement("i"),
         participantName: "You",
         participantId: PARTICIPANT_ID,
         isMuted: JSON.parse(IS_MUTED),
         isStoppedVideo: JSON.parse(IS_STOPPED_VIDEO),
+        participantContainer: document.createElement("div"),
+        participantAvatar: document.createElement("div"),
+        participantAvatarImg: document.createElement("img"),
+        participantContent: document.createElement("div"),
+        participantNameTag: document.createElement("div"),
+        participantRoleTag: document.createElement("div"),
+        participantMediaContainer: document.createElement("div"),
+        participantMuteUnmuteContainer: document.createElement("div"),
+        participantMuteUnmute: document.createElement("i"),
+        participantPlayStopVideoContainer: document.createElement("div"),
+        participantPlayStopVideo: document.createElement("i"),
       };
       this.roomInfoMod.initInfo();
       await this.participantMod.setParticipantMap(DOMElement);
-      await this.participantMod.addParticipantList(PARTICIPANT_ID);
+      await this.participantMod.addParticipantList(DOMElement);
       DOMElement.participantPlayStopVideo = document.querySelector(
         "#selfParticipantPlayStopVideo"
       );
@@ -66,8 +73,6 @@ class RoomController {
       );
       await this.mainDisplayMod.addRoomStream(DOMElement);
       await this.streamMod.initMediaControl(DOMElement);
-      cnt = await this.participantMod.getAllParticipants();
-      preload();
     } catch (err) {
       console.log(err);
       preload();
@@ -90,6 +95,7 @@ class RoomController {
       participantPlayStopVideo: document.querySelector(
         "#selfParticipantPlayStopVideo"
       ),
+      micStatusIcon: document.querySelector("#selfMicStatusIcon"),
     };
     if (e.target.id === "inviteModalCloseBtn") {
     } else if (e.target.id === "addInviteList") {

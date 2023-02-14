@@ -163,9 +163,7 @@ video {
   position: relative;
   width: 100%;
   height: 100%;
-  max-height: 500px;
   border-radius: 10px;
-  background-color: #202124;
 }
 
 .videos-container .two-self-item {
@@ -173,7 +171,6 @@ video {
   width: 100%;
   height: 100%;
   border-radius: 10px;
-  background-color: #43454b;
   box-shadow: rgba(0, 0, 0, 0.8) 0 0 10px;
 }
 
@@ -187,8 +184,8 @@ video {
 
 .videos-container .more-item {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: inherit;
+  max-height: 100%;
   border-radius: 10px;
   background-color: #43454b;
 }
@@ -215,11 +212,22 @@ video {
 
 .videos-container .video {
   width: 100%;
+  height: 100%;
 }
 
-.videos-container .avatar-container {
+.videos-container .one-self-avatar-container {
+  position: absolute;
+  z-index: 5;
   width: 100%;
-  height: 100em;
+  height: 100%;
+  background-color: #202124;
+}
+
+.videos-container .more-avatar-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #43454b;
 }
 
 .videos-container .avatar-content {
@@ -244,6 +252,21 @@ video {
 .videos-container .avatar-img {
   width: 100%;
   height: 100%;
+}
+
+.videos-container .mic-status {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #202124;
+  z-index: 5;
+}
+
+.videos-container .mic-status i {
+  color: #fff;
 }
 
 /*--------------------------------------------------------------

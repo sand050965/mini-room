@@ -7,9 +7,9 @@ class ParticipantMod {
   }
 
   getAllParticipants = async () => {
-    const response = await fetch(`/api/participant/${ROOM_ID}`);
+    const response = await fetch(`/api/participant/all/${ROOM_ID}`);
     const result = await response.json();
-    const cnt = await result.data.length;
+    const cnt = await result.data.participantCnt;
     const participantCnt = document.querySelector("#participantCnt");
     if (participantCnt) {
       participantCnt.textContent = cnt;
@@ -17,9 +17,17 @@ class ParticipantMod {
     return cnt;
   };
 
+  getBeforeParticipants = async () => {
+    const response = await fetch(
+      `/api/participant/before/${ROOM_ID}?participantId=${PARTICIPANT_ID}`
+    );
+    const result = await response.json();
+    return result.data.beforeParticipantCnt;
+  };
+
   getParticipantInfo = async (participantId) => {
     const response = await fetch(
-      `/api/participant/${ROOM_ID}/${participantId}`
+      `/api/participant/${ROOM_ID}?participantId=${participantId}`
     );
     const result = await response.json();
     return result;
@@ -74,26 +82,7 @@ class ParticipantMod {
     participantMap.delete(participantId);
   };
 
-  addParticipantList = async (partcipantId) => {
-    const DOMElement = {
-      participantId: partcipantId,
-      participantName: participantMap.get(partcipantId).participantName,
-      role: participantMap.get(partcipantId).role,
-      avatarImgUrl: participantMap.get(partcipantId).avatarImgUrl,
-      isMuted: participantMap.get(partcipantId).isMuted,
-      isStoppedVideo: participantMap.get(partcipantId).isStoppedVideo,
-      participantContainer: document.createElement("div"),
-      participantAvatar: document.createElement("div"),
-      participantAvatarImg: document.createElement("img"),
-      participantContent: document.createElement("div"),
-      participantNameTag: document.createElement("div"),
-      participantRoleTag: document.createElement("div"),
-      participantMediaContainer: document.createElement("div"),
-      muteUnmuteContainer: document.createElement("div"),
-      muteUnmute: document.createElement("i"),
-      playStopVideoContainer: document.createElement("div"),
-      playStopVideo: document.createElement("i"),
-    };
+  addParticipantList = async (DOMElement) => {
     await this.setParticipantListAttribute(DOMElement);
     await this.setParticipantListStyle(DOMElement);
   };
@@ -111,10 +100,12 @@ class ParticipantMod {
     const participantNameTag = DOMElement.participantNameTag;
     const participantRoleTag = DOMElement.participantRoleTag;
     const participantMediaContainer = DOMElement.participantMediaContainer;
-    const muteUnmuteContainer = DOMElement.muteUnmuteContainer;
-    const muteUnmute = DOMElement.muteUnmute;
-    const playStopVideoContainer = DOMElement.playStopVideoContainer;
-    const playStopVideo = DOMElement.playStopVideo;
+    const participantMuteUnmuteContainer =
+      DOMElement.participantMuteUnmuteContainer;
+    const participantMuteUnmute = DOMElement.participantMuteUnmute;
+    const participantPlayStopVideoContainer =
+      DOMElement.participantPlayStopVideoContainer;
+    const participantPlayStopVideo = DOMElement.participantPlayStopVideo;
 
     participantContainer.setAttribute(
       "id",
@@ -140,19 +131,25 @@ class ParticipantMod {
     participantContainer.appendChild(participantContent);
 
     if (participantId === PARTICIPANT_ID) {
-      muteUnmute.setAttribute("id", "selfParticipantMuteUnmute");
-      playStopVideo.setAttribute("id", "selfParticipantPlayStopVideo");
+      participantMuteUnmute.setAttribute("id", "selfParticipantMuteUnmute");
+      participantPlayStopVideo.setAttribute(
+        "id",
+        "selfParticipantPlayStopVideo"
+      );
     } else {
-      muteUnmute.setAttribute("id", `${participantId}ParticipantMuteUnmute`);
-      playStopVideo.setAttribute(
+      participantMuteUnmute.setAttribute(
+        "id",
+        `${participantId}ParticipantMuteUnmute`
+      );
+      participantPlayStopVideo.setAttribute(
         "id",
         `${participantId}ParticipantPlayStopVideo`
       );
     }
-    muteUnmuteContainer.appendChild(muteUnmute);
-    playStopVideoContainer.appendChild(playStopVideo);
-    participantMediaContainer.appendChild(muteUnmuteContainer);
-    participantMediaContainer.appendChild(playStopVideoContainer);
+    participantMuteUnmuteContainer.appendChild(participantMuteUnmute);
+    participantPlayStopVideoContainer.appendChild(participantPlayStopVideo);
+    participantMediaContainer.appendChild(participantMuteUnmuteContainer);
+    participantMediaContainer.appendChild(participantPlayStopVideoContainer);
     participantContainer.appendChild(participantMediaContainer);
     participantList.appendChild(participantContainer);
   };
@@ -167,10 +164,12 @@ class ParticipantMod {
     const participantNameTag = DOMElement.participantNameTag;
     const participantRoleTag = DOMElement.participantRoleTag;
     const participantMediaContainer = DOMElement.participantMediaContainer;
-    const muteUnmuteContainer = DOMElement.muteUnmuteContainer;
-    const muteUnmute = DOMElement.muteUnmute;
-    const playStopVideoContainer = DOMElement.playStopVideoContainer;
-    const playStopVideo = DOMElement.playStopVideo;
+    const participantMuteUnmuteContainer =
+      DOMElement.participantMuteUnmuteContainer;
+    const participantMuteUnmute = DOMElement.participantMuteUnmute;
+    const participantPlayStopVideoContainer =
+      DOMElement.participantPlayStopVideoContainer;
+    const participantPlayStopVideo = DOMElement.participantPlayStopVideo;
 
     participantContainer.classList.add("participant-container");
     participantAvatar.classList.add("participant-avatar");
@@ -181,23 +180,25 @@ class ParticipantMod {
 
     participantNameTag.classList.add("participant-name");
     participantRoleTag.classList.add("participant-role");
-    muteUnmuteContainer.classList.add("mute-unmute-container");
-    playStopVideoContainer.classList.add("play-stop-video-container");
-    muteUnmute.classList.add("fa-solid");
-    playStopVideo.classList.add("fa-solid");
-    muteUnmute.classList.add("mute-unmute");
-    playStopVideo.classList.add("play-stop-video");
+    participantMuteUnmuteContainer.classList.add("mute-unmute-container");
+    participantPlayStopVideoContainer.classList.add(
+      "play-stop-video-container"
+    );
+    participantMuteUnmute.classList.add("fa-solid");
+    participantPlayStopVideo.classList.add("fa-solid");
+    participantMuteUnmute.classList.add("mute-unmute");
+    participantPlayStopVideo.classList.add("play-stop-video");
 
     if (isMuted) {
-      muteUnmute.classList.add("fa-microphone-slash");
+      participantMuteUnmute.classList.add("fa-microphone-slash");
     } else {
-      muteUnmute.classList.add("fa-microphone");
+      participantMuteUnmute.classList.add("fa-microphone");
     }
 
     if (isStoppedVideo) {
-      playStopVideo.classList.add("fa-video-slash");
+      participantPlayStopVideo.classList.add("fa-video-slash");
     } else {
-      playStopVideo.classList.add("fa-video");
+      participantPlayStopVideo.classList.add("fa-video");
     }
   };
 

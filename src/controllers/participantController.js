@@ -38,11 +38,38 @@ module.exports = {
     }
   },
 
-  getAllParticipantsInfo: async (req, res) => {
+  getAllParticipants: async (req, res) => {
     try {
       const roomId = req.params.roomId;
-      const roomInfo = await participantService.getAllParticipants(roomId);
-      res.status(200).json({ data: roomInfo });
+      const participantCnt = await participantService.getAllParticipantsCnt(
+        roomId
+      );
+      res.status(200).json({ data: { participantCnt: participantCnt } });
+    } catch (e) {
+      if (process.env.NODE_ENV !== "development") {
+        console.log(e);
+      }
+      res
+        .status(500)
+        .json({ error: true, message: "Sorry, something went wrong!" });
+    }
+  },
+
+  getBeforeParticipantsInfo: async (req, res) => {
+    try {
+      const participantData = {
+        roomId: req.params.roomId,
+        participantId: req.query.participantId,
+      };
+      const participantInfo = await participantService.getParticipant(
+        participantData
+      );
+      participantData.createdAt = participantInfo.createdAt;
+      const beforeParticipantCnt =
+        await participantService.getBeforeParticipants(participantData);
+      res
+        .status(200)
+        .json({ data: { beforeParticipantCnt: beforeParticipantCnt } });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {
         console.log(e);
@@ -57,7 +84,7 @@ module.exports = {
     try {
       const participantData = {
         roomId: req.params.roomId,
-        participantId: req.params.participantId,
+        participantId: req.query.participantId,
       };
       const participantInfo = await participantService.getParticipant(
         participantData

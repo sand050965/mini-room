@@ -52,7 +52,7 @@ module.exports = {
   getParticipantValidator: (req, res, next) => {
     const data = {
       roomId: req.params.roomId,
-      participantId: req.params.participantId,
+      participantId: req.query.participantId,
     };
 
     const { error, value } = roomIdAndUserIdSchema.validate(data, {

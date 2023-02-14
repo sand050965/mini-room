@@ -90,15 +90,23 @@ class MainDisplayMod {
     const nameTag = DOMElement.nameTag;
     const participantName = DOMElement.participantName;
     const participantId = DOMElement.participantId;
+    const micStatus = DOMElement.micStatus;
+    const micStatusIcon = DOMElement.micStatusIcon;
 
     // append and add common class
-    video.classList.add("none");
+    // video.classList.add("none");
     videoItem.appendChild(video);
     videoItem.classList.add("center");
     nameTag.textContent = participantName;
     nameTag.classList.add("name-tag");
+    micStatusIcon.classList.add("fa-solid");
+    micStatusIcon.classList.add("fa-microphone-slash");
+    micStatus.classList.add("mic-status");
+    micStatus.classList.add("center");
+    micStatus.appendChild(micStatusIcon);
     videoItem.appendChild(avatarContainer);
     videoItem.appendChild(nameTag);
+    videoItem.appendChild(micStatus);
     videoItemContainer.appendChild(videoItem);
     videoItemContainer.classList.add("center");
     videosContainer.append(videoItemContainer);
@@ -108,6 +116,7 @@ class MainDisplayMod {
       videoItemContainer.setAttribute("id", "selfVideoItemContainer");
       videoItem.setAttribute("id", "selfVideoItem");
       video.setAttribute("id", "selfVideo");
+      micStatusIcon.setAttribute("id", "selfMicStatusIcon");
       videoElement.selfVideoItemContainer = videoItemContainer;
       videoElement.selfVideoItem = videoItem;
       videoElement.selfVideo = video;
@@ -121,6 +130,7 @@ class MainDisplayMod {
       videoItem.setAttribute("name", "otherVideoItem");
       video.setAttribute("id", `${participantId}Video`);
       video.setAttribute("name", "otherVideo");
+      micStatusIcon.setAttribute("id", `${participantId}MicStatusIcon`);
       videoElement.otherVideoItemContainers = [videoItemContainer];
       videoElement.otherVideoItems = [videoItem];
       videoElement.otherVideos = [video];
@@ -142,20 +152,24 @@ class MainDisplayMod {
     // reset style
     this.resetRoomAvatarStyle(DOMElement);
 
-    // add self avatar style
-    selfAvatarContainer.classList.add("avatar-container");
     selfAvatarContent.classList.add("avatar-content");
 
-    if (cnt === 2) {
+    // add self avatar style
+    if (cnt === 1) {
+      selfAvatarContainer.classList.add("one-self-avatar-container");
+      selfAvatar.classList.add("avatar");
+    } else if (cnt === 2) {
+      selfAvatarContainer.classList.add("more-avatar-container");
       // add self avatar style
       selfAvatar.classList.add("two-self-avatar");
     } else {
+      selfAvatarContainer.classList.add("more-avatar-container");
       selfAvatar.classList.add("avatar");
     }
 
     // add other avatar style
     for (const otherAvatarContainer of otherAvatarContainers) {
-      otherAvatarContainer.classList.add("avatar-container");
+      otherAvatarContainer.classList.add("more-avatar-container");
     }
 
     for (const otherAvatarContent of otherAvatarContents) {
@@ -251,9 +265,11 @@ class MainDisplayMod {
 
   setScreenShareAvatarStyle = () => {
     //self avatar elements
+    const selfAvatarContainer = document.querySelector("#selfAvatarContainer");
     const selfAvatar = document.querySelector("#selfAvatar");
 
     const avatarDOMElement = {
+      selfAvatarContainer: selfAvatarContainer,
       selfAvatar: selfAvatar,
     };
 
@@ -261,6 +277,7 @@ class MainDisplayMod {
     this.resetRoomAvatarStyle(avatarDOMElement);
 
     // add self avatart style
+    selfAvatarContainer.classList.add("more-avatar-container");
     selfAvatar.classList.add("avatar");
   };
 
@@ -322,9 +339,12 @@ class MainDisplayMod {
 
   resetRoomAvatarStyle = (DOMElement) => {
     // self avatar elements
+    const selfAvatarContainer = DOMElement.selfAvatarContainer;
     const selfAvatar = DOMElement.selfAvatar;
 
     // remove self avatar style
+    selfAvatarContainer.classList.remove("one-self-avatar-container");
+    selfAvatarContainer.classList.remove("more-avatar-container");
     selfAvatar.classList.remove("avatar");
     selfAvatar.classList.remove("two-self-avatar");
   };
@@ -395,7 +415,8 @@ class MainDisplayMod {
     await e.target.play();
     loadedCnt++;
     console.log("loadedCnt", loadedCnt);
-    if (renderCnt === loadedCnt - 1) {
+    console.log("beforeCnt", beforeCnt);
+    if (beforeCnt === loadedCnt) {
       preload();
       socket.emit("finished-render");
     }

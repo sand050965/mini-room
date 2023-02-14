@@ -4,7 +4,7 @@ let myScreenShareStream = null;
 
 let cnt = 1;
 
-let renderCnt = 0;
+let beforeCnt = 1;
 
 let loadedCnt = 0;
 

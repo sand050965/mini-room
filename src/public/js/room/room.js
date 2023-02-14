@@ -27,8 +27,6 @@ const participantMod = new ParticipantMod();
 /**
  * ============================== Event Listeners ==============================
  */
-// window.addEventListener("load", roomController.init);
-
 window.addEventListener("keydown", roomController.hotKeysControl);
 
 window.addEventListener("beforeunload", roomController.closeWindow);
@@ -65,37 +63,47 @@ peer.on("call", async (call) => {
   // Answer video call
   await call.answer(myStream);
 
-  const newDOMElement = {
-    type: "roomOther",
-    videoItemContainer: document.createElement("div"),
-    videoItem: document.createElement("div"),
-    video: document.createElement("video"),
-    avatarContainer: document.createElement("div"),
-    avatarContent: document.createElement("div"),
-    avatar: document.createElement("div"),
-    avatarImg: document.createElement("img"),
-    nameTag: document.createElement("div"),
-    participantId: call.peer,
-  };
-
   // Respond to stream that comes in
   await call.on("stream", async (userStream) => {
     if (call.metadata.type === "video") {
       if (!peers[call.peer]) {
         peers[call.peer] = call;
-        const userInfo = await participantMod.getParticipantInfo(call.peer);
         cnt = await participantMod.getAllParticipants();
-        newDOMElement.stream = userStream;
-        newDOMElement.participantName = userInfo.data.participantName;
-        newDOMElement.avatarImgUrl = userInfo.data.avatarImgUrl;
-        newDOMElement.isMuted = userInfo.data.isMuted;
-        newDOMElement.isStoppedVideo = userInfo.data.isStoppedVideo;
-        await participantMod.setParticipantMap(newDOMElement);
-        await participantMod.addParticipantList(call.peer);
-        await mainDisplayMod.addRoomStream(newDOMElement);
-        await streamMod.initMediaControl(newDOMElement);
-        renderCnt++;
-        console.log("renderCnt", renderCnt);
+        const userInfo = await participantMod.getParticipantInfo(call.peer);
+        const DOMElement = {
+          type: "roomOther",
+          videoItemContainer: document.createElement("div"),
+          videoItem: document.createElement("div"),
+          video: document.createElement("video"),
+          avatarContainer: document.createElement("div"),
+          avatarContent: document.createElement("div"),
+          avatar: document.createElement("div"),
+          avatarImg: document.createElement("img"),
+          nameTag: document.createElement("div"),
+          micStatus: document.createElement("div"),
+          micStatusIcon: document.createElement("i"),
+          participantId: call.peer,
+          stream: userStream,
+          participantName: userInfo.data.participantName,
+          avatarImgUrl: userInfo.data.avatarImgUrl,
+          isMuted: userInfo.data.isMuted,
+          isStoppedVideo: userInfo.data.isStoppedVideo,
+          participantContainer: document.createElement("div"),
+          participantAvatar: document.createElement("div"),
+          participantAvatarImg: document.createElement("img"),
+          participantContent: document.createElement("div"),
+          participantNameTag: document.createElement("div"),
+          participantRoleTag: document.createElement("div"),
+          participantMediaContainer: document.createElement("div"),
+          participantMuteUnmuteContainer: document.createElement("div"),
+          participantMuteUnmute: document.createElement("i"),
+          participantPlayStopVideoContainer: document.createElement("div"),
+          participantPlayStopVideo: document.createElement("i"),
+        };
+        await participantMod.setParticipantMap(DOMElement);
+        await participantMod.addParticipantList(DOMElement);
+        await mainDisplayMod.addRoomStream(DOMElement);
+        await streamMod.initMediaControl(DOMElement);
       }
     } else if (call.metadata.type === "screensharing") {
       screenShareMod.checkScreenShare();
@@ -130,34 +138,47 @@ const connectToNewUser = async (DOMElement) => {
     });
   }
 
-  const newDOMElement = {
-    type: "roomOther",
-    videoItemContainer: document.createElement("div"),
-    videoItem: document.createElement("div"),
-    video: document.createElement("video"),
-    avatarContainer: document.createElement("div"),
-    avatarContent: document.createElement("div"),
-    avatar: document.createElement("div"),
-    avatarImg: document.createElement("img"),
-    nameTag: document.createElement("div"),
-    participantName: participantName,
-    participantId: participantId,
-  };
-
   // Receive new connected user's stream when they join room (Listen to someone answer our call)
   await call.on("stream", async (userStream) => {
     if (!peers[call.peer]) {
       peers[call.peer] = call;
       cnt = await participantMod.getAllParticipants();
       const userInfo = await participantMod.getParticipantInfo(call.peer);
-      newDOMElement.stream = userStream;
-      newDOMElement.avatarImgUrl = userInfo.data.avatarImgUrl;
-      newDOMElement.isMuted = userInfo.data.isMuted;
-      newDOMElement.isStoppedVideo = userInfo.data.isStoppedVideo;
-      await participantMod.setParticipantMap(newDOMElement);
-      await participantMod.addParticipantList(call.peer);
-      await mainDisplayMod.addRoomStream(newDOMElement);
-      await streamMod.initMediaControl(newDOMElement);
+
+      const DOMElement = {
+        type: "roomOther",
+        videoItemContainer: document.createElement("div"),
+        videoItem: document.createElement("div"),
+        video: document.createElement("video"),
+        avatarContainer: document.createElement("div"),
+        avatarContent: document.createElement("div"),
+        avatar: document.createElement("div"),
+        avatarImg: document.createElement("img"),
+        nameTag: document.createElement("div"),
+        micStatus: document.createElement("div"),
+        micStatusIcon: document.createElement("i"),
+        participantName: participantName,
+        participantId: participantId,
+        stream: userStream,
+        avatarImgUrl: userInfo.data.avatarImgUrl,
+        isMuted: userInfo.data.isMuted,
+        isStoppedVideo: userInfo.data.isStoppedVideo,
+        participantContainer: document.createElement("div"),
+        participantAvatar: document.createElement("div"),
+        participantAvatarImg: document.createElement("img"),
+        participantContent: document.createElement("div"),
+        participantNameTag: document.createElement("div"),
+        participantRoleTag: document.createElement("div"),
+        participantMediaContainer: document.createElement("div"),
+        participantMuteUnmuteContainer: document.createElement("div"),
+        participantMuteUnmute: document.createElement("i"),
+        participantPlayStopVideoContainer: document.createElement("div"),
+        participantPlayStopVideo: document.createElement("i"),
+      };
+      await participantMod.setParticipantMap(DOMElement);
+      await participantMod.addParticipantList(DOMElement);
+      await mainDisplayMod.addRoomStream(DOMElement);
+      await streamMod.initMediaControl(DOMElement);
     }
   });
 
@@ -167,6 +188,22 @@ const connectToNewUser = async (DOMElement) => {
     video.remove();
   });
 };
+
+/**
+ * new user connected
+ */
+socket.on("user-connected", async (participantId, participantName) => {
+  // ************** todo... ****************
+  // need to improve get participants method
+  const DOMElement = {
+    participantId: participantId,
+    participantName: participantName,
+    videoStream: myStream,
+    screenShareStream: myScreenShareStream,
+  };
+  await participantMod.getAllParticipants();
+  await connectToNewUser(DOMElement);
+});
 
 /**
  * user finish render
@@ -198,26 +235,13 @@ socket.on("user-finished-render", (participantId) => {
 });
 
 /**
- * new user connected
- */
-socket.on("user-connected", async (participantId, participantName) => {
-  // ************** todo... ****************
-  // need to improve get participants method
-  const DOMElement = {
-    participantId: participantId,
-    participantName: participantName,
-    videoStream: myStream,
-    screenShareStream: myScreenShareStream,
-  };
-  await participantMod.getAllParticipants();
-  await connectToNewUser(DOMElement);
-});
-
-/**
  * display other user mute
  */
 socket.on("user-mute", async (participantId) => {
-  const stream = participantMap.get(participantId).stream;
+  let stream = null;
+  if (participantMap.get(participantId)) {
+    stream = participantMap.get(participantId).stream;
+  }
   const newDOMElement = {
     type: "roomOther",
     stream: stream,
@@ -229,6 +253,7 @@ socket.on("user-mute", async (participantId) => {
     participantPlayStopVideo: document.getElementById(
       `${participantId}ParticipantPlayStopVideo`
     ),
+    micStatusIcon: document.getElementById(`${participantId}MicStatusIcon`),
   };
   await streamMod.mute(newDOMElement);
 });
@@ -237,7 +262,10 @@ socket.on("user-mute", async (participantId) => {
  * display other user unmute
  */
 socket.on("user-unmute", async (participantId) => {
-  const stream = participantMap.get(participantId).stream;
+  let stream = null;
+  if (participantMap.get(participantId)) {
+    stream = participantMap.get(participantId).stream;
+  }
   const newDOMElement = {
     type: "roomOther",
     stream: stream,
@@ -249,6 +277,7 @@ socket.on("user-unmute", async (participantId) => {
     participantPlayStopVideo: document.getElementById(
       `${participantId}ParticipantPlayStopVideo`
     ),
+    micStatusIcon: document.getElementById(`${participantId}MicStatusIcon`),
   };
   await streamMod.unmute(newDOMElement);
 });
@@ -257,7 +286,10 @@ socket.on("user-unmute", async (participantId) => {
  * stop other user video
  */
 socket.on("user-stop-video", async (participantId) => {
-  const stream = participantMap.get(participantId).stream;
+  let stream = null;
+  if (participantMap.get(participantId)) {
+    stream = participantMap.get(participantId).stream;
+  }
   const newDOMElement = {
     type: "roomOther",
     stream: stream,
@@ -277,7 +309,10 @@ socket.on("user-stop-video", async (participantId) => {
  * play other user video
  */
 socket.on("user-play-video", async (participantId) => {
-  const stream = participantMap.get(participantId).stream;
+  let stream = null;
+  if (participantMap.get(participantId)) {
+    stream = participantMap.get(participantId).stream;
+  }
   const newDOMElement = {
     type: "roomOther",
     stream: stream,

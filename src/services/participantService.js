@@ -5,8 +5,15 @@ module.exports = {
     return Participant.findById(dataId);
   },
 
-  getAllParticipants: (roomId) => {
-    return Participant.find({ roomId: roomId });
+  getAllParticipantsCnt: (roomId) => {
+    return Participant.countDocuments({ roomId: roomId });
+  },
+
+  getBeforeParticipants: (data) => {
+    return Participant.countDocuments({
+      roomId: data.roomId,
+      createdAt: { $lte: data.createdAt },
+    });
   },
 
   getParticipant: (data) => {

@@ -4,13 +4,19 @@ const participantController = require("../controllers/participantController");
 const router = express.Router();
 
 router.get(
-  "/:roomId",
+  "/all/:roomId",
   participantValidator.getAllParticipantsValidator,
-  participantController.getAllParticipantsInfo
+  participantController.getAllParticipants
+)
+;
+router.get(
+  "/before/:roomId",
+  participantValidator.getParticipantValidator,
+  participantController.getBeforeParticipantsInfo
 );
 
 router.get(
-  "/:roomId/:participantId",
+  "/:roomId",
   participantValidator.getParticipantValidator,
   participantController.getParticipantInfo
 );
