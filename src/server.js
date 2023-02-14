@@ -6,7 +6,6 @@ const io = require("socket.io")(server);
 
 const PORT = process.env.PORT || 3000;
 
-
 // -------------Socket IO-------------
 io.on("connection", (socket) => {
   //user join room event
@@ -50,6 +49,11 @@ io.on("connection", (socket) => {
     // socket.on("start-screen-share", () => {
     //   socket.to(roomId).emit("user-start-screen-share", participantId);
     // });
+
+    // users denied permission to use camera and microphone
+    socket.on("denied-media-permission", () => {
+      socket.to(roomId).emit("user-denied-media-permission", participantId);
+    });
 
     // users send message event
     socket.on("message", (message) => {

@@ -6,7 +6,7 @@ import RoomInfoMod from "../modules/roomInfoMod.js";
 import ChatRoomMod from "../modules/chatRoomMod.js";
 import ParticipantMod from "../modules/participantMod.js";
 import MailMod from "../modules/mailMod.js";
-import { preload } from "../modules/commonMod.js";
+import CommonMod from "../modules/commonMod.js";
 
 class RoomController {
   constructor() {
@@ -18,6 +18,7 @@ class RoomController {
     this.chatRoomMod = new ChatRoomMod();
     this.participantMod = new ParticipantMod();
     this.mailMod = new MailMod();
+    this.commonMod = new CommonMod();
   }
 
   init = async () => {
@@ -75,13 +76,15 @@ class RoomController {
       await this.streamMod.initMediaControl(DOMElement);
     } catch (err) {
       console.log(err);
-      preload();
+      this.commonMod.closePreload();
     }
   };
 
   btnControl = async (e) => {
     const DOMElement = {
+      page: "room",
       type: "roomSelf",
+      isLoseTrack: isLoseTrack,
       video: document.querySelector("#selfVideo"),
       avatarContainer: document.querySelector("#selfAvatarContainer"),
       stream: document.querySelector("#selfVideo").srcObject,

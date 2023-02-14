@@ -31,6 +31,30 @@
         <!-- Preloader -->
         <div id="preloader" class="preloader"></div>
         <!-- Modal -->
+        <div id="modalContainer"
+             class="modal fade"
+             tabindex="-1"
+             aria-labelledby="roomModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="roomModalLabel"></h1>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div id="roomModalBody" class="modal-body">
+                        Mini Room needs access to your camera and microphone so that other participants can see and hear you. Mini Room will ask you to confirm this decision on each browser and computer you use.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add Participan Modal -->
         <div class="modal fade"
              id="addParticipantModal"
              tabindex="-1"
@@ -39,7 +63,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Invite People</h1>
                         <button id="inviteModalCloseBtn"
                                 type="button"
                                 class="btn-close"
@@ -69,7 +93,7 @@
                 </div>
             </div>
         </div>
-        <!-- / Modal Ends -->
+        <!-- / Add Participan Modal Ends -->
         <!-- Main Container -->
         <div id="mainContainer" class="main-container main-middle">
             <!-- Main Left -->
@@ -178,7 +202,8 @@
                                     class="btn-close close-participant-list none"
                                     aria-label="Close">
                             </button>
-                            <div id="searchMsg" class="participant-list-title none"></div>
+                            <div id="searchMsg" class="participant-list-title none">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -189,7 +214,9 @@
                      tabindex="-1"
                      aria-labelledby="offcanvasRightLabel">
                     <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="staticBackdropLabel">In-call Messages</h5>
+                        <h5 class="offcanvas-title" id="staticBackdropLabel">
+                            In-call Messages
+                        </h5>
                         <button id="chatCloseBtn"
                                 type="button"
                                 class="btn-close"
@@ -198,7 +225,9 @@
                                 aria-label="Close">
                         </button>
                     </div>
-                    <div class="warning">Messages can only be seen by people in the call and are deleted when the call ends.</div>
+                    <div class="warning">
+                        Messages can only be seen by people in the call and are deleted when the call ends.
+                    </div>
                     <div class="offcanvas-body">
                         <div id="messageContainer" class="message-container">
                         </div>

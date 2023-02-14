@@ -1,13 +1,15 @@
-import { initAOS, preload } from "../modules/commonMod.js";
+import CommonMod from "../modules/commonMod.js";
 const input = document.querySelector("input");
 const startBtn = document.querySelector("#startBtn");
 const joinBtn = document.querySelector("#joinBtn");
+
+const commonMod = new CommonMod();
 
 /**
  * Init App
  */
 const init = () => {
-  initAOS(AOS);
+  commonMod.initAOS(AOS);
 };
 
 // input button control

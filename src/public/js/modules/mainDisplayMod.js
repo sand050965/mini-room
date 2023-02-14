@@ -1,13 +1,14 @@
 import StreamMod from "../modules/streamMod.js";
 import OffcanvasMod from "../modules/offcanvasMod.js";
 import ParticipantMod from "../modules/participantMod.js";
-import { preload } from "../modules/commonMod.js";
+import CommonMod from "../modules/commonMod.js";
 
 class MainDisplayMod {
   constructor() {
     this.streamMod = new StreamMod();
     this.offcanvasMod = new OffcanvasMod();
     this.participantMod = new ParticipantMod();
+    this.commonMod = new CommonMod();
   }
 
   addRoomStream = async (DOMElement) => {
@@ -407,8 +408,12 @@ class MainDisplayMod {
   };
 
   listenOnVideoStream = (DOMElement) => {
+    let participantId = DOMElement.participantId;
     const video = DOMElement.video;
     video.addEventListener("loadedmetadata", this.startPlayStream);
+    if (participantId === PARTICIPANT_ID) {
+      video.srcObject.getTracks()[0].addEventListener("ended", this.stopStream);
+    }
   };
 
   startPlayStream = async (e) => {
@@ -417,9 +422,31 @@ class MainDisplayMod {
     console.log("loadedCnt", loadedCnt);
     console.log("beforeCnt", beforeCnt);
     if (beforeCnt === loadedCnt) {
-      preload();
+      this.commonMod.closePreload();
       socket.emit("finished-render");
     }
+  };
+
+  stopStream = async (e) => {
+    isLoseTrack = true;
+    const DOMElement = {
+      type: "roomSelf",
+      audioBtn: document.querySelector("#audioBtn"),
+      audioBtnIcon: document.querySelector("#audioBtnIcon"),
+      videoBtn: document.querySelector("#videoBtn"),
+      videoBtnIcon: document.querySelector("#videoBtnIcon"),
+      participantMuteUnmute: document.querySelector(
+        "#selfParticipantMuteUnmute"
+      ),
+      participantPlayStopVideo: document.querySelector(
+        "#selfParticipantPlayStopVideo"
+      ),
+      micStatusIcon: document.querySelector("#selfMicStatusIcon"),
+      avatarContainer: document.querySelector("#selfAvatarContainer"),
+    };
+    await this.streamMod.mute(DOMElement);
+    await this.streamMod.stopVideo(DOMElement);
+    socket.emit("denied-media-permission");
   };
 }
 

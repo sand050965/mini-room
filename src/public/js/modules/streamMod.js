@@ -1,5 +1,10 @@
+import CommonMod from "../modules/commonMod.js";
+
 class StreamMod {
-  constructor() {}
+  constructor() {
+    this.commonMod = new CommonMod();
+  }
+
   getUserMediaStream = () => {
     return navigator.mediaDevices.getUserMedia({
       video: true,
@@ -17,6 +22,18 @@ class StreamMod {
 
   muteUnmute = (DOMElement) => {
     const stream = DOMElement.stream;
+    const isLoseTrack = DOMElement.isLoseTrack;
+    if (isLoseTrack && loseTrackArray.includes("self")) {
+      const newDOMElement = {
+        page: DOMElement.page,
+        isDisplayModal: true,
+        title: "Allow Mini Room to use your camera and microphone",
+        msg: "Mini Room needs access to your camera and microphone so that other participants can see and hear you. Mini Room will ask you to confirm this decision on each browser and computer you use.",
+      };
+      this.commonMod.displayModal(newDOMElement);
+      return;
+    }
+
     const enabled = stream.getAudioTracks()[0].enabled;
     if (enabled) {
       return this.mute(DOMElement);
@@ -27,6 +44,17 @@ class StreamMod {
 
   playStopVideo = (DOMElement) => {
     const stream = DOMElement.stream;
+    const loseTrackArray = DOMElement.loseTrackArray;
+    if (loseTrackArray && loseTrackArray.includes("self")) {
+      const newDOMElement = {
+        page: DOMElement.page,
+        isDisplayModal: true,
+        title: "Allow Mini Room to use your camera and microphone",
+        msg: "Mini Room needs access to your camera and microphone so that other participants can see and hear you. Mini Room will ask you to confirm this decision on each browser and computer you use.",
+      };
+      this.commonMod.displayModal(newDOMElement);
+      return;
+    }
     const enabled = stream.getVideoTracks()[0].enabled;
     if (enabled) {
       return this.stopVideo(DOMElement);
@@ -156,7 +184,6 @@ class StreamMod {
     let videoBtn;
     let videoBtnIcon;
     let participantPlayStopVideo;
-    const video = DOMElement.video;
     const avatarContainer = DOMElement.avatarContainer;
 
     const stream = DOMElement.stream;
@@ -181,7 +208,6 @@ class StreamMod {
         videoBtnIcon = DOMElement.videoBtnIcon;
         participantPlayStopVideo = DOMElement.participantPlayStopVideo;
         avatarContainer.classList.add("none");
-        // video.classList.remove("none");
         videoBtnIcon.classList.remove("fa-video-slash");
         videoBtnIcon.classList.add("fa-video");
         videoBtn.classList.remove("btn-disable");
@@ -192,7 +218,6 @@ class StreamMod {
       case "roomOther":
         participantPlayStopVideo = DOMElement.participantPlayStopVideo;
         avatarContainer.classList.add("none");
-        // video.classList.remove("none");
         participantPlayStopVideo.classList.remove("fa-video-slash");
         participantPlayStopVideo.classList.add("fa-video");
         return false;
@@ -203,7 +228,6 @@ class StreamMod {
     let videoBtn;
     let videoBtnIcon;
     let participantPlayStopVideo;
-    const video = DOMElement.video;
     const avatarContainer = DOMElement.avatarContainer;
     const stream = DOMElement.stream;
     if (stream) {
@@ -227,7 +251,6 @@ class StreamMod {
         videoBtnIcon = DOMElement.videoBtnIcon;
         participantPlayStopVideo = DOMElement.participantPlayStopVideo;
         avatarContainer.classList.remove("none");
-        // video.classList.add("none");
         videoBtnIcon.classList.remove("fa-video");
         videoBtnIcon.classList.add("fa-video-slash");
         videoBtn.classList.remove("btn-able");
@@ -238,7 +261,6 @@ class StreamMod {
       case "roomOther":
         participantPlayStopVideo = DOMElement.participantPlayStopVideo;
         avatarContainer.classList.remove("none");
-        // video.classList.add("none");
         participantPlayStopVideo.classList.remove("fa-video");
         participantPlayStopVideo.classList.add("fa-video-slash");
         return true;

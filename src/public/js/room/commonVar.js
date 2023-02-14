@@ -8,6 +8,8 @@ let beforeCnt = 1;
 
 let loadedCnt = 0;
 
+let isLoseTrack = false;
+
 let isOffcanvasOpen = false;
 
 let isScreenSharing = false;

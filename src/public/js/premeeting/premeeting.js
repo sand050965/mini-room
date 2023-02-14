@@ -1,10 +1,11 @@
-import { initAOS, preload, displayModal } from "../modules/commonMod.js";
+import CommonMod from "../modules/commonMod.js";
 import StreamMod from "../modules/streamMod.js";
 import ParticipantMod from "../modules/participantMod.js";
 const socket = io("/");
 const peer = new Peer();
 const streamMod = new StreamMod();
 const participantMod = new ParticipantMod();
+const commonMod = new CommonMod();
 
 let participantId;
 let isPermissionDenied = true;
@@ -32,6 +33,7 @@ const DOMElement = {
   avatarContainer: avatarContainer,
   videoBtn: videoBtn,
   videoBtnIcon: videoBtnIcon,
+  isLoseTrack: false,
 };
 
 /**
@@ -78,7 +80,7 @@ const getStream = async () => {
     addStream(DOMElement);
   } catch (e) {
     console.log(e);
-    preload();
+    commonMod.closePreload();
     displayAlert(false);
     isPermissionDenied = true;
     isMuted = streamMod.mute(DOMElement);
@@ -96,7 +98,7 @@ const addStream = (DOMElement) => {
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", async () => {
     await video.play();
-    preload();
+    commonMod.closePreload();
   });
 
   videoContainer.appendChild(video);
@@ -119,10 +121,12 @@ const hotKeysControl = (e) => {
  */
 const btnControl = (e) => {
   const newDOMElement = {
+    page: "premeeting",
     isDisplayModal: isPermissionDenied,
+    title: "Allow Mini Room to use your camera and microphone",
     msg: "Mini Room needs access to your camera and microphone so that other participants can see and hear you. Mini Room will ask you to confirm this decision on each browser and computer you use.",
   };
-  if (!displayModal(newDOMElement)) {
+  if (!commonMod.displayModal(newDOMElement)) {
     return;
   }
 
@@ -143,12 +147,12 @@ const displayAlert = (isSuccess) => {
     successAlert.classList.remove("none");
     successAlert.setAttribute("data-aos", "fade-up");
     failedAlert.classList.add("none");
-    initAOS(AOS);
+    commonMod.initAOS(AOS);
   } else {
     failedAlert.classList.remove("none");
     failedAlert.setAttribute("data-aos", "fade-up");
     successAlert.classList.add("none");
-    initAOS(AOS);
+    commonMod.initAOS(AOS);
   }
 };
 
@@ -168,11 +172,13 @@ const displayName = (e) => {
  */
 const confirmState = async () => {
   const newDOMElement = {
+    page: "premeeting",
     isDisplayModal: isPermissionDenied,
+    title: "Allow Mini Room to use your camera and microphone",
     msg: "Mini Room needs access to your camera and microphone so that other participants can see and hear you. Mini Room will ask you to confirm this decision on each browser and computer you use.",
   };
 
-  if (!displayModal(newDOMElement)) {
+  if (!commonMod.displayModal(newDOMElement)) {
     return;
   }
 
@@ -205,20 +211,24 @@ const confirmState = async () => {
       window.location = `/${ROOM_ID}`;
     } else {
       const newDOMElement = {
+        page: "premeeting",
         isDisplayModal: true,
+        title: "Somthing Went Wrong",
         msg: "Sorry there are some problems, please try again!",
       };
-      if (!displayModal(newDOMElement)) {
+      if (!commonMod.displayModal(newDOMElement)) {
         setConfirmBtnEnabled();
         return;
       }
     }
   } else {
     const newDOMElement = {
+      page: "premeeting",
+      title: "This Room is full",
       isDisplayModal: true,
       msg: "Sorry this room is full, please try another one!",
     };
-    displayModal(newDOMElement);
+    commonMod.displayModal(newDOMElement);
     setConfirmBtnEnabled();
     return;
   }
@@ -228,6 +238,7 @@ const confirmState = async () => {
  * Set Confirm Button Disable
  */
 const setConfirmBtnDisabled = () => {
+  commonMod.openPreload();
   const confirmBtn = document.querySelector("#confirmBtn");
   confirmBtn.disabled = true;
   confirmBtn.textContent = "Loading ...";
@@ -237,6 +248,7 @@ const setConfirmBtnDisabled = () => {
  * Set Confirm Button Enable
  */
 const setConfirmBtnEnabled = () => {
+  commonMod.closePreload();
   const confirmBtn = document.querySelector("#confirmBtn");
   confirmBtn.disabled = false;
   confirmBtn.textContent = "Enter Your Name";

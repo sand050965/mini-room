@@ -242,7 +242,7 @@ socket.on("user-mute", async (participantId) => {
   if (participantMap.get(participantId)) {
     stream = participantMap.get(participantId).stream;
   }
-  const newDOMElement = {
+  const DOMElement = {
     type: "roomOther",
     stream: stream,
     video: document.getElementById(`${participantId}Video`),
@@ -255,7 +255,7 @@ socket.on("user-mute", async (participantId) => {
     ),
     micStatusIcon: document.getElementById(`${participantId}MicStatusIcon`),
   };
-  await streamMod.mute(newDOMElement);
+  await streamMod.mute(DOMElement);
 });
 
 /**
@@ -266,7 +266,7 @@ socket.on("user-unmute", async (participantId) => {
   if (participantMap.get(participantId)) {
     stream = participantMap.get(participantId).stream;
   }
-  const newDOMElement = {
+  const DOMElement = {
     type: "roomOther",
     stream: stream,
     video: document.getElementById(`${participantId}Video`),
@@ -279,7 +279,7 @@ socket.on("user-unmute", async (participantId) => {
     ),
     micStatusIcon: document.getElementById(`${participantId}MicStatusIcon`),
   };
-  await streamMod.unmute(newDOMElement);
+  await streamMod.unmute(DOMElement);
 });
 
 /**
@@ -290,7 +290,7 @@ socket.on("user-stop-video", async (participantId) => {
   if (participantMap.get(participantId)) {
     stream = participantMap.get(participantId).stream;
   }
-  const newDOMElement = {
+  const DOMElement = {
     type: "roomOther",
     stream: stream,
     video: document.getElementById(`${participantId}Video`),
@@ -302,7 +302,7 @@ socket.on("user-stop-video", async (participantId) => {
       `${participantId}ParticipantPlayStopVideo`
     ),
   };
-  await streamMod.stopVideo(newDOMElement);
+  await streamMod.stopVideo(DOMElement);
 });
 
 /**
@@ -313,7 +313,7 @@ socket.on("user-play-video", async (participantId) => {
   if (participantMap.get(participantId)) {
     stream = participantMap.get(participantId).stream;
   }
-  const newDOMElement = {
+  const DOMElement = {
     type: "roomOther",
     stream: stream,
     video: document.getElementById(`${participantId}Video`),
@@ -325,7 +325,7 @@ socket.on("user-play-video", async (participantId) => {
       `${participantId}ParticipantPlayStopVideo`
     ),
   };
-  await streamMod.playVideo(newDOMElement);
+  await streamMod.playVideo(DOMElement);
 });
 
 /**
@@ -336,6 +336,31 @@ socket.on("user-stop-screen-share", async (participantId) => {
     screenShareMod.stopSreenShareVideo();
     screenShareMap.clear();
   }
+});
+
+/**
+ * user denied permission to use camera and microphone
+ */
+socket.on("user-denied-media-permission", async (participantId) => {
+  let stream = null;
+  if (participantMap.get(participantId)) {
+    stream = participantMap.get(participantId).stream;
+  }
+  const DOMElement = {
+    type: "roomOther",
+    stream: stream,
+    video: document.getElementById(`${participantId}Video`),
+    avatarContainer: document.getElementById(`${participantId}AvatarContainer`),
+    participantMuteUnmute: document.getElementById(
+      `${participantId}ParticipantMuteUnmute`
+    ),
+    participantPlayStopVideo: document.getElementById(
+      `${participantId}ParticipantPlayStopVideo`
+    ),
+    micStatusIcon: document.getElementById(`${participantId}MicStatusIcon`),
+  };
+  await streamMod.mute(DOMElement);
+  await streamMod.stopVideo(DOMElement);
 });
 
 /**

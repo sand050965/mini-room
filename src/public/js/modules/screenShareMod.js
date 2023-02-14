@@ -116,18 +116,9 @@ class ScreenShareMod {
     }
   };
 
-  playScreenShareVideo = async () => {
-    const screenShareVideo = document.querySelector("#screenShareVideo");
-    await screenShareVideo.play();
-    if (screenShareMap.get("screenSharing") === PARTICIPANT_ID) {
-      socket.emit("start-screen-share");
-    }
-  };
-
   stopSelfScreenShareVideo = () => {
     this.stopSreenShareVideo();
     screenShareMap.clear();
-
   };
 
   stopSreenShareVideo = async () => {
