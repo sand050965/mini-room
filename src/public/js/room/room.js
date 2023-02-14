@@ -98,8 +98,13 @@ peer.on("call", async (call) => {
         console.log("renderCnt", renderCnt);
       }
     } else if (call.metadata.type === "screensharing") {
+      screenShareMod.checkScreenShare();
       screenShareMap.set("screenSharing", call.peer);
-      screenShareMod.doScreenShare(userStream);
+      const screenShareDOMElement = {
+        stream: userStream,
+        screenShareId: call.peer,
+      };
+      screenShareMod.doScreenShare(screenShareDOMElement);
     }
   });
 });
@@ -294,6 +299,7 @@ socket.on("user-play-video", async (participantId) => {
 socket.on("user-stop-screen-share", async (participantId) => {
   if (screenShareMap.get("screenSharing") === participantId) {
     screenShareMod.stopSreenShareVideo();
+    screenShareMap.clear();
   }
 });
 

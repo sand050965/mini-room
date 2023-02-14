@@ -11,7 +11,9 @@ class ParticipantMod {
     const result = await response.json();
     const cnt = await result.data.length;
     const participantCnt = document.querySelector("#participantCnt");
-    participantCnt.textContent = cnt;
+    if (participantCnt) {
+      participantCnt.textContent = cnt;
+    }
     return cnt;
   };
 
@@ -208,7 +210,8 @@ class ParticipantMod {
 
   doSearchParticipant = async () => {
     try {
-      const resultData = await this.searchParticipant.data;
+      const result = await this.searchParticipant();
+      const resultData = result.data;
 
       if (resultData.length === 0) {
         throw "No result!";

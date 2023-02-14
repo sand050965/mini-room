@@ -92,8 +92,8 @@ class RoomController {
       ),
     };
     if (e.target.id === "inviteModalCloseBtn") {
-      
     } else if (e.target.id === "addInviteList") {
+      this.mailMod.addInviteList();
     } else if (e.target.id === "sendEmail") {
     } else if (e.target.id.includes("audioBtn")) {
       // muteUnmute btn is clicked
@@ -108,7 +108,7 @@ class RoomController {
       this.screenShareMod.doMyScreenShare();
     } else if (e.target.id.includes("leaveBtn")) {
       // leave btn is clicked
-      this.participantMod.leaveRoom();
+      this.leaveRoom();
     } else if (e.target.id.includes("infoBtn")) {
       // info offcanvas btn is clicked
       const offcanvasDOMElement = {
@@ -138,7 +138,7 @@ class RoomController {
       this.offcanvasMod.offcanvasCloseControl(offcanvasDOMElement);
       this.offcanvasMod.offcanvasCloseGrid();
     } else if (e.target.id.includes("addParticipantBtn")) {
-      console.log("invite people");
+      this.mailMod.initInviteListModal();
     } else if (e.target.id.includes("closeParticpantList")) {
       // cancel search participant
       this.participantMod.cancelSearchParticipant();
@@ -187,14 +187,14 @@ class RoomController {
   closeWindow = async (e) => {
     e.preventDefault();
     if (screenShareMap.get("screenSharing") === PARTICIPANT_ID) {
-      await screenShareMod.stopSreenShareVideo();
+      await this.screenShareMod.stopSreenShareVideo();
     }
     await this.participantMod.removeParticipant(ROOM_ID, PARTICIPANT_ID);
   };
 
   leaveRoom = async () => {
     if (screenShareMap.get("screenSharing") === PARTICIPANT_ID) {
-      await screenShareMod.stopSreenShareVideo();
+      await this.screenShareMod.stopSreenShareVideo();
     }
     await this.participantMod.removeParticipant(ROOM_ID, PARTICIPANT_ID);
     window.location = "/leave/thankyou";

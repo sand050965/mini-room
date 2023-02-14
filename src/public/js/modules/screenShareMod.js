@@ -1,26 +1,27 @@
 import StreamMod from "../modules/streamMod.js";
 import MainDisplayMod from "../modules/mainDisplayMod.js";
+import ParticipantMod from "./participantMod.js";
 
 class ScreenShareMod {
   constructor() {
     this.streamMod = new StreamMod();
     this.mainDisplayMod = new MainDisplayMod();
+    this.participantMod = new ParticipantMod();
   }
 
   doMyScreenShare = async () => {
-    if (
-      isScreenSharing &&
-      screenShareMap.get("screenSharing") == PARTICIPANT_ID
-    ) {
-      myScreenShareStream.getTracks().forEach((track) => track.stop());
-      this.stopSreenShareVideo();
+    if (!this.checkScreenShare()) {
       return;
     }
 
     try {
       myScreenShareStream = await this.streamMod.getDisplayMediaStream();
       screenShareMap.set("screenSharing", PARTICIPANT_ID);
-      await this.doScreenShare(myScreenShareStream);
+      const screenShareDOMElement = {
+        screenShareId: PARTICIPANT_ID,
+        stream: myScreenShareStream,
+      };
+      await this.doScreenShare(screenShareDOMElement);
       isScreenSharing = true;
       await this.screenShareBtnControl();
       await this.makeScreenShareCall();
@@ -31,19 +32,29 @@ class ScreenShareMod {
     }
   };
 
-  doScreenShare = async (stream) => {
+  doScreenShare = async (screenShareDOMElement) => {
     isScreenSharing = true;
     await this.clearCurrentStream();
     const screenShareVideo = document.createElement("video");
     screenShareVideo.muted = true;
-    const DOMElement = {
-      stream: stream,
-      video: screenShareVideo,
-    };
-    await this.addScreenShareStream(DOMElement);
+    screenShareDOMElement.video = screenShareVideo;
+    await this.addScreenShareStream(screenShareDOMElement);
+    await this.displayScreenShareAlert(screenShareDOMElement);
     await this.listenOnScreenShare();
     await this.mainDisplayMod.setScreenShareAvatarStyle();
     await this.mainDisplayMod.setScreenShareGridStyle();
+  };
+
+  checkScreenShare = () => {
+    if (
+      isScreenSharing &&
+      screenShareMap.get("screenSharing") == PARTICIPANT_ID
+    ) {
+      myScreenShareStream.getTracks().forEach((track) => track.stop());
+      this.stopSelfScreenShareVideo();
+      return false;
+    }
+    return true;
   };
 
   /**
@@ -76,6 +87,22 @@ class ScreenShareMod {
     screenShare.appendChild(video);
   };
 
+  displayScreenShareAlert = async (screenShareDOMElement) => {
+    const screenShareAlert = document.querySelector("#screenShareAlert");
+    const screenShareId = screenShareDOMElement.screenShareId;
+    document
+      .querySelector("#screenShareAlertContainer")
+      .classList.remove("none");
+    if (screenShareId === PARTICIPANT_ID) {
+      screenShareAlert.textContent = "You are sharing screen!";
+    } else {
+      const participantInfo = await this.participantMod.getParticipantInfo(
+        screenShareId
+      );
+      screenShareAlert.textContent = `${participantInfo.data.participantName} is sharing his/her screen!`;
+    }
+  };
+
   listenOnScreenShare = async () => {
     const screenShareVideo = document.querySelector("#screenShareVideo");
     screenShareVideo.addEventListener(
@@ -85,7 +112,7 @@ class ScreenShareMod {
     if (screenShareMap.get("screenSharing") == PARTICIPANT_ID) {
       screenShareVideo.srcObject
         .getVideoTracks()[0]
-        .addEventListener("ended", this.stopSreenShareVideo);
+        .addEventListener("ended", this.stopSelfScreenShareVideo);
     }
   };
 
@@ -97,10 +124,17 @@ class ScreenShareMod {
     }
   };
 
+  stopSelfScreenShareVideo = () => {
+    this.stopSreenShareVideo();
+    screenShareMap.clear();
+
+  };
+
   stopSreenShareVideo = async () => {
     isScreenSharing = false;
     const screenShareVideo = document.querySelector("#screenShareVideo");
     screenShareVideo.remove();
+    document.querySelector("#screenShareAlertContainer").classList.add("none");
     if (screenShareMap.get("screenSharing") === PARTICIPANT_ID) {
       myScreenShareStream = null;
       this.screenShareBtnControl();
@@ -132,7 +166,6 @@ class ScreenShareMod {
       otherVideos: document.querySelectorAll('[name="otherVideo"]'),
     };
     await this.mainDisplayMod.setRoomVideoGridStyle(videoElement);
-    screenShareMap.clear();
   };
 
   screenShareBtnControl = () => {

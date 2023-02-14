@@ -70,7 +70,9 @@ class StreamMod {
     let participantMuteUnmute;
 
     const stream = DOMElement.stream;
-    stream.getAudioTracks()[0].enabled = true;
+    if (stream) {
+      stream.getAudioTracks()[0].enabled = true;
+    }
     switch (DOMElement.type) {
       case "premeeting":
         audioBtn = DOMElement.audioBtn;
@@ -109,7 +111,9 @@ class StreamMod {
     let participantMuteUnmute;
 
     const stream = DOMElement.stream;
-    stream.getAudioTracks()[0].enabled = false;
+    if (stream) {
+      stream.getAudioTracks()[0].enabled = false;
+    }
     switch (DOMElement.type) {
       case "premeeting":
         audioBtn = DOMElement.audioBtn;
@@ -150,7 +154,9 @@ class StreamMod {
     const avatarContainer = DOMElement.avatarContainer;
 
     const stream = DOMElement.stream;
-    stream.getVideoTracks()[0].enabled = true;
+    if (stream) {
+      stream.getVideoTracks()[0].enabled = true;
+    }
 
     switch (DOMElement.type) {
       case "premeeting":
@@ -198,7 +204,9 @@ class StreamMod {
     const video = DOMElement.video;
     const avatarContainer = DOMElement.avatarContainer;
     const stream = DOMElement.stream;
-    stream.getVideoTracks()[0].enabled = false;
+    if (stream) {
+      stream.getVideoTracks()[0].enabled = false;
+    }
 
     switch (DOMElement.type) {
       case "premeeting":

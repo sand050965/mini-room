@@ -1,8 +1,10 @@
 import { initAOS, preload, displayModal } from "../modules/commonMod.js";
 import StreamMod from "../modules/streamMod.js";
+import ParticipantMod from "../modules/participantMod.js";
 const socket = io("/");
 const peer = new Peer();
 const streamMod = new StreamMod();
+const participantMod = new ParticipantMod();
 
 let participantId;
 let isPermissionDenied = true;
@@ -80,7 +82,7 @@ const getStream = async () => {
     displayAlert(false);
     isPermissionDenied = true;
     isMuted = streamMod.mute(DOMElement);
-    isStoppedVideo = video.stopVideo(DOMElement);
+    isStoppedVideo = streamMod.stopVideo(DOMElement);
   }
 };
 
@@ -116,7 +118,13 @@ const hotKeysControl = (e) => {
  * Buttons Control
  */
 const btnControl = (e) => {
-  displayModal(isPermissionDenied);
+  const newDOMElement = {
+    isDisplayModal: isPermissionDenied,
+    msg: "Mini Room needs access to your camera and microphone so that other participants can see and hear you. Mini Room will ask you to confirm this decision on each browser and computer you use.",
+  };
+  if (!displayModal(newDOMElement)) {
+    return;
+  }
 
   if (e.target.id.includes("audioBtn")) {
     isMuted = streamMod.muteUnmute(DOMElement);
@@ -159,7 +167,16 @@ const displayName = (e) => {
  * Confirm State
  */
 const confirmState = async () => {
-  displayModal(isPermissionDenied);
+  const newDOMElement = {
+    isDisplayModal: isPermissionDenied,
+    msg: "Mini Room needs access to your camera and microphone so that other participants can see and hear you. Mini Room will ask you to confirm this decision on each browser and computer you use.",
+  };
+
+  if (!displayModal(newDOMElement)) {
+    return;
+  }
+
+  await setConfirmBtnDisabled();
 
   const data = {
     participantId: participantId,
@@ -172,18 +189,56 @@ const confirmState = async () => {
     isReadyState: true,
   };
 
-  const postData = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  };
-  const response = await fetch("/api/participant/ready", postData);
-  const result = await response.json();
-  if (result.ok) {
-    window.location = `/${ROOM_ID}`;
+  const cnt = await participantMod.getAllParticipants();
+
+  if (cnt <= 3) {
+    const postData = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+    const response = await fetch("/api/participant/ready", postData);
+    const result = await response.json();
+    if (result.ok) {
+      window.location = `/${ROOM_ID}`;
+    } else {
+      const newDOMElement = {
+        isDisplayModal: true,
+        msg: "Sorry there are some problems, please try again!",
+      };
+      if (!displayModal(newDOMElement)) {
+        setConfirmBtnEnabled();
+        return;
+      }
+    }
+  } else {
+    const newDOMElement = {
+      isDisplayModal: true,
+      msg: "Sorry this room is full, please try another one!",
+    };
+    displayModal(newDOMElement);
+    setConfirmBtnEnabled();
+    return;
   }
+};
+
+/**
+ * Set Confirm Button Disable
+ */
+const setConfirmBtnDisabled = () => {
+  const confirmBtn = document.querySelector("#confirmBtn");
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = "Loading ...";
+};
+
+/**
+ * Set Confirm Button Enable
+ */
+const setConfirmBtnEnabled = () => {
+  const confirmBtn = document.querySelector("#confirmBtn");
+  confirmBtn.disabled = false;
 };
 
 // ========================== Event Listeners ==========================

@@ -22,11 +22,15 @@ export const preload = () => {
 /**
  * Display Modal
  */
-export const displayModal = (isDisplayModal) => {
+export const displayModal = (DOMElement) => {
+  const isDisplayModal = DOMElement.isDisplayModal;
   const modal = new bootstrap.Modal(document.querySelector("#modalContainer"));
 
   if (isDisplayModal) {
     modal.show();
-    return;
+    document.querySelector("#modalBody").textContent = DOMElement.msg;
+    return false;
   }
+
+  return true;
 };

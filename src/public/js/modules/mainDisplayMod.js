@@ -235,6 +235,10 @@ class MainDisplayMod {
       selfVideo.classList.add("video");
 
       // set other's video style
+      for (const otherVideoItemContainer of otherVideoItemContainers) {
+        otherVideoItemContainer.classList.add("video-container");
+      }
+
       for (const otherVideoItem of otherVideoItems) {
         otherVideoItem.classList.add("more-item");
       }

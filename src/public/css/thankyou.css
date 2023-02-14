@@ -1,0 +1,22 @@
+/*--------------------------------------------------------------
+# General
+--------------------------------------------------------------*/
+@import "common.css";
+
+.thankyou-container {
+  display: grid;
+  grid-template-rows: 300px auto 300px;
+  justify-items: center;
+  align-items: center;
+  background-color: rgb(2, 60, 81);
+  height: 90vh;
+}
+
+.thankyou-container h1 {
+  color: #fff;
+}
+
+.thankyou-container button {
+  font-size: 28px;
+  color: #fff;
+}
