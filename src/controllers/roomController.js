@@ -9,10 +9,9 @@ module.exports = {
     try {
       let roomId = uuidv4();
       //   check if the roomId is duplicated
-      const checkData = {
+      const checkRoom = await roomService.getValidRoom({
         roomId: roomId,
-      };
-      const checkRoom = await roomService.getValidRoom(checkData);
+      });
 
       if (checkRoom !== null) {
         roomId = uuidv4();

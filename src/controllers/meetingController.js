@@ -1,6 +1,7 @@
 const session = require("express-session");
 const express = require("express");
 const participantService = require("../services/participantService");
+const roomService = require("../services/roomService");
 
 // meeting room
 module.exports = {
@@ -12,6 +13,14 @@ module.exports = {
       const participantId = req.session.participantId;
       const roomId = req.params.roomId;
       const dataId = req.session.dataId;
+
+      const roomCheck = await roomService.getValidRoom({ roomId: roomId });
+
+      //   check if the roomId exists
+      if (roomCheck === null) {
+        res.render("error");
+        return;
+      }
 
       if (role === null || role === undefined) {
         role = "participant";

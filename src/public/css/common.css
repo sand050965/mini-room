@@ -47,6 +47,13 @@ textarea:focus {
   align-items: center;
 }
 
+.flex-row-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .vertical-center {
   display: flex;
   flex-direction: column;
