@@ -16,6 +16,15 @@
               rel="stylesheet">
         <!-- Main CSS File -->
         <link rel="stylesheet" href="/css/room.css">
+        <!-- Vendor JS Files -->
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+        <script src="https://WebRTC.github.io/adapter/adapter-latest.js"></script>
+        <script src="https://kit.fontawesome.com/8de498932c.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/6.1.4/adapter.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
         <script>
             const ROOM_ID = '<%= roomId %>';
             const PARTICIPANT_ID = '<%= participantId %>'
@@ -139,7 +148,9 @@
                         </button>
                     </div>
                     <div class="offcanvas-body">
-                        <div class="hint">How to join this meeting</div>
+                        <div class="hint">
+                            How to join this meeting
+                        </div>
                         <textarea id="roomPath" class="room-path" type="text" readonly></textarea>
                         <button id="copyInfoBtn"
                                 type="button"
@@ -161,7 +172,9 @@
                      tabindex="-1"
                      aria-labelledby="offcanvasRightLabel">
                     <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="staticBackdropLabel">People</h5>
+                        <h5 class="offcanvas-title" id="staticBackdropLabel">
+                            People
+                        </h5>
                         <button id="participantCloseBtn"
                                 type="button"
                                 class="btn-close"
@@ -195,7 +208,9 @@
                                 <i id="searchParticipantBtnIcon" class="fa-solid fa-magnifying-glass"></i>
                             </button>
                         </div>
-                        <div class="participant-list-title">In call</div>
+                        <div class="participant-list-title">
+                            In call
+                        </div>
                         <div id="participantList" class="participant-list">
                             <button id="closeParticpantList"
                                     type="button"
@@ -250,7 +265,10 @@
         </div>
         <!-- / Main Container Ends -->
         <div class="tool-bar">
-            <div class="meeting-info">
+            <div class="meeting-room-info left-center">
+                <div id="clock" class="clock"></div>
+                <div id="meetingRoomId" class="meeting-room-id">
+                </div>
             </div>
             <div class="control-btns position-relative">
                 <div class="main-control-container center">
@@ -288,15 +306,6 @@
             </div>
         </body>
     </html>
-    <!-- Vendor JS Files -->
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
-    <script src="https://WebRTC.github.io/adapter/adapter-latest.js"></script>
-    <script src="https://kit.fontawesome.com/8de498932c.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/6.1.4/adapter.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Template Main JS File -->
     <script type="text/javascript" src="../js/room/commonVar.js"></script>
     <script type="module" src="../js/room/room.js"></script>

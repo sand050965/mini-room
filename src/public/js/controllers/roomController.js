@@ -195,10 +195,12 @@ class RoomController {
 
   closeWindow = async () => {
     await socket.disconnect();
+    await this.participantMod.removeParticipant(ROOM_ID, PARTICIPANT_ID);
   };
 
   leaveRoom = async () => {
     await socket.disconnect();
+    await this.participantMod.removeParticipant(ROOM_ID, PARTICIPANT_ID);
     window.location = "/leave/thankyou";
   };
 }

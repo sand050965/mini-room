@@ -12,6 +12,68 @@ class StreamMod {
     });
   };
 
+  getUserAudioStream = () => {
+    return navigator.mediaDevices.getUserMedia({
+      audio: true,
+    });
+  };
+
+  getUserVideoStream = () => {
+    return navigator.mediaDevices.getUserMedia({
+      video: true,
+    });
+  };
+
+  getDefaultTrack = () => {
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    const defaultStream = canvas.captureStream();
+    return defaultStream.getVideoTracks()[0];
+  };
+
+  getLocalMediaStream = async () => {
+    let isAudioPermission = false;
+    let isVideoPermission = false;
+    let audioStream;
+    let videoStream;
+    const localStream = new MediaStream();
+
+    try {
+      audioStream = await this.getUserAudioStream();
+      isAudioPermission = true;
+    } catch (e) {
+      isAudioPermission = false;
+    }
+    try {
+      videoStream = await this.getUserVideoStream();
+      isVideoPermission = true;
+    } catch (e) {
+      isVideoPermission = false;
+    }
+    const defaultTrack = await this.getDefaultTrack();
+    localStream.addTrack(defaultTrack);
+    if (isAudioPermission) {
+      localStream.addTrack(audioStream.getAudioTracks()[0]);
+    }
+    if (isVideoPermission) {
+      localStream.removeTrack(defaultTrack);
+      localStream.addTrack(videoStream.getVideoTracks()[0]);
+    }
+    const DOMElement = {
+      isAudioPermission: isAudioPermission,
+      isVideoPermission: isVideoPermission,
+      audioStream: audioStream,
+      videoStream: videoStream,
+      defaultStream: defaultStream,
+      localStream: localStream,
+    };
+    return DOMElement;
+  };
+
+  replaceTracks = (DOMElement) => {
+    const participantId = DOMElement.participantId;
+  };
+
   getDisplayMediaStream = () => {
     return navigator.mediaDevices.getDisplayMedia({
       video: {

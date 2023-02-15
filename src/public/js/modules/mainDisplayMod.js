@@ -18,7 +18,6 @@ class MainDisplayMod {
 
     // avatar style
     const avatarDOMElement = await this.setRoomAvatarAttribute(DOMElement);
-    console.log(DOMElement.participantName, avatarDOMElement);
     await this.setRoomAvatarStyle(avatarDOMElement);
 
     // video grid style

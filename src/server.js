@@ -60,13 +60,14 @@ io.on("connection", (socket) => {
     });
 
     // users send message event
-    socket.on("message", (message) => {
-      io.to(roomId).emit(
-        "create-message",
-        message,
-        participantId,
-        participantName
-      ); // emit to users in the room what message that user sent
+    socket.on("message", (message, time, avatarImgUrl) => {
+      io.to(roomId).emit("user-send-message", {
+        message: message,
+        time: time,
+        avatarImgUrl: avatarImgUrl,
+        participantId: participantId,
+        participantName: participantName,
+      }); // emit to users in the room what message that user sent
     });
 
     // user disconnect event

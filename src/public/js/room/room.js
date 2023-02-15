@@ -363,8 +363,8 @@ socket.on("user-denied-media-permission", async (participantId) => {
 /**
  * create message
  */
-socket.on("create-message", (message, participantId, participantName) => {
-  chatRoomMod.displayMessage(message, participantId, participantName);
+socket.on("user-send-message", (elementObj) => {
+  chatRoomMod.displayMessage(elementObj);
   chatRoomMod.scrollToBottom();
 });
 
