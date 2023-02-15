@@ -193,19 +193,16 @@ class RoomController {
     }
   };
 
-  closeWindow = async (e) => {
-    e.preventDefault();
-    if (screenShareMap.get("screenSharing") === PARTICIPANT_ID) {
-      await this.screenShareMod.stopSreenShareVideo();
-    }
-    await this.participantMod.removeParticipant(ROOM_ID, PARTICIPANT_ID);
+  closeWindow = async () => {
+    await socket.emit("disconnect");
   };
 
   leaveRoom = async () => {
+    await this.participantMod.removeParticipant(ROOM_ID, PARTICIPANT_ID);
+    await socket.emit("disconnect");
     if (screenShareMap.get("screenSharing") === PARTICIPANT_ID) {
       await this.screenShareMod.stopSreenShareVideo();
     }
-    await this.participantMod.removeParticipant(ROOM_ID, PARTICIPANT_ID);
     window.location = "/leave/thankyou";
   };
 }

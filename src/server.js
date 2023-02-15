@@ -72,6 +72,7 @@ io.on("connection", (socket) => {
 
     // user disconnect event
     socket.on("disconnect", () => {
+      console.log("user disconnected", participantName);
       socket.to(roomId).emit("user-disconnected", participantId); // emit to users in the room that a user just leave
     });
   });

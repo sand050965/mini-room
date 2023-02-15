@@ -137,7 +137,7 @@ class ScreenShareMod {
     if (screenShareMap.get("screenSharing") === PARTICIPANT_ID) {
       myScreenShareStream = null;
       this.screenShareBtnControl();
-      socket.emit("stop-screen-share");
+      await socket.emit("stop-screen-share");
     }
     await this.mainDisplayMod.mainContainerGrid();
     const avatarElement = {

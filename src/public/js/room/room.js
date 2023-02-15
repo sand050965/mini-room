@@ -376,6 +376,8 @@ socket.on("user-disconnected", async (participantId) => {
     peers[participantId].close();
   }
 
+  await participantMod.removeParticipant(ROOM_ID, participantId);
+
   cnt = await participantMod.getAllParticipants();
 
   await participantMod.removeParticipantList(participantId);
