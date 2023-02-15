@@ -8,14 +8,13 @@ const io = require("socket.io")(server, {
     method: ["GET", "POST"],
   },
 });
-
+const participantService = require("./services/participantService");
 const PORT = process.env.PORT || 3000;
 
 // -------------Socket IO-------------
 io.on("connection", (socket) => {
   //user join room event
   socket.on("join-room", (roomId, participantId, participantName) => {
-    console.log("user-join-room", participantName);
     socket.join(roomId); //user join room event
 
     socket.to(roomId).emit("user-connected", participantId, participantName); // emit to users in the room that a new user connected
@@ -71,8 +70,11 @@ io.on("connection", (socket) => {
     });
 
     // user disconnect event
-    socket.on("disconnect", () => {
-      console.log("user disconnected", participantName);
+    socket.on("disconnect", async () => {
+      await participantService.deleteParticipant({
+        roomId: roomId,
+        participantId: participantId,
+      });
       socket.to(roomId).emit("user-disconnected", participantId); // emit to users in the room that a user just leave
     });
   });

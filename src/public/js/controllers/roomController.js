@@ -194,15 +194,11 @@ class RoomController {
   };
 
   closeWindow = async () => {
-    await socket.emit("disconnect");
+    await socket.disconnect();
   };
 
   leaveRoom = async () => {
-    await this.participantMod.removeParticipant(ROOM_ID, PARTICIPANT_ID);
-    await socket.emit("disconnect");
-    if (screenShareMap.get("screenSharing") === PARTICIPANT_ID) {
-      await this.screenShareMod.stopSreenShareVideo();
-    }
+    await socket.disconnect();
     window.location = "/leave/thankyou";
   };
 }
