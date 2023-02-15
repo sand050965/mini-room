@@ -18,6 +18,7 @@ class MainDisplayMod {
 
     // avatar style
     const avatarDOMElement = await this.setRoomAvatarAttribute(DOMElement);
+    console.log(DOMElement.participantName, avatarDOMElement);
     await this.setRoomAvatarStyle(avatarDOMElement);
 
     // video grid style
@@ -35,6 +36,31 @@ class MainDisplayMod {
       otherAvatarContents: [],
       otherAvatars: [],
     };
+
+    // set origin DOM element
+    const otherAvatarContainers = document.querySelectorAll(
+      '[name="otherAvatarContainer"]'
+    );
+    const otherAvatarContents = document.querySelectorAll(
+      '[name="otherAvatarContent"]'
+    );
+    const otherAvatars = document.querySelectorAll('[name="otherAvatar"]');
+
+    if (otherAvatarContainers.length !== 0) {
+      avatarDOMElement.otherAvatarContainers = Array.from(
+        otherAvatarContainers
+      );
+    }
+
+    if (otherAvatarContents.length !== 0) {
+      avatarDOMElement.otherAvatarContents = Array.from(otherAvatarContents);
+    }
+
+    if (otherAvatars.length != 0) {
+      avatarDOMElement.otherAvatars = Array.from(otherAvatars);
+    }
+
+    // get DOM from DOM element
     const avatarContainer = DOMElement.avatarContainer;
     const avatarContent = DOMElement.avatarContent;
     const avatar = DOMElement.avatar;
@@ -52,7 +78,7 @@ class MainDisplayMod {
 
     avatarImg.setAttribute("src", avatarImgUrl);
 
-    // set DOM element id and name attributes
+    // set new DOM element id and name attributes
     if (participantId === PARTICIPANT_ID) {
       avatarContainer.setAttribute("id", "selfAvatarContainer");
       avatarContent.setAttribute("id", "selfAvatarContent");
@@ -66,9 +92,9 @@ class MainDisplayMod {
       avatarContent.setAttribute("id", `${participantId}AvatarContent`);
       avatar.setAttribute("id", `${participantId}Avatar`);
       avatarImg.setAttribute("id", `${participantId}AvatarImg`);
-      avatarDOMElement.otherAvatarContainers = [avatarContainer];
-      avatarDOMElement.otherAvatarContents = [avatarContent];
-      avatarDOMElement.otherAvatars = [avatar];
+      avatarDOMElement.otherAvatarContainers.push(avatarContainer);
+      avatarDOMElement.otherAvatarContents.push(avatarContent);
+      avatarDOMElement.otherAvatars.push(avatar);
     }
     return avatarDOMElement;
   };
@@ -83,6 +109,30 @@ class MainDisplayMod {
       otherVideos: [],
     };
 
+    // set origin DOM element
+    const otherVideoItemContainers = document.querySelectorAll(
+      '[name="otherVideoItemContainer"]'
+    );
+    const otherVideoItems = document.querySelectorAll(
+      '[name="otherVideoItem"]'
+    );
+    const otherVideos = document.querySelectorAll('[name="otherVideo"]');
+
+    if (otherVideoItemContainers.length !== 0) {
+      videoElement.otherVideoItemContainers = Array.from(
+        otherVideoItemContainers
+      );
+    }
+
+    if (otherVideoItems.length !== 0) {
+      videoElement.otherVideoItems = Array.from(otherVideoItems);
+    }
+
+    if (otherVideos.length !== 0) {
+      videoElement.otherVideos = Array.from(otherVideos);
+    }
+
+    // get DOM from DOM element
     const videosContainer = document.querySelector("#videosContainer");
     const videoItemContainer = DOMElement.videoItemContainer;
     const videoItem = DOMElement.videoItem;
@@ -95,7 +145,6 @@ class MainDisplayMod {
     const micStatusIcon = DOMElement.micStatusIcon;
 
     // append and add common class
-    // video.classList.add("none");
     videoItem.appendChild(video);
     videoItem.classList.add("center");
     nameTag.textContent = participantName;
@@ -112,7 +161,7 @@ class MainDisplayMod {
     videoItemContainer.classList.add("center");
     videosContainer.append(videoItemContainer);
 
-    // set DOM element id and name attributes
+    // set new DOM element id and name attributes
     if (participantId === PARTICIPANT_ID) {
       videoItemContainer.setAttribute("id", "selfVideoItemContainer");
       videoItem.setAttribute("id", "selfVideoItem");
@@ -132,9 +181,9 @@ class MainDisplayMod {
       video.setAttribute("id", `${participantId}Video`);
       video.setAttribute("name", "otherVideo");
       micStatusIcon.setAttribute("id", `${participantId}MicStatusIcon`);
-      videoElement.otherVideoItemContainers = [videoItemContainer];
-      videoElement.otherVideoItems = [videoItem];
-      videoElement.otherVideos = [video];
+      videoElement.otherVideoItemContainers.push(videoItemContainer);
+      videoElement.otherVideoItems.push(videoItem);
+      videoElement.otherVideos.push(video);
     }
     return videoElement;
   };
@@ -145,7 +194,7 @@ class MainDisplayMod {
     const selfAvatarContent = DOMElement.selfAvatarContent;
     const selfAvatar = DOMElement.selfAvatar;
 
-    // other avatar elements
+    // original other avatar elements
     const otherAvatarContainers = DOMElement.otherAvatarContainers;
     const otherAvatarContents = DOMElement.otherAvatarContents;
     const otherAvatars = DOMElement.otherAvatars;
@@ -396,7 +445,9 @@ class MainDisplayMod {
     const videoItemContainer = document.getElementById(
       `${participantId}VideoItemContainer`
     );
-    videoItemContainer.remove();
+    if (videoItemContainer) {
+      videoItemContainer.remove();
+    }
   };
 
   mainContainerGrid = () => {

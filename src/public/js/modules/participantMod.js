@@ -206,7 +206,9 @@ class ParticipantMod {
     const participantContainer = document.getElementById(
       `${participantId}ParticipantContainer`
     );
-    participantContainer.remove();
+    if (participantContainer) {
+      participantContainer.remove();
+    }
   };
 
   doSearchParticipant = async () => {

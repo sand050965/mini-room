@@ -2,7 +2,12 @@
 require("dotenv").config();
 const app = require("./middleware/app");
 const server = require("http").Server(app);
-const io = require("socket.io")(server);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: process.env.SOCKET_IO_ORIGIN,
+    method: ["GET", "POST"],
+  },
+});
 
 const PORT = process.env.PORT || 3000;
 

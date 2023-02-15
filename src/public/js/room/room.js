@@ -49,8 +49,8 @@ for (const btn of btnsArray) {
 /**
  * ============================== Socket IO and Peer JS ==============================
  */
-peer.on("open", (id) => {
-  roomController.init();
+peer.on("open", async (id) => {
+  await roomController.init();
   socket.emit("join-room", ROOM_ID, id, PARTICIPANT_NAME);
 });
 
@@ -193,15 +193,12 @@ const connectToNewUser = async (DOMElement) => {
  * new user connected
  */
 socket.on("user-connected", async (participantId, participantName) => {
-  // ************** todo... ****************
-  // need to improve get participants method
   const DOMElement = {
     participantId: participantId,
     participantName: participantName,
     videoStream: myStream,
     screenShareStream: myScreenShareStream,
   };
-  await participantMod.getAllParticipants();
   await connectToNewUser(DOMElement);
 });
 
@@ -413,7 +410,7 @@ socket.on("user-disconnected", async (participantId) => {
     otherVideoItemContainers: document.querySelectorAll(
       '[name="otherVideoItemContainer"]'
     ),
-    otherVideoItems: document.querySelectorAll("div[name='otherVideoItem']"),
+    otherVideoItems: document.querySelectorAll('[name="otherVideoItem"]'),
     otherVideos: document.querySelectorAll('[name="otherVideo"]'),
   };
   await mainDisplayMod.setRoomVideoGridStyle(videoDOMElement);
