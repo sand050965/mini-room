@@ -1,5 +1,5 @@
-require("dotenv").config();
 const express = require("express");
+require("dotenv").config();
 const participantService = require("../services/participantService");
 
 module.exports = {
@@ -15,16 +15,11 @@ module.exports = {
         isStoppedVideo: req.body.isStoppedVideo,
         isReadyState: req.body.isReadyState,
       };
-      //   check if the userId exists
-      const checkParticipant = await participantService.getParticipant(
-        participantData
-      );
-      if (checkParticipant !== null) {
-        res.status(409).json({ ok: false, message: "user id is duplicated!" });
-      }
+
       const participant = await participantService.insertParticipant(
         participantData
       );
+
       req.session.participantId = req.body.participantId;
       req.session.dataId = participant.id;
       res.status(200).json({ ok: true });
@@ -32,6 +27,7 @@ module.exports = {
       if (process.env.NODE_ENV !== "development") {
         console.log(e);
       }
+
       res
         .status(500)
         .json({ error: true, message: "Sorry, something went wrong!" });
@@ -52,6 +48,8 @@ module.exports = {
       res
         .status(500)
         .json({ error: true, message: "Sorry, something went wrong!" });
+    } finally {
+      mongoose.connection.close();
     }
   },
 

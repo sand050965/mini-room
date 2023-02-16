@@ -2,39 +2,23 @@ const mongoose = require("mongoose");
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 mongoose.set("strictQuery", false);
-
 const uri = process.env.DB_URI;
 
-const connectToDB = () => {
-  mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-  // mongoose.connect(url, {
-  //   useNewUrlParser: true,
-  //   useFindAndModify: true,
-  //   useUnifiedTopology: true,
-  //   useCreateIndex: true,
-  // });
-  const db = mongoose.connection;
-  db.on("error", (err) => console.error("Connection Error", err));
-  db.once("open", (db) => console.log("Connected to MongoDB"));
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-  mongoose.connection.once("open", () => {
-    console.log("DB connected");
-  });
-};
+mongoose.connection.once("open", () => {
+  console.log("Connected to MongoDB");
+});
 
-const disconnectToDB = () => {
-  if (!mongoose.connection) {
-    return;
-  }
+mongoose.connection.once("close", async () => {
+  console.log("Diconnected to database");
+});
 
-  mongoose.disconnect();
+mongoose.connection.once("err", (err) => {
+  console.log("Connection Error", err);
+});
 
-  mongoose.once("close", async () => {
-    console.log("Diconnected to database");
-  });
-};
-
-module.exports = { connectToDB, disconnectToDB };
+module.exports = mongoose;

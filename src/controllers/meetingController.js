@@ -1,5 +1,6 @@
 const session = require("express-session");
 const express = require("express");
+require("dotenv").config();
 const participantService = require("../services/participantService");
 const roomService = require("../services/roomService");
 

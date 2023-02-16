@@ -1,14 +1,18 @@
-const mongoose = require("mongoose");
+const mongoose = require("../utils/DBUtil");
 
 const roomShcema = new mongoose.Schema(
   {
-    roomId: { type: String, required: true },
-    status: { type: String, required: true },
+    roomId: { type: String, required: true, unique: true, trim: true },
+    status: {
+      type: String,
+      required: true,
+      index: true,
+      enum: ["start", "preStart", "inUse", "closed"],
+      trim: true,
+    },
   },
   {
-    collection: "room",
     timestamps: true,
-    versionKey: false,
   }
 );
 

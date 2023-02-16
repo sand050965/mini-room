@@ -1,14 +1,14 @@
 "use strict";
 require("dotenv").config();
-const app = require("./middleware/app");
+const app = require("./app");
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
   cors: {
     origin: process.env.SOCKET_IO_ORIGIN,
     method: ["GET", "POST"],
   },
-});
-const participantService = require("./services/participantService");
+}); 
+const fetch = require("cross-fetch");
 const PORT = process.env.PORT || 3000;
 
 // -------------Socket IO-------------
@@ -72,10 +72,15 @@ io.on("connection", (socket) => {
 
     // user disconnect event
     socket.on("disconnect", async () => {
-      await participantService.deleteParticipant({
-        roomId: roomId,
-        participantId: participantId,
+      const response = await fetch("/api/participant", {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          Authorization: auth,
+        },
+        body: { roomId: roomId, participantId: participantId },
       });
+      const data = await response.json();
       socket.to(roomId).emit("user-disconnected", participantId); // emit to users in the room that a user just leave
     });
   });

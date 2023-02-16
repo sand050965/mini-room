@@ -1,8 +1,8 @@
 const Room = require("../models/Room");
 
 module.exports = {
-  getValidRoom: (data) => {
-    return Room.findOne({
+  getValidRoom: async (data) => {
+    return await Room.findOne({
       $and: [
         { roomId: data.roomId },
         { status: ["start", "preStart", "inUse"] },
@@ -19,11 +19,7 @@ module.exports = {
   },
 
   updateRoomStatus: async (data) => {
-    const room = new Room({
-      roomId: data.roomId,
-      status: data.status,
-    });
-    return await room.findOneAndUpdate(
+    return await Room.updateOne(
       { roomId: data.roomId },
       { status: data.status }
     );

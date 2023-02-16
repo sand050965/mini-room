@@ -1,9 +1,9 @@
-require("dotenv").config();
 const express = require("express");
+require("dotenv").config();
 const mailService = require("../services/mailService");
 
 module.exports = {
-  sendInviteeEmail: async (req, res) => {
+  sendInviteEmail: async (req, res) => {
     try {
       const mailData = {
         senderName: req.body.senderName,
