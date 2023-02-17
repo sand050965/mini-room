@@ -10,7 +10,7 @@ class MailMod {
   };
 
   sendMail = async () => {
-    const postData = {
+    const payload = {
       methos: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -19,7 +19,7 @@ class MailMod {
         inviteList: this.inviteListArray,
       }),
     };
-    const reponse = await fetch("/api/mail", postData);
+    const reponse = await fetch("/api/mail", payload);
     const result = await reponse.json();
     return result;
   };

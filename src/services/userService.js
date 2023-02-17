@@ -4,13 +4,13 @@ module.exports = {
   getUser: async (data) => {
     return await User.findOne({
       email: data.email,
-    }).select("_id email name avatarImgUrl");
+    }).select("_id email username avatarImgUrl");
   },
 
   putUser: async (data) => {
     return await User.findOne({
       email: data.email,
-    }).select("email");
+    }).select("email password");
   },
 
   postUser: async (data) => {

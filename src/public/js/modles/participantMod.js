@@ -49,7 +49,7 @@ class ParticipantMod {
   };
 
   removeParticipant = async (roomId, participantId) => {
-    const deleteData = {
+    const payload = {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -59,7 +59,7 @@ class ParticipantMod {
         participantId: participantId,
       }),
     };
-    await fetch("/api/participant", deleteData);
+    await fetch("/api/participant", payload);
     return this.getAllParticipants();
   };
 

@@ -40,9 +40,10 @@ module.exports = {
       }
 
       if (e.code === 11000) {
-        return res
-          .status(400)
-          .json({ error: true, message: "user's email is duplicated!" });
+        return res.status(400).json({
+          error: true,
+          message: "the email has been already registered!",
+        });
       }
       return res
         .status(500)
@@ -52,7 +53,6 @@ module.exports = {
 
   login: async (req, res) => {
     try {
-      // password: req.body.password,
       const user = await userService.putUser({
         email: req.body.email,
       });
@@ -99,12 +99,13 @@ module.exports = {
 
   logout: async (req, res) => {
     try {
-      const cookies = req.cookies;
-      if (cookies?.access_token) {
+      const { access_token } = req.cookies;
+      console.log(access_token);
+      if (access_token === undefined || access_token === null) {
         return res.status(204).json({ ok: true });
       }
       res.clearCookie("access_token", { httpOnly: true });
-      return res.status(204).json({ ok: true });
+      return res.status(200).json({ ok: true });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {
         console.log(e);

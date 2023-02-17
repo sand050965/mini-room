@@ -1,0 +1,90 @@
+/*--------------------------------------------------------------
+# General
+--------------------------------------------------------------*/
+@import "common.css";
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.form-label,
+.form-text {
+  color: #fff;
+}
+
+.form-label {
+  font-size: 19px;
+  font-weight: 700;
+}
+
+/*--------------------------------------------------------------
+# Hero Section
+--------------------------------------------------------------*/
+.hero {
+  width: 100%;
+  height: 80vh;
+  background: rgb(19, 58, 103);
+}
+
+.hero .alert-container {
+  width: 500px;
+  position: absolute;
+  bottom: 200px;
+}
+
+@media (max-width: 1400px) {
+  .hero .left-contet {
+    width: 60% !important;
+  }
+
+  .hero .right-contet {
+    width: 40% !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .navbar {
+    width: 90vw;
+  }
+}
+
+@media (max-width: 991px) {
+  .hero {
+    position: relative;
+    height: 100vh;
+    text-align: center;
+  }
+
+  .hero .left-contet {
+    width: 100% !important;
+  }
+
+  .hero .right-contet {
+    width: 100% !important;
+  }
+
+  .hero .animated {
+    -webkit-animation: none;
+    animation: none;
+  }
+
+  .hero .hero-img {
+    position: absolute;
+    top: 180px;
+    max-width: 720px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .hero .hero-img img {
+    width: 50%;
+  }
+}

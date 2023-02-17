@@ -47,7 +47,6 @@ class RoomInfoMod {
   displayRoomClock = async () => {
     const timeElement = await this.getTime();
     const time = `${timeElement.h}:${timeElement.m}:${timeElement.s} ${timeElement.session}`;
-    // document.querySelector("#clock").innerText = time;
     document.querySelector("#clock").textContent = time;
 
     setTimeout(this.displayRoomClock, 1000);

@@ -9,7 +9,7 @@ router
   .get("/auth", JWTverify.verifyAccessToken, userController.getUserData)
   .post("/auth", userValidator.signupValidator, userController.signup)
   .put("/auth", userValidator.loginValidator, userController.login)
-  .delete("/auth", userController.login);
+  .delete("/auth", userController.logout);
 
 router.post(
   "/avatar",

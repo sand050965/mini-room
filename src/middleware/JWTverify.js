@@ -5,10 +5,10 @@ module.exports = {
   verifyAccessToken: (req, res, next) => {
     try {
       const { access_token } = req.cookies;
-      if (access_token === null) {
+      if (access_token === null || access_token === undefined) {
         return res
           .status(401)
-          .json({ error: true, message: "No access token found!" });
+          .json({ ok: true, message: "No access token found!", data: null });
       }
       const user = jwt.verify(
         access_token,
