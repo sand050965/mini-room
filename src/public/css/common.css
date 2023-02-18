@@ -132,29 +132,19 @@ nav .avatar-container {
   width: 48px;
   height: 48px;
   border: none;
-}
-
-nav .avatar-container,
-nav .setting-container {
-  border-radius: 50%;
-  cursor: pointer;
-  padding: 5px;
-}
-
-nav .avatar-container:hover,
-nav .setting-container:hover {
-  background-color: #e1e1e3;
-}
-
-nav .avatar-container img {
   background-color: #969699;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 50%;
 }
 
-nav .setting-container img,
+nav .avatar-container:hover {
+  background-color: #ababad;
+}
+
 nav .avatar-container img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
+  cursor: pointer;
+  min-width: 48px;
 }
 
 /*--------------------------------------------------------------
@@ -175,8 +165,7 @@ nav .avatar-container img {
 }
 
 #userDropdownMenu .user-profile-avatar {
-  width: 48px;
-  height: 48px;
+  min-width: 100%;
   border-radius: 50%;
 }
 

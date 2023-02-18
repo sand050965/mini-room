@@ -250,8 +250,7 @@ video {
 }
 
 .videos-container .avatar-img {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
 }
 
 .videos-container .mic-status {
@@ -357,6 +356,7 @@ video {
   grid-template-columns: 40px calc(100% - 145px) 105px;
   justify-items: start;
   align-items: center;
+  padding: 10px;
 }
 
 #participantOffcanvas .participant-avatar {
@@ -367,8 +367,7 @@ video {
 }
 
 #participantOffcanvas .participant-avatar-img {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
 }
 
 #participantOffcanvas .participant-content {
@@ -466,8 +465,7 @@ video {
 }
 
 .message-container .message-avatar-img {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
 }
 
 .message-container .self-message-content {

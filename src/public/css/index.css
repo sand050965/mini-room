@@ -19,27 +19,25 @@ h6 {
 # User Modal
 --------------------------------------------------------------*/
 .modal .sign-up-avatar-container {
+  position: relative;
   margin-bottom: 20px;
 }
 
 .modal .sign-up-avatar {
   width: 200px;
   height: 200px;
-  position: relative;
-  background-color: #fff;
   border-radius: 50%;
+  overflow: hidden;
+  background-color: #969699;
 }
 
 .modal .sign-up-avatar-container .avatar-img {
-  width: 200px;
-  height: 200px;
-  background-color: #969699;
-  border-radius: 50%;
+  min-width: 100%;
 }
 
 .modal .sign-up-avatar-container .change-avatar {
   position: absolute;
-  right: 0;
+  right: 160px;
   bottom: 0;
   cursor: pointer;
 }
@@ -48,9 +46,22 @@ h6 {
   color: #3c3c3d;
 }
 
+.modal .sign-up-avatar-container .change-avatar-btn {
+  width: 50px;
+  height: 50px;
+  padding: 5px;
+  border-radius: 50%;
+  background-color: #70a9a1;
+  cursor: pointer;
+}
+
 .modal .sign-up-avatar-container i {
   cursor: pointer;
   font-size: 19px;
+}
+
+.modal .sign-up-avatar-help {
+  margin-bottom: 30px;
 }
 
 .modal .change-auth {

@@ -1,5 +1,4 @@
 "use strict";
-// require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
 const compression = require("compression");
@@ -13,9 +12,9 @@ const participantRoutes = require("./routes/participantRoutes");
 const roomRoutes = require("./routes/roomRoutes");
 const mailRoutes = require("./routes/mailRoutes");
 const userRoutes = require("./routes/userRoutes");
+const s3Routes = require("./routes/s3Routes");
 const memberRoutes = require("./routes/memberRoutes");
 const thankyouRoutes = require("./routes/thankyouRoutes");
-
 // view engine setup
 const app = express();
 app.set("views", path.resolve(__dirname, "./views"));
@@ -39,6 +38,7 @@ app.use("/api/participant", participantRoutes);
 app.use("/api/room", roomRoutes);
 app.use("/api/mail", mailRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/s3", s3Routes);
 app.use("/member", memberRoutes);
 app.use("/thankyou", thankyouRoutes);
 app.use("/", meetingRoutes);

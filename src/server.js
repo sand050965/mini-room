@@ -7,7 +7,7 @@ const io = require("socket.io")(server, {
     origin: process.env.SOCKET_IO_ORIGIN,
     method: ["GET", "POST"],
   },
-}); 
+});
 const fetch = require("cross-fetch");
 const PORT = process.env.PORT || 3000;
 
@@ -76,7 +76,6 @@ io.on("connection", (socket) => {
         method: "DELETE",
         headers: {
           Accept: "application/json",
-          Authorization: auth,
         },
         body: { roomId: roomId, participantId: participantId },
       });

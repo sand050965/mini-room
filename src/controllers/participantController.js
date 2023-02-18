@@ -48,8 +48,6 @@ module.exports = {
       res
         .status(500)
         .json({ error: true, message: "Sorry, something went wrong!" });
-    } finally {
-      mongoose.connection.close();
     }
   },
 

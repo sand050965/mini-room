@@ -1,6 +1,6 @@
-import CommonMod from "../modules/commonMod.js";
-import StreamMod from "../modules/streamMod.js";
-import ParticipantMod from "../modules/participantMod.js";
+import CommonMod from "../modles/commonMod.js";
+import StreamMod from "../modles/streamMod.js";
+import ParticipantMod from "../modles/participantMod.js";
 const socket = io("/");
 const peer = new Peer();
 const streamMod = new StreamMod();

@@ -1,12 +1,12 @@
-import StreamMod from "../modules/streamMod.js";
-import ScreenShareMod from "../modules/screenShareMod.js";
-import MainDisplayMod from "../modules/mainDisplayMod.js";
-import OffcanvasMod from "../modules/offcanvasMod.js";
-import RoomInfoMod from "../modules/roomInfoMod.js";
-import ChatRoomMod from "../modules/chatRoomMod.js";
-import ParticipantMod from "../modules/participantMod.js";
-import MailMod from "../modules/mailMod.js";
-import CommonMod from "../modules/commonMod.js";
+import StreamMod from "../modles/streamMod.js";
+import ScreenShareMod from "../modles/screenShareMod.js";
+import MainDisplayMod from "../modles/mainDisplayMod.js";
+import OffcanvasMod from "../modles/offcanvasMod.js";
+import RoomInfoMod from "../modles/roomInfoMod.js";
+import ChatRoomMod from "../modles/chatRoomMod.js";
+import ParticipantMod from "../modles/participantMod.js";
+import MailMod from "../modles/mailMod.js";
+import CommonMod from "../modles/commonMod.js";
 
 class RoomController {
   constructor() {

@@ -1,7 +1,7 @@
-import StreamMod from "../modules/streamMod.js";
-import OffcanvasMod from "../modules/offcanvasMod.js";
-import ParticipantMod from "../modules/participantMod.js";
-import CommonMod from "../modules/commonMod.js";
+import StreamMod from "../modles/streamMod.js";
+import OffcanvasMod from "../modles/offcanvasMod.js";
+import ParticipantMod from "../modles/participantMod.js";
+import CommonMod from "../modles/commonMod.js";
 
 class MainDisplayMod {
   constructor() {

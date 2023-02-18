@@ -1,6 +1,6 @@
-import StreamMod from "../modules/streamMod.js";
-import MainDisplayMod from "../modules/mainDisplayMod.js";
-import ParticipantMod from "./participantMod.js";
+import StreamMod from "../modles/streamMod.js";
+import MainDisplayMod from "../modles/mainDisplayMod.js";
+import ParticipantMod from "../modles/participantMod.js";
 
 class ScreenShareMod {
   constructor() {

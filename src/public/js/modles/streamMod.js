@@ -1,4 +1,4 @@
-import CommonMod from "./commonMod.js";
+import CommonMod from "../modles/commonMod.js";
 
 class StreamMod {
   constructor() {

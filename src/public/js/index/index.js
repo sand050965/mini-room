@@ -118,3 +118,6 @@ document
 document
   .querySelector("#password")
   .addEventListener("keyup", userMod.validatePassword);
+document
+  .querySelector("#avatarFileUpload")
+  .addEventListener("change", userMod.uploadAvatar);

@@ -23,6 +23,8 @@
         <title>Mini Room</title>
     </head>
     <body>
+        <!-- Preloader -->
+        <div id="preloader" class="preloader"></div>
         <!-- ======= Header ======= -->
         <header class="center">
             <nav class="navbar navbar-grid">
@@ -39,7 +41,7 @@
                 </div> -->
                 <div id="userDropdown" class="dropdown">
                     <button id="userAuth"
-                            class="avatar-container"
+                            class="avatar-container center"
                             type="button"
                             aria-expanded="false">
                         <img id="avatarImg"
@@ -109,20 +111,29 @@
                             </svg>
                             <div id="authFailedMsg"></div>
                         </div>
-                        <form class="needs-validation">
+                        <form id="avatarForm" class="needs-validation">
                             <div id="signUpAvatarContainer"
                                  class="sign-up-avatar-container center none">
                                 <div class="sign-up-avatar center">
-                                    <img id="signUpavatarImg"
+                                    <img id="signUpAvatarImg"
                                          class="avatar-img"
                                          src="https://s3.amazonaws.com/www.miniroom.online/images/avatar.png"/>
                                     <div class="change-avatar">
-                                        <label for="fileInput">
+                                        <label for="avatarFileUpload" class="change-avatar-btn center">
                                             <i class="fa-solid fa-camera"></i>
                                         </label>
-                                        <input id="fileInput" type="file" accept="image/*" class="none"/>
+                                        <input id="avatarFileUpload"
+                                               name="avatar"
+                                               type="file"
+                                               accept="image/*"
+                                               class="none"/>
                                     </div>
                                 </div>
+                            </div>
+                            <div id="signUpAvatarValid" class="valid-feedback">Looks good!</div>
+                            <div id="signUpAvatarInvalid" class="invalid-feedback">there are something wrong while avatar image is uploading!</div>
+                            <div id="signUpAvatarHelp" class="form-text sign-up-avatar-help">
+                                Avatar image is only allowed to be these file types: [jpeg, jpg, png], and the file size must be less than 5MB!
                             </div>
                             <div id="usernameContainer" class="mb-3 none">
                                 <label for="username" class="form-label">User Name</label>
@@ -165,8 +176,12 @@
                         <button id="userModalCloseBtn"
                                 type="button"
                                 class="btn btn-secondary none"
-                                data-bs-dismiss="modal">Close</button>
-                        <button id="loginBtn" type="button" class="btn btn-primary">login</button>
+                                data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button id="loginBtn" type="button" class="btn btn-primary">
+                            login
+                        </button>
                         <button id="signUpBtn" type="button" class="btn btn-primary">
                             sign up and login
                         </button>
