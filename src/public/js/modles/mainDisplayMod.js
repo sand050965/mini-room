@@ -138,10 +138,14 @@ class MainDisplayMod {
     const video = DOMElement.video;
     const avatarContainer = DOMElement.avatarContainer;
     const nameTag = DOMElement.nameTag;
-    const participantName = DOMElement.participantName;
     const participantId = DOMElement.participantId;
+    let participantName = DOMElement.participantName;
     const micStatus = DOMElement.micStatus;
     const micStatusIcon = DOMElement.micStatusIcon;
+
+    if (participantId === PARTICIPANT_ID) {
+      participantName = "You";
+    }
 
     // append and add common class
     videoItem.appendChild(video);
@@ -469,6 +473,7 @@ class MainDisplayMod {
   startPlayStream = async (e) => {
     await e.target.play();
     loadedCnt++;
+    beforeCnt = await this.participantMod.getBeforeParticipants();
     console.log("loadedCnt", loadedCnt);
     console.log("beforeCnt", beforeCnt);
     if (beforeCnt === loadedCnt) {

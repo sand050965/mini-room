@@ -15,6 +15,7 @@ const userRoutes = require("./routes/userRoutes");
 const s3Routes = require("./routes/s3Routes");
 const memberRoutes = require("./routes/memberRoutes");
 const thankyouRoutes = require("./routes/thankyouRoutes");
+const multer = require("multer");
 // view engine setup
 const app = express();
 app.set("views", path.resolve(__dirname, "./views"));
@@ -34,6 +35,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compression());
+
 app.use("/api/participant", participantRoutes);
 app.use("/api/room", roomRoutes);
 app.use("/api/mail", mailRoutes);

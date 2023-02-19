@@ -2,6 +2,7 @@
 import RoomController from "../controllers/roomController.js";
 
 // modules
+import CommonMod from "../modles/commonMod.js";
 import StreamMod from "../modles/streamMod.js";
 import ScreenShareMod from "../modles/screenShareMod.js";
 import MainDisplayMod from "../modles/mainDisplayMod.js";
@@ -10,13 +11,14 @@ import ChatRoomMod from "../modles/chatRoomMod.js";
 import ParticipantMod from "../modles/participantMod.js";
 
 /**
- * ============================== Initiate COntroller ==============================
+ * ============================== Initiate Controller ==============================
  */
 const roomController = new RoomController();
 
 /**
  * ============================== Initiate Module ==============================
  */
+const commonMod = new CommonMod();
 const streamMod = new StreamMod();
 const screenShareMod = new ScreenShareMod();
 const mainDisplayMod = new MainDisplayMod();
@@ -27,6 +29,8 @@ const participantMod = new ParticipantMod();
 /**
  * ============================== Event Listeners ==============================
  */
+window.addEventListener("load", roomController.init);
+
 window.addEventListener("keydown", roomController.hotKeysControl);
 
 window.addEventListener("beforeunload", roomController.closeWindow);
@@ -49,9 +53,8 @@ for (const btn of btnsArray) {
 /**
  * ============================== Socket IO and Peer JS ==============================
  */
-peer.on("open", async (id) => {
-  await roomController.init();
-  socket.emit("join-room", ROOM_ID, id, PARTICIPANT_NAME);
+peer.on("error", async (err) => {
+  console.log(err);
 });
 
 /**
@@ -70,6 +73,9 @@ peer.on("call", async (call) => {
         peers[call.peer] = call;
         cnt = await participantMod.getAllParticipants();
         const userInfo = await participantMod.getParticipantInfo(call.peer);
+        if (userInfo === null) {
+          return;
+        }
         const DOMElement = {
           type: "roomOther",
           videoItemContainer: document.createElement("div"),
@@ -380,6 +386,8 @@ socket.on("user-disconnected", async (participantId) => {
 
   cnt = await participantMod.getAllParticipants();
 
+  beforeCnt = await participantMod.getBeforeParticipants();
+
   await participantMod.removeParticipantList(participantId);
 
   await mainDisplayMod.removeRoomVideoItemContainer(participantId);
@@ -416,4 +424,9 @@ socket.on("user-disconnected", async (participantId) => {
     otherVideos: document.querySelectorAll('[name="otherVideo"]'),
   };
   await mainDisplayMod.setRoomVideoGridStyle(videoDOMElement);
+
+  if (beforeCnt === loadedCnt) {
+    commonMod.closePreload();
+    socket.emit("finished-render");
+  }
 });

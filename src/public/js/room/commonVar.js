@@ -18,6 +18,12 @@ const socket = io("/");
 
 const peer = new Peer(PARTICIPANT_ID);
 
+// const peer = new Peer(PARTICIPANT_ID, {
+//   host: "triptaipei.online",
+//   port: 443,
+//   secure: true,
+// });
+
 const peers = {};
 
 const offcanvasMap = new Map();

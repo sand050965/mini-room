@@ -47,15 +47,6 @@ const showBtn = (e) => {
 
 // start meeting
 const startMeeting = async () => {
-  // const data = { roomId: roomId };
-
-  // const postData = {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify(data),
-  // };
   const respone = await fetch(`/api/room/start`);
   const result = await respone.json();
   const roomId = result.roomId;
@@ -65,13 +56,33 @@ const startMeeting = async () => {
 // join meeting
 const joinMeeting = async () => {
   let roomId = roomCodeInput.value.trim();
-  if (roomId.startsWith("https://")) {
-    if (roomId.startsWith("miniroom.online")) {
-      roomId = roomId.replace("https://miniroom.online/", "");
-    } else {
+
+  // localhost
+  if (roomId.startsWith("http://")) {
+    roomId = roomId.replace("http://", "");
+    if (
+      !roomId.startsWith("miniroom.online") &&
+      !roomId.startsWith("localhost")
+    ) {
+      document.querySelector("#alert").classList.remove("none");
       return;
     }
-  } else if (roomId.startsWith("miniroom.online/")) {
+  }
+
+  if (roomId.startsWith("localhost")) {
+    roomId = roomId.replace("localhost:3000/", "");
+  }
+
+  // miniroom.online
+  if (roomId.startsWith("https://")) {
+    roomId = roomId.replace("https://", "");
+    if (!roomId.startsWith("miniroom.online")) {
+      document.querySelector("#alert").classList.remove("none");
+      return;
+    }
+  }
+
+  if (roomId.startsWith("miniroom.online/")) {
     roomId = roomId.replace("miniroom.online/", "");
   }
 
@@ -101,8 +112,8 @@ joinBtn.addEventListener("click", joinMeeting);
 
 document.querySelector("#userAuth").addEventListener("click", userMod.doAuth);
 document.querySelector("#signUp").addEventListener("click", userMod.initSignUp);
-document.querySelector("#login").addEventListener("click", userMod.initLogIn);
-document.querySelector("#loginBtn").addEventListener("click", userMod.doLogIn);
+document.querySelector("#logIn").addEventListener("click", userMod.initLogIn);
+document.querySelector("#logInBtn").addEventListener("click", userMod.doLogIn);
 document
   .querySelector("#signUpBtn")
   .addEventListener("click", userMod.doSignUp);

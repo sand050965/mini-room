@@ -24,7 +24,6 @@ class RoomController {
   init = async () => {
     try {
       myStream = await this.streamMod.getUserMediaStream();
-      beforeCnt = await this.participantMod.getBeforeParticipants();
       const myVideo = document.createElement("video");
       myVideo.muted = true;
 
@@ -47,7 +46,7 @@ class RoomController {
         nameTag: document.createElement("div"),
         micStatus: document.createElement("div"),
         micStatusIcon: document.createElement("i"),
-        participantName: "You",
+        participantName: PARTICIPANT_NAME,
         participantId: PARTICIPANT_ID,
         isMuted: JSON.parse(IS_MUTED),
         isStoppedVideo: JSON.parse(IS_STOPPED_VIDEO),
@@ -78,6 +77,7 @@ class RoomController {
       console.log(err);
       this.commonMod.closePreload();
     }
+    socket.emit("join-room", ROOM_ID, PARTICIPANT_ID, PARTICIPANT_NAME);
   };
 
   btnControl = async (e) => {

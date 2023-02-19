@@ -10,9 +10,10 @@ module.exports = {
     fileFilter(req, file, cb) {
       // only accept jpg, jpeg, png files
       if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-        cb(new Error("file is not of the correct type!"), false);
+        cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE"), false);
+      } else {
+        cb(null, true);
       }
-      cb(null, true);
     },
   }),
 
@@ -23,11 +24,29 @@ module.exports = {
     },
     // FILTER OPTIONS LIKE VALIDATING FILE EXTENSION
     fileFilter(req, file, cb) {
-      // only accept jpg, jpeg, png files
+      // only accept mp4 files
       if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-        cb(null, false);
+        cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE"), false);
+      } else {
+        cb(null, true);
       }
-      cb(null, true);
     },
   }),
+
+  uploadErrorHandler: (error, req, res, next) => {
+    if (error instanceof multer.MulterError) {
+      console.log(error.code);
+      switch (error.code) {
+        case "LIMIT_FILE_SIZE":
+          return res
+            .status(400)
+            .json({ error: true, message: "File is too large!" });
+        case "LIMIT_UNEXPECTED_FILE":
+          return res.status(400).json({
+            error: true,
+            message: "Only accept these file types: [jpg, jpeg, png]!",
+          });
+      }
+    }
+  },
 };

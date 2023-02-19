@@ -1,7 +1,9 @@
+import CommonMod from "../modles/commonMod.js";
 import InputValidator from "../validators/inputValidator.js";
 
 class UserMod {
   constructor() {
+    this.commonMod = new CommonMod();
     this.inputValidator = new InputValidator();
     this.userModal = new bootstrap.Modal(
       document.querySelector("#userModalContainer")
@@ -50,14 +52,18 @@ class UserMod {
 
     // btns
     this.userModalCloseBtn = document.querySelector("#userModalCloseBtn");
+    this.logInBtn = document.querySelector("#logInBtn");
+    this.logInPreloader = document.querySelector("#logInPreloader");
+    this.logInBtnContent = document.querySelector("#logInBtnContent");
     this.signUpBtn = document.querySelector("#signUpBtn");
-    this.loginBtn = document.querySelector("#loginBtn");
+    this.signUpPreloader = document.querySelector("#signUpPreloader");
+    this.signUpBtnContent = document.querySelector("#signUpBtnContent");
   }
 
   initSignUp = async () => {
     await this.reset();
     await this.signUpContainer.classList.add("none");
-    await this.loginBtn.classList.add("none");
+    await this.logInBtn.classList.add("none");
   };
 
   initLogIn = async () => {
@@ -71,17 +77,17 @@ class UserMod {
 
   initAuth = async () => {
     const checkResult = await this.checkUserAuth();
-    if (checkResult.data === null) {
-      this.avatarImg.src =
-        "https://s3.amazonaws.com/www.miniroom.online/images/avatar.png";
-      await this.userDropdown.removeAttribute("data-bs-toggle", "dropdown");
-      this.authStatus.textContent = "Log In / Sign Up";
-    } else {
+    if (checkResult.data !== null) {
       this.avatarImg.src = checkResult.data.avatarImgUrl;
       this.userProfileAvatarImg.src = checkResult.data.avatarImgUrl;
       this.userProfileName.textContent = checkResult.data.username;
       this.userDropdown.setAttribute("data-bs-toggle", "dropdown");
       this.authStatus.textContent = "Log Out";
+    } else {
+      this.avatarImg.src =
+        "https://s3.amazonaws.com/www.miniroom.online/images/avatar.png";
+      await this.userDropdown.removeAttribute("data-bs-toggle", "dropdown");
+      this.authStatus.textContent = "Log In / Sign Up";
     }
   };
 
@@ -94,7 +100,11 @@ class UserMod {
   };
 
   doSignUp = async () => {
-    let avatarImgUrl;
+    await this.setSignUpBtn(true);
+    this.resetValidateStyle();
+
+    let avatarImgUrl =
+      "https://s3.amazonaws.com/www.miniroom.online/images/avatar.png";
     let isInvalid = false;
 
     const data = {
@@ -111,33 +121,49 @@ class UserMod {
       this.username.classList.add("is-invalid");
       isInvalid = true;
     }
+
     if (!this.inputValidator.emailValidator(data)) {
       this.email.classList.add("is-invalid");
       isInvalid = true;
     }
+
     if (!this.inputValidator.passwordValidator(data)) {
       this.password.classList.add("is-invalid");
       isInvalid = true;
     }
+
     if (isInvalid) {
+      this.setSignUpBtn(false);
       return;
     }
 
-    // upload avatar image to s3 first
-    const s3Result = await this.storeAvatarToS3();
-    const isS3Success = await this.displayAuthResult("avatarUpload", s3Result);
+    if (
+      this.signUpAvatarImg.src !==
+      "https://s3.amazonaws.com/www.miniroom.online/images/avatar.png"
+    ) {
+      // upload avatar image to s3 first
+      const s3Result = await this.storeAvatarToS3();
 
-    if (isS3Success) {
-      avatarImgUrl = s3Result.data.url;
-    } else {
-      this.signUpAvatarInValid.style.display = "block";
-      return;
+      const isS3Success = await this.displayAuthResult(
+        "avatarUpload",
+        s3Result
+      );
+
+      if (isS3Success) {
+        avatarImgUrl = s3Result.data.url;
+      } else {
+        this.setSignUpBtn(false);
+        this.signUpAvatarInvalid.style.display = "block";
+        return;
+      }
     }
 
     data.avatarImgUrl = avatarImgUrl;
 
     const result = await this.signUp(data);
     const isSuccess = await this.displayAuthResult("signUp", result);
+    await this.setSignUpBtn(false);
+
     if (!isSuccess) {
       return;
     }
@@ -145,6 +171,9 @@ class UserMod {
   };
 
   doLogIn = async () => {
+    await this.setLogInBtn(true);
+    this.resetValidateStyle();
+
     const data = {
       email: this.email.value,
       password: this.password.value,
@@ -159,13 +188,18 @@ class UserMod {
       isInvalid = true;
     }
     if (isInvalid) {
+      this.logInBtn.disabled = false;
+      this.logInBtnContent.textContent = "Log In";
+      this.logInPreloader.classList.add("none");
       return;
     }
     const result = await this.logIn(data);
     const isSuccess = await this.displayAuthResult("login", result);
+    await this.setLogInBtn(false);
+
     if (isSuccess) {
       this.resetValue();
-      this.loginBtn.classList.add("none");
+      this.logInBtn.classList.add("none");
       this.signUpBtn.classList.add("none");
       this.userModalCloseBtn.classList.remove("none");
       setTimeout(async () => {
@@ -217,6 +251,7 @@ class UserMod {
     ) {
       return;
     }
+    this.authFailed.classList.add("none");
     if (!this.inputValidator.nameValidator({ username: this.username.value })) {
       this.username.classList.remove("is-valid");
       this.username.classList.add("is-invalid");
@@ -233,6 +268,7 @@ class UserMod {
     ) {
       return;
     }
+    this.authFailed.classList.add("none");
     if (!this.inputValidator.emailValidator({ email: this.email.value })) {
       this.email.classList.remove("is-valid");
       this.email.classList.add("is-invalid");
@@ -249,6 +285,7 @@ class UserMod {
     ) {
       return;
     }
+    this.authFailed.classList.add("none");
     if (
       !this.inputValidator.passwordValidator({ password: this.password.value })
     ) {
@@ -263,10 +300,11 @@ class UserMod {
   displayAuthResult = (type, result) => {
     let successMsg;
     if (type === "login") {
-      successMsg = "Successfully Sign Up!";
-    } else {
       successMsg = "Successfully Log In!";
+    } else {
+      successMsg = "Successfully Sign Up!";
     }
+    
     if (result.error) {
       this.authSuccess.classList.add("none");
       this.authFailed.classList.remove("none");
@@ -283,6 +321,30 @@ class UserMod {
     }
   };
 
+  setLogInBtn = (isLoading) => {
+    if (isLoading) {
+      this.logInBtn.disabled = true;
+      this.logInBtnContent.textContent = "Loading...";
+      this.logInPreloader.classList.remove("none");
+    } else {
+      this.logInBtn.disabled = false;
+      this.logInBtnContent.textContent = "Log In";
+      this.logInPreloader.classList.add("none");
+    }
+  };
+
+  setSignUpBtn = (isLoading) => {
+    if (isLoading) {
+      this.signUpBtn.disabled = true;
+      this.signUpBtnContent.textContent = "Loading...";
+      this.signUpPreloader.classList.remove("none");
+    } else {
+      this.signUpBtn.disabled = false;
+      this.signUpBtnContent.textContent = "Sign Up and Log In";
+      this.signUpPreloader.classList.add("none");
+    }
+  };
+
   reset = async () => {
     await this.resetValue();
     await this.resetStyle();
@@ -294,31 +356,38 @@ class UserMod {
     this.username.value = "";
     this.email.value = "";
     this.password.value = "";
-    this.authSuccess.textContent = "";
-    this.authFailed.textContent = "";
+    this.logInBtn.disabled = false;
+    this.logInBtnContent.textContent = "Log In";
+    this.logInPreloader.classList.add("none");
+    this.signUpBtn.disabled = false;
+    this.signUpBtnContent.textContent = "Sign Up and Log In";
+    this.signUpPreloader.classList.add("none");
   };
 
   resetStyle = () => {
-    this.authSuccess.classList.add("none");
-    this.authFailed.classList.add("none");
     this.signUpAvatarContainer.classList.remove("none");
-    this.signUpAvatarValid.removeAttribute("style");
-    this.signUpAvatarInvalid.removeAttribute("style");
-    this.signUpAvatarHelp.classList.remove("none");
-    this.username.classList.remove("is-valid");
-    this.username.classList.remove("is-invalid");
     this.usernameContainer.classList.remove("none");
-    this.email.classList.remove("is-valid");
-    this.email.classList.remove("is-invalid");
     this.emailContainer.classList.remove("none");
-    this.password.classList.remove("is-valid");
-    this.password.classList.remove("is-invalid");
     this.passwordContainer.classList.remove("none");
     this.signUpContainer.classList.remove("none");
     this.loginContainer.classList.remove("none");
     this.userModalCloseBtn.classList.add("none");
+    this.logInBtn.classList.remove("none");
     this.signUpBtn.classList.remove("none");
-    this.loginBtn.classList.remove("none");
+    this.resetValidateStyle();
+  };
+
+  resetValidateStyle = () => {
+    this.authSuccess.classList.add("none");
+    this.authFailed.classList.add("none");
+    this.signUpAvatarInvalid.removeAttribute("style");
+    this.signUpAvatarValid.removeAttribute("style");
+    this.username.classList.remove("is-valid");
+    this.username.classList.remove("is-invalid");
+    this.email.classList.remove("is-valid");
+    this.email.classList.remove("is-invalid");
+    this.password.classList.remove("is-valid");
+    this.password.classList.remove("is-invalid");
   };
 
   checkUserAuth = async () => {

@@ -23,8 +23,6 @@
         <title>Mini Room</title>
     </head>
     <body>
-        <!-- Preloader -->
-        <div id="preloader" class="preloader"></div>
         <!-- ======= Header ======= -->
         <header class="center">
             <nav class="navbar navbar-grid">
@@ -167,7 +165,7 @@
                     <div class="modal-footer">
                         <div class="change-auth">
                             <div id="loginContainer">
-                                Already have an account? <a id="login" class="login">Login now!</a>
+                                Already have an account? <a id="logIn" class="login">Login now!</a>
                             </div>
                             <div id="signUpContainer" class="none">
                                 Don't have an account? <a id="signUp" class="sign-up">Sign Up now!</a>
@@ -179,11 +177,19 @@
                                 data-bs-dismiss="modal">
                             Close
                         </button>
-                        <button id="loginBtn" type="button" class="btn btn-primary">
-                            login
+                        <button id="logInBtn" type="button" class="btn btn-primary">
+                            <span id="logInPreloader"
+                                  class="spinner-border spinner-border-sm none"
+                                  role="status"
+                                  aria-hidden="true"></span>
+                            <span id="logInBtnContent">Log In</span>
                         </button>
                         <button id="signUpBtn" type="button" class="btn btn-primary">
-                            sign up and login
+                            <span id="signUpPreloader"
+                                  class="spinner-border spinner-border-sm none"
+                                  role="status"
+                                  aria-hidden="true"></span>
+                            <span id="signUpBtnContent">Sign Up and Log In</span>
                         </button>
                     </div>
                 </div>

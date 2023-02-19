@@ -197,41 +197,65 @@ const confirmState = async () => {
 
   const cnt = await participantMod.getAllParticipants();
 
-  if (cnt <= 3) {
-    const postData = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    };
-    const response = await fetch("/api/participant/ready", postData);
-    const result = await response.json();
-    if (result.ok) {
-      window.location = `/${ROOM_ID}`;
-    } else {
-      const newDOMElement = {
-        page: "premeeting",
-        isDisplayModal: true,
-        title: "Somthing Went Wrong",
-        msg: "Sorry there are some problems, please try again!",
-      };
-      if (!commonMod.displayModal(newDOMElement)) {
-        setConfirmBtnEnabled();
-        return;
-      }
-    }
+  const postData = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  };
+  const response = await fetch("/api/participant/ready", postData);
+  const result = await response.json();
+  if (result.ok) {
+    window.location = `/${ROOM_ID}`;
   } else {
     const newDOMElement = {
       page: "premeeting",
-      title: "This Room is full",
       isDisplayModal: true,
-      msg: "Sorry this room is full, please try another one!",
+      title: "Somthing Went Wrong",
+      msg: "Sorry there are some problems, please try again!",
     };
-    commonMod.displayModal(newDOMElement);
-    setConfirmBtnEnabled();
-    return;
+    if (!commonMod.displayModal(newDOMElement)) {
+      setConfirmBtnEnabled();
+      return;
+    }
   }
+
+  // if (cnt <= 3) {
+  //   const postData = {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(data),
+  //   };
+  //   const response = await fetch("/api/participant/ready", postData);
+  //   const result = await response.json();
+  //   if (result.ok) {
+  //     window.location = `/${ROOM_ID}`;
+  //   } else {
+  //     const newDOMElement = {
+  //       page: "premeeting",
+  //       isDisplayModal: true,
+  //       title: "Somthing Went Wrong",
+  //       msg: "Sorry there are some problems, please try again!",
+  //     };
+  //     if (!commonMod.displayModal(newDOMElement)) {
+  //       setConfirmBtnEnabled();
+  //       return;
+  //     }
+  //   }
+  // } else {
+  //   const newDOMElement = {
+  //     page: "premeeting",
+  //     title: "This Room is full",
+  //     isDisplayModal: true,
+  //     msg: "Sorry this room is full, please try another one!",
+  //   };
+  //   commonMod.displayModal(newDOMElement);
+  //   setConfirmBtnEnabled();
+  //   return;
+  // }
 };
 
 /**
