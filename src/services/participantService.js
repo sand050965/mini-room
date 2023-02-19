@@ -36,7 +36,6 @@ module.exports = {
       roomId: data.roomId,
       participantId: data.participantId,
       participantName: data.participantName,
-      role: data.role,
       avatarImgUrl: data.avatarImgUrl,
       isMuted: data.isMuted,
       isStoppedVideo: data.isStoppedVideo,

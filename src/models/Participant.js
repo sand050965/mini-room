@@ -6,7 +6,6 @@ const participantSchema = new mongoose.Schema(
     roomId: { type: String, required: true, index: true },
     participantId: { type: String, required: true, index: true },
     participantName: { type: String, required: true, index: true, trim: true },
-    role: { type: String, required: true, enum: ["host", "participant"] },
     avatarImgUrl: {
       type: String,
       required: true,
@@ -14,7 +13,6 @@ const participantSchema = new mongoose.Schema(
     },
     isMuted: { type: Boolean, required: true },
     isStoppedVideo: { type: Boolean, required: true },
-    isReadyState: { type: Boolean, required: true, default: false },
   },
   {
     timestamps: true,

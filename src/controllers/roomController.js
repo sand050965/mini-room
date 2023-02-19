@@ -23,7 +23,6 @@ module.exports = {
       };
       await roomService.createRoom(roomData);
 
-      req.session.role = "host";
       res.status(200).json({ roomId: roomId });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {
@@ -48,7 +47,6 @@ module.exports = {
           .json({ error: true, message: "room id doesn't exist!" });
         return;
       }
-      req.session.role = "participant";
       res.status(200).json({ ok: true });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {

@@ -55,7 +55,6 @@ class RoomController {
         participantAvatarImg: document.createElement("img"),
         participantContent: document.createElement("div"),
         participantNameTag: document.createElement("div"),
-        participantRoleTag: document.createElement("div"),
         participantMediaContainer: document.createElement("div"),
         participantMuteUnmuteContainer: document.createElement("div"),
         participantMuteUnmute: document.createElement("i"),

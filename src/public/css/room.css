@@ -375,14 +375,8 @@ video {
   align-items: center;
 }
 
-#participantOffcanvas .participant-name,
-#participantOffcanvas .participant-role {
+#participantOffcanvas .participant-name {
   padding: 0 10px;
-}
-
-#participantOffcanvas .participant-role {
-  font-size: 13px;
-  color: rgb(125, 125, 125);
 }
 
 #participantOffcanvas .media-container {

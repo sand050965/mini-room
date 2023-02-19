@@ -8,54 +8,42 @@ const roomService = require("../services/roomService");
 module.exports = {
   getIntoMeeting: async (req, res) => {
     try {
-      let isReadyState = false;
       let participantInfo = null;
-      let role = req.session.role;
-      const participantId = req.session.participantId;
+      const { participantId, dataId } = req.cookies;
       const roomId = req.params.roomId;
-      const dataId = req.session.dataId;
 
       const roomCheck = await roomService.getValidRoom({ roomId: roomId });
 
       //   check if the roomId exists
       if (roomCheck === null) {
-        res.render("error");
-        return;
-      }
-
-      if (role === null || role === undefined) {
-        role = "participant";
+        return res.render("error");
       }
 
       if (dataId) {
         participantInfo = await participantService.getParticipantById(dataId);
-        isReadyState = participantInfo.isReadyState;
-      }
 
-      if (
-        isReadyState &&
-        roomId === participantInfo.roomId &&
-        participantId === participantInfo.participantId
-      ) {
-        req.session.destroy();
-        res.render("room", {
-          roomId: participantInfo.roomId,
-          participantId: participantInfo.participantId,
-          participantName: participantInfo.participantName,
-          role: participantInfo.role,
-          avatarImgUrl: participantInfo.avatarImgUrl,
-          audioAuth: participantInfo.audioAuth,
-          videoAuth: participantInfo.videoAuth,
-          isMuted: participantInfo.isMuted,
-          isStoppedVideo: participantInfo.isStoppedVideo,
-        });
-        return;
+        if (
+          roomId === participantInfo.roomId &&
+          participantId === participantInfo.participantId
+        ) {
+          res.clearCookie("participantId");
+          res.clearCookie("dataId");
+          return res.render("room", {
+            roomId: participantInfo.roomId,
+            participantId: participantInfo.participantId,
+            participantName: participantInfo.participantName,
+            avatarImgUrl: participantInfo.avatarImgUrl,
+            audioAuth: participantInfo.audioAuth,
+            videoAuth: participantInfo.videoAuth,
+            isMuted: participantInfo.isMuted,
+            isStoppedVideo: participantInfo.isStoppedVideo,
+          });
+        }
       }
 
       // premeeting
-      res.render("premeeting", {
+      return res.render("premeeting", {
         roomId: roomId,
-        role: role,
       });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {

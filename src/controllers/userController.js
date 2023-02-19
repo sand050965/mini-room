@@ -78,7 +78,7 @@ module.exports = {
           .cookie("access_token", accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            maxAge: 604800,
+            maxAge: 60 * 60 * 24 * 7,
           })
           .status(200)
           .json({ ok: true });
@@ -100,7 +100,6 @@ module.exports = {
   logout: async (req, res) => {
     try {
       const { access_token } = req.cookies;
-      console.log(access_token);
       if (access_token === undefined || access_token === null) {
         return res.status(204).json({ ok: true });
       }
@@ -141,7 +140,7 @@ module.exports = {
         username: req.body.username,
       };
       await userService.updateUsername(userData);
-      res.status(200).json({ ok: true });
+      return res.status(200).json({ ok: true });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {
         console.log(e);

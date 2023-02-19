@@ -15,31 +15,29 @@ const roomIdAndUserNameSchema = Joi.object({
   participantName: Joi.string().required(),
 });
 
+const insertParticipantSchema = Joi.object({
+  roomId: Joi.string().required(),
+  participantId: Joi.string().required(),
+  participantName: Joi.string().required(),
+  avatarImgUrl: Joi.string().required(),
+  isMuted: Joi.boolean().required(),
+  isStoppedVideo: Joi.boolean().required(),
+});
+
 module.exports = {
   insertParticipantValidator: (req, res, next) => {
     const data = {
       roomId: req.body.roomId,
       participantId: req.body.participantId,
       participantName: req.body.participantName,
-      role: req.body.role,
       avatarImgUrl: req.body.avatarImgUrl,
       isMuted: req.body.isMuted,
       isStoppedVideo: req.body.isStoppedVideo,
-      isReadyState: req.body.isReadyState,
     };
 
-    const schema = Joi.object({
-      roomId: Joi.string().required(),
-      participantId: Joi.string().required(),
-      participantName: Joi.string().required(),
-      role: Joi.string().required(),
-      avatarImgUrl: Joi.string().required(),
-      isMuted: Joi.boolean().required(),
-      isStoppedVideo: Joi.boolean().required(),
-      isReadyState: Joi.boolean().required(),
+    const { error, value } = insertParticipantSchema.validate(data, {
+      abortEarly: false,
     });
-
-    const { error, value } = schema.validate(data, { abortEarly: false });
 
     if (error) {
       console.log(error);

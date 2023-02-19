@@ -70,11 +70,9 @@ class ParticipantMod {
     await participantMap.set(DOMElement.participantId, {
       stream: DOMElement.stream,
       participantName: participantInfo.data.participantName,
-      role: participantInfo.data.role,
       avatarImgUrl: participantInfo.data.avatarImgUrl,
       isMuted: participantInfo.data.isMuted,
       isStoppedVideo: participantInfo.data.isStoppedVideo,
-      role: participantInfo.data.role,
     });
   };
 
@@ -91,14 +89,12 @@ class ParticipantMod {
     const participantList = document.querySelector("#participantList");
     const participantId = DOMElement.participantId;
     let participantName = DOMElement.participantName;
-    const role = DOMElement.role;
     const avatarImgUrl = DOMElement.avatarImgUrl;
     const participantContainer = DOMElement.participantContainer;
     const participantAvatar = DOMElement.participantAvatar;
     const participantAvatarImg = DOMElement.participantAvatarImg;
     const participantContent = DOMElement.participantContent;
     const participantNameTag = DOMElement.participantNameTag;
-    const participantRoleTag = DOMElement.participantRoleTag;
     const participantMediaContainer = DOMElement.participantMediaContainer;
     const participantMuteUnmuteContainer =
       DOMElement.participantMuteUnmuteContainer;
@@ -125,9 +121,7 @@ class ParticipantMod {
       participantNameTag.textContent = participantName;
     }
 
-    participantRoleTag.textContent = role;
     participantContent.appendChild(participantNameTag);
-    participantContent.appendChild(participantRoleTag);
     participantContainer.appendChild(participantContent);
 
     if (participantId === PARTICIPANT_ID) {
@@ -162,7 +156,6 @@ class ParticipantMod {
     const participantAvatarImg = DOMElement.participantAvatarImg;
     const participantContent = DOMElement.participantContent;
     const participantNameTag = DOMElement.participantNameTag;
-    const participantRoleTag = DOMElement.participantRoleTag;
     const participantMediaContainer = DOMElement.participantMediaContainer;
     const participantMuteUnmuteContainer =
       DOMElement.participantMuteUnmuteContainer;
@@ -179,7 +172,6 @@ class ParticipantMod {
     participantMediaContainer.classList.add("media-container");
 
     participantNameTag.classList.add("participant-name");
-    participantRoleTag.classList.add("participant-role");
     participantMuteUnmuteContainer.classList.add("mute-unmute-container");
     participantPlayStopVideoContainer.classList.add(
       "play-stop-video-container"

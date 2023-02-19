@@ -6,7 +6,6 @@ const cors = require("cors");
 const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const cookieSession = require("cookie-session");
 const meetingRoutes = require("./routes/meetingRoutes");
 const participantRoutes = require("./routes/participantRoutes");
 const roomRoutes = require("./routes/roomRoutes");
@@ -15,20 +14,13 @@ const userRoutes = require("./routes/userRoutes");
 const s3Routes = require("./routes/s3Routes");
 const memberRoutes = require("./routes/memberRoutes");
 const thankyouRoutes = require("./routes/thankyouRoutes");
-const multer = require("multer");
+
 // view engine setup
 const app = express();
 app.set("views", path.resolve(__dirname, "./views"));
 app.set("view engine", "ejs");
 
 // middlewares
-app.use(
-  session({
-    secret: process.env.SECRET,
-    resave: true,
-    saveUninitialized: true,
-  })
-);
 app.use(cors());
 app.use(express.static(path.resolve(__dirname, "./public")));
 app.use(bodyParser.json());

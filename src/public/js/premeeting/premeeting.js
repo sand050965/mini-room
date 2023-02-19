@@ -57,15 +57,6 @@ const init = async () => {
 
   // Get User Stream
   await getStream();
-
-  // Join Or Start Meeting
-  if (ROLE === "host") {
-    title.textContent = "Start The Meeting";
-    subtitle.textContent = "Ready to start this meeting ?";
-  } else {
-    title.textContent = "Join This Meeting";
-    subtitle.textContent = "Ready to join this meeting ?";
-  }
 };
 
 /**
@@ -187,7 +178,6 @@ const confirmState = async () => {
   const data = {
     participantId: participantId,
     participantName: participantName.textContent.trim(),
-    role: ROLE,
     avatarImgUrl: avatarImg.src,
     roomId: ROOM_ID.toString(),
     isMuted: isMuted,
@@ -221,7 +211,7 @@ const confirmState = async () => {
     }
   }
 
-  // if (cnt <= 3) {
+  // if (cnt <= 5) {
   //   const postData = {
   //     method: "POST",
   //     headers: {

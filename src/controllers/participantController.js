@@ -9,26 +9,34 @@ module.exports = {
         roomId: req.body.roomId,
         participantId: req.body.participantId,
         participantName: req.body.participantName,
-        role: req.body.role,
         avatarImgUrl: req.body.avatarImgUrl,
         isMuted: req.body.isMuted,
         isStoppedVideo: req.body.isStoppedVideo,
-        isReadyState: req.body.isReadyState,
       };
 
       const participant = await participantService.insertParticipant(
         participantData
       );
 
-      req.session.participantId = req.body.participantId;
-      req.session.dataId = participant.id;
-      res.status(200).json({ ok: true });
+      return res
+        .status(200)
+        .cookie("dataId", participant.id, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          maxAge: 60 * 60,
+        })
+        .cookie("participantId", req.body.participantId, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          maxAge: 60 * 60,
+        })
+        .json({ ok: true });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {
         console.log(e);
       }
 
-      res
+      return res
         .status(500)
         .json({ error: true, message: "Sorry, something went wrong!" });
     }
@@ -40,7 +48,7 @@ module.exports = {
       const participantCnt = await participantService.getAllParticipantsCnt(
         roomId
       );
-      res.status(200).json({ data: { participantCnt: participantCnt } });
+      return res.status(200).json({ data: { participantCnt: participantCnt } });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {
         console.log(e);
@@ -63,14 +71,14 @@ module.exports = {
       participantData.createdAt = participantInfo.createdAt;
       const beforeParticipantCnt =
         await participantService.getBeforeParticipants(participantData);
-      res
+      return res
         .status(200)
         .json({ data: { beforeParticipantCnt: beforeParticipantCnt } });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {
         console.log(e);
       }
-      res
+      return es
         .status(500)
         .json({ error: true, message: "Sorry, something went wrong!" });
     }
@@ -85,12 +93,12 @@ module.exports = {
       const participantInfo = await participantService.getParticipant(
         participantData
       );
-      res.status(200).json({ data: participantInfo });
+      return res.status(200).json({ data: participantInfo });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {
         console.log(e);
       }
-      res
+      return res
         .status(500)
         .json({ error: true, message: "Sorry, something went wrong!" });
     }
@@ -112,12 +120,12 @@ module.exports = {
       for (const id of participantIds) {
         participantIdArray.push(id.participantId);
       }
-      res.status(200).json({ data: participantIdArray });
+      return res.status(200).json({ data: participantIdArray });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {
         console.log(e);
       }
-      res
+      return res
         .status(500)
         .json({ error: true, message: "Sorry, something went wrong!" });
     }
@@ -130,12 +138,12 @@ module.exports = {
         participantId: req.body.participantId,
       };
       await participantService.deleteParticipant(participantData);
-      res.status(200).json({ ok: true });
+      return res.status(200).json({ ok: true });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {
         console.log(e);
       }
-      res
+      return res
         .status(500)
         .json({ error: true, message: "Sorry, something went wrong!" });
     }
@@ -145,12 +153,12 @@ module.exports = {
     try {
       const roomId = req.body.roomId;
       await participantService.deleteAllParticipants(roomId);
-      res.status(200).json({ ok: true });
+      return res.status(200).json({ ok: true });
     } catch (e) {
       if (process.env.NODE_ENV !== "development") {
         console.log(e);
       }
-      res
+      return res
         .status(500)
         .json({ error: true, message: "Sorry, something went wrong." });
     }
