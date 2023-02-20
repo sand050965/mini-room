@@ -422,9 +422,4 @@ socket.on("user-disconnected", async (participantId) => {
     otherVideos: document.querySelectorAll('[name="otherVideo"]'),
   };
   await mainDisplayMod.setRoomVideoGridStyle(videoDOMElement);
-
-  if (beforeCnt === loadedCnt) {
-    commonMod.closePreload();
-    socket.emit("finished-render");
-  }
 });

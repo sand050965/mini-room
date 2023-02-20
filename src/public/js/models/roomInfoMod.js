@@ -16,6 +16,18 @@ class RoomInfoMod {
     copyInfoBtnTooltip.hide();
   };
 
+  getDate = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return {
+      y: year,
+      m: month,
+      d: day,
+    };
+  };
+
   getTime = () => {
     const date = new Date();
     let h = date.getHours();

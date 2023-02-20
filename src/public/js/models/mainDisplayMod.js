@@ -472,14 +472,10 @@ class MainDisplayMod {
 
   startPlayStream = async (e) => {
     await e.target.play();
-    loadedCnt++;
     beforeCnt = await this.participantMod.getBeforeParticipants();
-    console.log("loadedCnt", loadedCnt);
-    console.log("beforeCnt", beforeCnt);
-    if (beforeCnt === loadedCnt) {
-      this.commonMod.closePreload("#preloader");
-      socket.emit("finished-render");
-    }
+    loadedCnt++;
+    this.commonMod.closePreload("#preloader");
+    socket.emit("finished-render");
   };
 
   stopStream = async (e) => {

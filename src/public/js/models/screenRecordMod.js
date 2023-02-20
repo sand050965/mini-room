@@ -1,9 +1,11 @@
 import StreamMod from "../models/streamMod.js";
+import RoomInfoMod from "../models/roomInfoMod.js";
 import CommonMod from "../models/commonMod.js";
 
 class ScreenRecordMod {
   constructor() {
     this.streamMod = new StreamMod();
+    this.roomInfoMod = new RoomInfoMod();
     this.commonMod = new CommonMod();
     this.stream = null;
     this.audio = null;
@@ -81,7 +83,9 @@ class ScreenRecordMod {
     document.body.appendChild(a);
     a.classList.add("none");
     a.href = url;
-    a.download = "test.webm";
+    const dateElement = await this.roomInfoMod.getDate();
+    const timeElement = await this.roomInfoMod.getTime();
+    a.download = `${dateElement.y}.${dateElement.m}.${dateElement.d}_${timeElement.h}:${timeElement.m}:${timeElement.s}_${ROOM_ID}.webm`;
     a.click();
     this.screenRecordBtnIcon.classList.remove("is-recording");
     this.isRecording = false;
