@@ -150,6 +150,14 @@ body {
   margin-bottom: 24px;
 }
 
+.side-bar .invalid-feedback {
+  font-size: 20px;
+  color: #fff;
+  background-color: var(--bs-danger-text);
+  border-radius: 20px;
+  width: auto;
+}
+
 .side-bar .btn-block {
   display: block;
   width: 100%;

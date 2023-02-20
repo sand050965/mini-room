@@ -14,7 +14,10 @@ class StreamMod {
 
   getUserAudioStream = () => {
     return navigator.mediaDevices.getUserMedia({
-      audio: true,
+      audio: {
+        echoCancellation: true,
+        noiseSuppression: true,
+      },
     });
   };
 
@@ -22,6 +25,18 @@ class StreamMod {
     return navigator.mediaDevices.getUserMedia({
       video: true,
     });
+  };
+
+  getDisplayMediaStream = () => {
+    return navigator.mediaDevices.getDisplayMedia({
+      video: {
+        cursor: "always",
+      },
+    });
+  };
+
+  replaceTracks = (DOMElement) => {
+    const participantId = DOMElement.participantId;
   };
 
   getDefaultTrack = () => {
@@ -68,25 +83,6 @@ class StreamMod {
       localStream: localStream,
     };
     return DOMElement;
-  };
-
-  replaceTracks = (DOMElement) => {
-    const participantId = DOMElement.participantId;
-  };
-
-  getDisplayMediaStream = () => {
-    return navigator.mediaDevices.getDisplayMedia({
-      video: {
-        cursor: "always",
-      },
-    });
-  };
-
-  getScreenRecordMediaStream = () => {
-    return navigator.mediaDevices.getDisplayMedia({
-      audio: true,
-      video: true,
-    });
   };
 
   muteUnmute = (DOMElement) => {

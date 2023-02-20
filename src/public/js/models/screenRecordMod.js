@@ -1,37 +1,64 @@
 import StreamMod from "../models/streamMod.js";
+import CommonMod from "../models/commonMod.js";
 
 class ScreenRecordMod {
   constructor() {
-    this.screenRecordBtnIcon = document.querySelector("#screenRecordBtnIcon");
     this.streamMod = new StreamMod();
+    this.commonMod = new CommonMod();
+    this.stream = null;
+    this.audio = null;
+    this.mixedStream = null;
     this.mediaRecorder = null;
     this.tracks = [];
     this.isRecording = false;
+    this.screenRecordBtnIcon = document.querySelector("#screenRecordBtnIcon");
   }
 
   recordBtnControl = () => {
     if (!this.isRecording) {
-      this.screenRecordBtnIcon.classList.add("is-recording");
       this.startRecording();
       this.isRecording = true;
     } else {
-      this.screenRecordBtnIcon.classList.remove("is-recording");
       this.stopRecording();
-      this.isRecording = false;
     }
   };
 
   startRecording = async () => {
     try {
-      const stream = await this.streamMod.getDisplayMediaStream();
-      this.mediaRecorder = new MediaRecorder(stream, { type: "video" });
+      this.stream = await this.streamMod.getDisplayMediaStream();
+      this.audio = await this.streamMod.getUserAudioStream();
+      if (this.stream && this.audio) {
+        this.mixedStream = new MediaStream([
+          ...this.stream.getTracks(),
+          ...this.audio.getTracks(),
+        ]);
+      } else {
+        throw "couldn't get media stream right!";
+      }
+
+      this.mediaRecorder = new MediaRecorder(this.mixedStream, {
+        type: "video",
+      });
       this.mediaRecorder.start(1000);
+      this.mixedStream
+        .getVideoTracks()[0]
+        .addEventListener("ended", this.stopRecording);
       this.mediaRecorder.addEventListener(
         "dataavailable",
         this.addStreamToRecorder
       );
+      this.screenRecordBtnIcon.classList.add("is-recording");
+      this.isRecording = true;
     } catch (e) {
       console.log(e);
+      this.isRecording = false;
+      const DOMElement = {
+        page: "room",
+        isDisplayModal: true,
+        title: "Sorry! Can't record this meeting",
+        msg: "Something goes wrong when getting permission of screen or audio stream.",
+      };
+      this.commonMod.displayModal(DOMElement);
     }
   };
 
@@ -40,7 +67,14 @@ class ScreenRecordMod {
   };
 
   stopRecording = async () => {
-    this.mediaRecorder.stop();
+    if (this.mediaRecorder.state === "recording") {
+      await this.mediaRecorder.removeEventListener("stop", this.stopRecording);
+      await this.mediaRecorder.stop();
+    }
+
+    for (const track of this.mixedStream.getTracks()) {
+      track.stop();
+    }
     const blob = new Blob(this.tracks, { type: "video/webm" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -49,6 +83,8 @@ class ScreenRecordMod {
     a.href = url;
     a.download = "test.webm";
     a.click();
+    this.screenRecordBtnIcon.classList.remove("is-recording");
+    this.isRecording = false;
   };
 }
 
