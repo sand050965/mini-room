@@ -1,4 +1,4 @@
-import CommonMod from "../modles/commonMod.js";
+import CommonMod from "../models/commonMod.js";
 
 class StreamMod {
   constructor() {
@@ -79,6 +79,13 @@ class StreamMod {
       video: {
         cursor: "always",
       },
+    });
+  };
+
+  getScreenRecordMediaStream = () => {
+    return navigator.mediaDevices.getDisplayMedia({
+      audio: true,
+      video: true,
     });
   };
 

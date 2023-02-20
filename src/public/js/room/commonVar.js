@@ -69,6 +69,7 @@ const btnsArray = [
   document.querySelector("#audioBtn"),
   document.querySelector("#videoBtn"),
   document.querySelector("#screenShareBtn"),
+  document.querySelector("#screenRecordBtn"),
   document.querySelector("#leaveBtn"),
   document.querySelector("#infoBtn"),
   document.querySelector("#infoCloseBtn"),

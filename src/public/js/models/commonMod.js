@@ -15,16 +15,16 @@ class CommonMod {
   /**
    * Close Preloader
    */
-  closePreload = () => {
-    const preloader = document.querySelector("#preloader");
+  closePreload = (preloaderId) => {
+    const preloader = document.querySelector(preloaderId);
     preloader.classList.add("none");
   };
 
   /**
    * Open Preloader
    */
-  openPreload = () => {
-    const preloader = document.querySelector("#preloader");
+  openPreload = (preloaderId) => {
+    const preloader = document.querySelector(preloaderId);
     preloader.classList.remove("none");
   };
 

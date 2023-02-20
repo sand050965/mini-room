@@ -2,13 +2,13 @@
 import RoomController from "../controllers/roomController.js";
 
 // modules
-import CommonMod from "../modles/commonMod.js";
-import StreamMod from "../modles/streamMod.js";
-import ScreenShareMod from "../modles/screenShareMod.js";
-import MainDisplayMod from "../modles/mainDisplayMod.js";
-import RoomInfoMod from "../modles/roomInfoMod.js";
-import ChatRoomMod from "../modles/chatRoomMod.js";
-import ParticipantMod from "../modles/participantMod.js";
+import CommonMod from "../models/commonMod.js";
+import StreamMod from "../models/streamMod.js";
+import ScreenShareMod from "../models/screenShareMod.js";
+import MainDisplayMod from "../models/mainDisplayMod.js";
+import RoomInfoMod from "../models/roomInfoMod.js";
+import ChatRoomMod from "../models/chatRoomMod.js";
+import ParticipantMod from "../models/participantMod.js";
 
 /**
  * ============================== Initiate Controller ==============================

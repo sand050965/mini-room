@@ -1,12 +1,15 @@
-import CommonMod from "../modles/commonMod.js";
-import StreamMod from "../modles/streamMod.js";
-import ParticipantMod from "../modles/participantMod.js";
+import CommonMod from "../models/commonMod.js";
+import StreamMod from "../models/streamMod.js";
+import ParticipantMod from "../models/participantMod.js";
+import UserMod from "../models/userMod.js";
 const socket = io("/");
 const peer = new Peer();
 const streamMod = new StreamMod();
 const participantMod = new ParticipantMod();
 const commonMod = new CommonMod();
+const userMod = new UserMod();
 
+let isNoName = true;
 let participantId;
 let isPermissionDenied = true;
 let isMuted = false;
@@ -57,6 +60,7 @@ const init = async () => {
 
   // Get User Stream
   await getStream();
+  await initAuth();
 };
 
 /**
@@ -71,11 +75,26 @@ const getStream = async () => {
     addStream(DOMElement);
   } catch (e) {
     console.log(e);
-    commonMod.closePreload();
+    commonMod.closePreload("#preloader");
     displayAlert(false);
     isPermissionDenied = true;
     isMuted = streamMod.mute(DOMElement);
     isStoppedVideo = streamMod.stopVideo(DOMElement);
+  }
+};
+
+/**
+ * Add Video and Audio Stream
+ */
+const initAuth = async () => {
+  const checkResult = await userMod.checkUserAuth();
+  if (checkResult.data !== null) {
+    document.querySelector("#avatarImg").src = checkResult.data.avatarImgUrl;
+    document.querySelector("#nameInput").value = checkResult.data.username;
+    displayName();
+  } else {
+    document.querySelector("#avatarImg").src =
+      "https://s3.amazonaws.com/www.miniroom.online/images/avatar.png";
   }
 };
 
@@ -89,7 +108,7 @@ const addStream = (DOMElement) => {
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", async () => {
     await video.play();
-    commonMod.closePreload();
+    commonMod.closePreload("#preloader");
   });
 
   videoContainer.appendChild(video);
@@ -150,12 +169,17 @@ const displayAlert = (isSuccess) => {
 /**
  * Display Name
  */
-const displayName = (e) => {
-  if (e.target.value === "") {
+const displayName = () => {
+  const nameInput = document.querySelector("#nameInput");
+  nameInput.classList.remove("is-invalid");
+  if (nameInput.value === "") {
     participantName.textContent = `${participantId}`;
+    nameInput.classList.add("is-invalid");
+    isNoName = true;
     return;
   }
-  participantName.textContent = e.target.value;
+  isNoName = false;
+  participantName.textContent = nameInput.value;
 };
 
 /**
@@ -169,7 +193,11 @@ const confirmState = async () => {
     msg: "Mini Room needs access to your camera and microphone so that other participants can see and hear you. Mini Room will ask you to confirm this decision on each browser and computer you use.",
   };
 
-  if (!commonMod.displayModal(newDOMElement)) {
+  if (isNoName) {
+    nameInput.classList.add("is-invalid");
+  }
+
+  if (!commonMod.displayModal(newDOMElement) || isNoName) {
     return;
   }
 
@@ -252,7 +280,7 @@ const confirmState = async () => {
  * Set Confirm Button Disable
  */
 const setConfirmBtnDisabled = () => {
-  commonMod.openPreload();
+  commonMod.openPreload("#preloader");
   const confirmBtn = document.querySelector("#confirmBtn");
   confirmBtn.disabled = true;
   confirmBtn.textContent = "Loading ...";
@@ -262,7 +290,7 @@ const setConfirmBtnDisabled = () => {
  * Set Confirm Button Enable
  */
 const setConfirmBtnEnabled = () => {
-  commonMod.closePreload();
+  commonMod.closePreload("#preloader");
   const confirmBtn = document.querySelector("#confirmBtn");
   confirmBtn.disabled = false;
   confirmBtn.textContent = "Enter Your Name";

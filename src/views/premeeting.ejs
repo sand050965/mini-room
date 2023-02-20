@@ -29,6 +29,10 @@
         <title>Mini Room</title>
     </head>
     <body>
+        <!-- Header -->
+        <header class="none">
+            <div id="authStatus"></div>
+        </header>
         <!-- Preloader -->
         <div id="preloader" class="preloader"></div>
         <!-- Modal -->
@@ -77,14 +81,19 @@
                 <div class="side-bar-grid">
                     <h1 id="title" class="title">Join This Meeting</h1>
                     <h5 id="subtitle" class="subtitle">Ready to join this meeting ?</h5>
-                    <div class="premeeting-input-container">
-                        <!-- Name Input -->
-                        <input id="nameInput"
-                               class="form-control form-control-lg"
-                               autocomplete="name"
-                               type="text"
-                               placeholder="Enter Your Name">
-                    </div>
+                    <form id="nameForm">
+                        <div class="premeeting-input-container">
+                            <!-- Name Input -->
+                            <input id="nameInput"
+                                   class="form-control form-control-lg"
+                                   autocomplete="name"
+                                   type="text"
+                                   placeholder="Enter Your Name"
+                                   max-length="20"
+                                   required>
+                            <div class="invalid-feedback">Please enter a username.</div>
+                        </div>
+                    </form>
                     <div class="premeeting-button-container">
                         <!-- Confirm Button -->
                         <button id="confirmBtn"

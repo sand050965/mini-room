@@ -1,17 +1,19 @@
-import StreamMod from "../modles/streamMod.js";
-import ScreenShareMod from "../modles/screenShareMod.js";
-import MainDisplayMod from "../modles/mainDisplayMod.js";
-import OffcanvasMod from "../modles/offcanvasMod.js";
-import RoomInfoMod from "../modles/roomInfoMod.js";
-import ChatRoomMod from "../modles/chatRoomMod.js";
-import ParticipantMod from "../modles/participantMod.js";
-import MailMod from "../modles/mailMod.js";
-import CommonMod from "../modles/commonMod.js";
+import StreamMod from "../models/streamMod.js";
+import ScreenShareMod from "../models/screenShareMod.js";
+import ScreenRecordMod from "../models/screenRecordMod.js";
+import MainDisplayMod from "../models/mainDisplayMod.js";
+import OffcanvasMod from "../models/offcanvasMod.js";
+import RoomInfoMod from "../models/roomInfoMod.js";
+import ChatRoomMod from "../models/chatRoomMod.js";
+import ParticipantMod from "../models/participantMod.js";
+import MailMod from "../models/mailMod.js";
+import CommonMod from "../models/commonMod.js";
 
 class RoomController {
   constructor() {
     this.streamMod = new StreamMod();
     this.screenShareMod = new ScreenShareMod();
+    this.screenRecordMod = new ScreenRecordMod();
     this.mainDisplayMod = new MainDisplayMod();
     this.offcanvasMod = new OffcanvasMod();
     this.roomInfoMod = new RoomInfoMod();
@@ -74,7 +76,7 @@ class RoomController {
       await this.streamMod.initMediaControl(DOMElement);
     } catch (err) {
       console.log(err);
-      this.commonMod.closePreload();
+      this.commonMod.closePreload("#preloader");
     }
     socket.emit("join-room", ROOM_ID, PARTICIPANT_ID, PARTICIPANT_NAME);
   };
@@ -114,6 +116,9 @@ class RoomController {
     } else if (e.target.id.includes("screenShareBtn")) {
       // share screen btn is clicked
       this.screenShareMod.doMyScreenShare();
+    } else if (e.target.id.includes("screenRecordBtn")) {
+      // screen record btn is clicked
+      this.screenRecordMod.recordBtnControl();
     } else if (e.target.id.includes("leaveBtn")) {
       // leave btn is clicked
       this.leaveRoom();
@@ -198,6 +203,7 @@ class RoomController {
   };
 
   leaveRoom = async () => {
+    await this.commonMod.openPreload("#preloader");
     await socket.disconnect();
     await this.participantMod.removeParticipant(ROOM_ID, PARTICIPANT_ID);
     window.location = "/thankyou";

@@ -139,7 +139,7 @@ nav .avatar-container {
 }
 
 nav .avatar-container:hover {
-  background-color: #ababad;
+  opacity: 0.7;
 }
 
 nav .avatar-container img {
@@ -162,18 +162,13 @@ nav .avatar-container img {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-}
-
-#userDropdownMenu .user-profile-avatar {
-  min-width: 100%;
-  border-radius: 50%;
+  background-color: #969699;
+  cursor: pointer;
+  overflow: hidden;
 }
 
 #userDropdownMenu .user-profile-avatar img {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: #969699;
+  width: 100%;
 }
 
 #userDropdownMenu .user-profile-name {

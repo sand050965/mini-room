@@ -1,18 +1,21 @@
-import CommonMod from "../modles/commonMod.js";
-import UserMod from "../modles/userMod.js";
+import CommonMod from "../models/commonMod.js";
+import UserController from "../controllers/userController.js";
 const roomCodeInput = document.querySelector("#roomCodeInput");
 const startBtn = document.querySelector("#startBtn");
 const joinBtn = document.querySelector("#joinBtn");
 
 const commonMod = new CommonMod();
-const userMod = new UserMod();
+const userController = new UserController();
 
 /**
  * Init App
  */
 const init = async () => {
   await commonMod.initAOS(AOS);
-  await userMod.initAuth();
+  await userController.initAuth();
+  setTimeout(() => {
+    commonMod.closePreload("#indexPreloader");
+  }, 3000);
 };
 
 // input button control
@@ -106,29 +109,5 @@ roomCodeInput.addEventListener("keydown", hotKeysControl);
 roomCodeInput.addEventListener("focus", showDisableBtn);
 roomCodeInput.addEventListener("blur", hideBtn);
 roomCodeInput.addEventListener("keyup", showBtn);
-
 startBtn.addEventListener("click", startMeeting);
 joinBtn.addEventListener("click", joinMeeting);
-
-document.querySelector("#userAuth").addEventListener("click", userMod.doAuth);
-document.querySelector("#signUp").addEventListener("click", userMod.initSignUp);
-document.querySelector("#logIn").addEventListener("click", userMod.initLogIn);
-document.querySelector("#logInBtn").addEventListener("click", userMod.doLogIn);
-document
-  .querySelector("#signUpBtn")
-  .addEventListener("click", userMod.doSignUp);
-document
-  .querySelector("#authStatus")
-  .addEventListener("click", userMod.doLogOut);
-document
-  .querySelector("#username")
-  .addEventListener("keyup", userMod.validateUsername);
-document
-  .querySelector("#email")
-  .addEventListener("keyup", userMod.validateEmail);
-document
-  .querySelector("#password")
-  .addEventListener("keyup", userMod.validatePassword);
-document
-  .querySelector("#avatarFileUpload")
-  .addEventListener("change", userMod.uploadAvatar);

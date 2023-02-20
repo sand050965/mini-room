@@ -1,7 +1,7 @@
-import StreamMod from "../modles/streamMod.js";
-import OffcanvasMod from "../modles/offcanvasMod.js";
-import ParticipantMod from "../modles/participantMod.js";
-import CommonMod from "../modles/commonMod.js";
+import StreamMod from "../models/streamMod.js";
+import OffcanvasMod from "../models/offcanvasMod.js";
+import ParticipantMod from "../models/participantMod.js";
+import CommonMod from "../models/commonMod.js";
 
 class MainDisplayMod {
   constructor() {
@@ -477,7 +477,7 @@ class MainDisplayMod {
     console.log("loadedCnt", loadedCnt);
     console.log("beforeCnt", beforeCnt);
     if (beforeCnt === loadedCnt) {
-      this.commonMod.closePreload();
+      this.commonMod.closePreload("#preloader");
       socket.emit("finished-render");
     }
   };

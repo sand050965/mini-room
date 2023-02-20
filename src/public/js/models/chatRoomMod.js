@@ -1,4 +1,4 @@
-import RoomInfoMod from "../modles/roomInfoMod.js";
+import RoomInfoMod from "../models/roomInfoMod.js";
 
 class ChatRoomMod {
   constructor() {

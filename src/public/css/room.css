@@ -538,7 +538,7 @@ video {
 --------------------------------------------------------------*/
 .tool-bar {
   display: grid;
-  grid-template-columns: 45% 55%;
+  grid-template-columns: 40% 60%;
   width: 100vw;
   height: 80px;
 }
@@ -563,7 +563,7 @@ video {
 
 .tool-bar .control-btns {
   display: grid;
-  grid-template-columns: 250px auto;
+  grid-template-columns: 300px auto;
   align-items: center;
 }
 
@@ -572,13 +572,17 @@ video {
   font-size: 1rem;
 }
 
+.tool-bar .is-recording {
+  color: #ea4335;
+}
+
 .tool-bar .main-control-container {
   height: 40px;
 }
 
 .tool-bar .main-control {
   display: grid;
-  grid-template-columns: repeat(3, 40px) 56px;
+  grid-template-columns: repeat(4, 40px) 56px;
   gap: 20px;
   height: 100%;
 }
