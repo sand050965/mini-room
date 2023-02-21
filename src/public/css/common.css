@@ -2,6 +2,15 @@
 # Common
 --------------------------------------------------------------*/
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@600;700&display=swap");
+
+@font-face {
+  font-family: "color-emoji";
+  src: local("Apple Color Emoji"),
+       local("Segoe UI Emoji"), 
+       local("Segoe UI Symbol"),
+       local("Noto Color Emoji");
+}
+
 body,
 div,
 fieldset,
