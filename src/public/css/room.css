@@ -1,9 +1,9 @@
+/** @format */
+
 /**
  * --------------------------------------------------------------
  * # General
  * --------------------------------------------------------------
- *
- * @format
  */
 
 @import "common.css";
@@ -31,6 +31,10 @@ h4,
 h5,
 h6 {
 	color: #fff;
+}
+
+a {
+	text-decoration: none;
 }
 
 body {
@@ -368,7 +372,7 @@ video {
 	width: 32px;
 	height: 32px;
 	border-radius: 50%;
-	background-color: #43454b;
+	background-color: #969699;
 }
 
 #participantOffcanvas .participant-avatar-img {
@@ -407,15 +411,7 @@ video {
 /*--------------------------------------------------------------
 # Chat Offcanvas
 --------------------------------------------------------------*/
-#chatOffcanvas .offcanvas-body {
-	overflow: hidden;
-	height: calc(100% - 800px);
-}
-
-#chatOffcanvas .offcanvas-body-emoji-active {
-	height: calc(100% - 1000px);
-}
-
+/* offcanvas header */
 #chatOffcanvas .warning {
 	background-color: rgb(244, 244, 244);
 	border-radius: 8px;
@@ -424,20 +420,20 @@ video {
 	text-align: center;
 }
 
+/* offcanvas body */
+#chatOffcanvas .offcanvas-body {
+	overflow: hidden;
+	height: calc(100% - 1000px);
+}
+
+#chatOffcanvas .offcanvas-body-emoji-active {
+	height: calc(100% - 1200px);
+}
+
 #chatOffcanvas .message-container {
 	width: 100%;
 	max-height: 100%;
 	overflow-y: scroll;
-}
-
-#chatOffcanvas .message-input-container {
-	position: relative;
-	padding: 22px;
-	height: 230px;
-}
-
-#chatOffcanvas .message-input-container-emoji-active {
-	height: 600px;
 }
 
 .message-container .message-content {
@@ -468,7 +464,7 @@ video {
 	width: 36px;
 	height: 36px;
 	border-radius: 50%;
-	background-color: #43454b;
+	background-color: #969699;
 }
 
 .message-container .message-avatar-img {
@@ -486,7 +482,12 @@ video {
 	padding: 10px;
 	border-radius: 10px;
 	color: #fff;
-  font-family: "color-emoji";
+	font-size: 19px;
+	font-family: "color-emoji";
+}
+
+.message-container .file-message {
+	width: 100%;
 }
 
 .message-container .self-message {
@@ -497,14 +498,82 @@ video {
 	background-color: #78787a;
 }
 
+.message-container .message-file-icon {
+	font-size: 32px !important;
+	color: #fff;
+}
+
+.message-container .message-file-name {
+	font-size: 16px;
+	color: #fff;
+	margin-bottom: 10px;
+}
+
+.message-container .message-file-size {
+	font-size: 13px;
+	color: #e8e8e8;
+}
+
+/* file share progress */
+#chatOffcanvas .file-share-container {
+	display: grid;
+	grid-template-columns: 50px auto;
+	align-items: center;
+	margin: 10px;
+	border-radius: 10px;
+	border: 1px solid #eee;
+}
+
+#chatOffcanvas .file-share-container i {
+	font-size: 19px;
+}
+
+#chatOffcanvas .file-share-info {
+	padding: 10px;
+}
+
+#chatOffcanvas .file-name {
+	font-size: 16px;
+}
+
+#chatOffcanvas .file-size {
+	font-size: 13px;
+	color: rgb(89, 89, 89);
+}
+
+#chatOffcanvas .file-share-progress {
+	width: 360px;
+	margin: 0 10px;
+}
+
+#chatOffcanvas .error-progress-bar {
+	background-color: red;
+}
+
+#chatOffcanvas .error-msg {
+	color: red;
+	text-align: center;
+}
+
+/* message input and buttons control */
+#chatOffcanvas .message-input-container {
+	position: relative;
+	padding: 22px;
+	height: 230px;
+}
+
+#chatOffcanvas .message-input-container-emoji-active {
+	height: 600px;
+}
+
 .message-input-container .message-input {
 	width: 100%;
 	height: 100px;
 	background-color: rgb(244, 244, 244);
 	padding: 20px;
 	border-radius: 20px;
-  font-weight: 400;
-  font-family: "color-emoji";
+	font-weight: 400;
+	font-family: "color-emoji";
 }
 
 .message-input-container .message-btns {
@@ -515,6 +584,7 @@ video {
 	padding: 10px;
 }
 
+/* emoji */
 .message-input-container > ul {
 	display: flex;
 	flex-direction: row;

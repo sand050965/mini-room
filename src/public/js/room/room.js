@@ -50,8 +50,6 @@ const btnsArray = [
 	document.querySelector("#searchParticipantBtn"),
 	document.querySelector("#chatOffcanvasBtn"),
 	document.querySelector("#chatOffcanvasCloseBtn"),
-	document.querySelector("#sendFileBtn"),
-	document.querySelector("#sendImgBtn"),
 	document.querySelector("#emojiSelectorBtn"),
 	document.querySelector("#emojiCloseBtn"),
 	document.querySelector("#sendMsgBtn"),
@@ -70,6 +68,10 @@ document
 document
 	.querySelector("#messageInput")
 	.addEventListener("keyup", chatRoomMod.sendMsgBtnControl);
+
+document
+	.querySelector("#fileShare")
+	.addEventListener("change", chatRoomMod.uploadFile);
 
 document
 	.querySelector("#emojiSearch")
@@ -405,8 +407,15 @@ socket.on("user-denied-media-permission", async (participantId) => {
  * create message
  */
 socket.on("user-send-message", (elementObj) => {
-	console.log("msg");
 	chatRoomMod.displayMessage(elementObj);
+	chatRoomMod.scrollToBottom();
+});
+
+/**
+ * share file
+ */
+socket.on("user-share-file", (elementObj) => {
+	chatRoomMod.displayFileShared(elementObj);
 	chatRoomMod.scrollToBottom();
 });
 

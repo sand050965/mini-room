@@ -1,14 +1,18 @@
-/*--------------------------------------------------------------
-# Common
---------------------------------------------------------------*/
+/** @format */
+
+/**
+* --------------------------------------------------------------
+* # Common
+* --------------------------------------------------------------
+*/
+
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@600;700&display=swap");
 
 @font-face {
-  font-family: "color-emoji";
-  src: local("Apple Color Emoji"),
-       local("Segoe UI Emoji"), 
-       local("Segoe UI Symbol"),
-       local("Noto Color Emoji");
+	font-family: "color-emoji";
+	src: local("Apple Color Emoji"), local("Segoe UI Emoji"),
+		local("Segoe UI Symbol"), local("Noto Color Emoji");
+	unicode-range: U+1F60A;
 }
 
 body,
@@ -24,9 +28,9 @@ h6,
 html,
 img,
 p {
-  margin: 0;
-  padding: 0;
-  outline: 0 !important;
+	margin: 0;
+	padding: 0;
+	outline: 0 !important;
 }
 
 h1,
@@ -36,254 +40,254 @@ h4,
 h5,
 h6,
 button {
-  font-family: "Jost", sans-serif;
+	font-family: "Jost", sans-serif;
 }
 
 textarea,
 textarea:focus {
-  border: 0;
-  outline: 0;
-  resize: none;
+	border: 0;
+	outline: 0;
+	resize: none;
 }
 
 .none {
-  display: none !important;
+	display: none !important;
 }
 
 .center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .flex-row-center {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .vertical-center {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .align-center {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 .left-center {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
 }
 
 .right-center {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
 }
 
 li a {
-  line-height: 50px;
+	line-height: 50px;
 }
 
 button {
-  font-family: "Jost", sans-serif;
+	font-family: "Jost", sans-serif;
 }
 
 .none {
-  display: none;
+	display: none;
 }
 
 /*--------------------------------------------------------------
 # Header
 --------------------------------------------------------------*/
 header {
-  background-color: rgb(240, 239, 239);
+	background-color: rgb(240, 239, 239);
 }
 
 .navbar {
-  width: 1200px;
+	width: 1200px;
 }
 
 .navbar-grid {
-  display: grid;
-  grid-template-columns: 90% 5% 5%;
+	display: grid;
+	grid-template-columns: 90% 5% 5%;
 }
 
 nav .navbar-brand {
-  width: 225px;
+	width: 225px;
 }
 
 nav .navbar-brand .logo {
-  color: rgb(20, 55, 101);
-  padding: 10px;
-  font-size: 30px;
-  font-weight: 700;
-  font-family: "Open Sans", sans-serif;
+	color: rgb(20, 55, 101);
+	padding: 10px;
+	font-size: 30px;
+	font-weight: 700;
+	font-family: "Open Sans", sans-serif;
 }
 
 nav .navbar-brand img {
-  width: 50px;
-  height: 50px;
+	width: 50px;
+	height: 50px;
 }
 
 nav .setting-container {
-  width: 37px;
-  height: 37px;
+	width: 37px;
+	height: 37px;
 }
 
 nav .avatar-container {
-  width: 48px;
-  height: 48px;
-  border: none;
-  background-color: #969699;
-  overflow: hidden;
-  cursor: pointer;
-  border-radius: 50%;
+	width: 48px;
+	height: 48px;
+	border: none;
+	background-color: #969699;
+	overflow: hidden;
+	cursor: pointer;
+	border-radius: 50%;
 }
 
 nav .avatar-container:hover {
-  opacity: 0.7;
+	opacity: 0.7;
 }
 
 nav .avatar-container img {
-  cursor: pointer;
-  min-width: 48px;
+	cursor: pointer;
+	min-width: 48px;
 }
 
 /*--------------------------------------------------------------
 # User Dropdown Menu
 --------------------------------------------------------------*/
 #userDropdownMenu .user-profile {
-  display: grid;
-  grid-template-columns: 48px auto;
-  align-items: center;
-  height: 70px;
-  border-bottom: 1px solid #000;
+	display: grid;
+	grid-template-columns: 48px auto;
+	align-items: center;
+	height: 70px;
+	border-bottom: 1px solid #000;
 }
 
 #userDropdownMenu .user-profile-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: #969699;
-  cursor: pointer;
-  overflow: hidden;
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	background-color: #969699;
+	cursor: pointer;
+	overflow: hidden;
 }
 
 #userDropdownMenu .user-profile-avatar img {
-  width: 100%;
+	width: 100%;
 }
 
 #userDropdownMenu .user-profile-name {
-  font-size: 19px;
-  padding: 15px;
+	font-size: 19px;
+	padding: 15px;
 }
 
 /*--------------------------------------------------------------
 # Modal
 --------------------------------------------------------------*/
 .modal .modal-dialog {
-  min-width: 550px !important;
+	min-width: 550px !important;
 }
 
 .modal h1 {
-  color: #000;
+	color: #000;
 }
 
 /*--------------------------------------------------------------
 # Preloader
 --------------------------------------------------------------*/
 .preloader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 9999;
-  overflow: hidden;
-  background: rgba(0, 0, 0, 0.5);
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 9999;
+	overflow: hidden;
+	background: rgba(0, 0, 0, 0.5);
 }
 
 .preloader:before {
-  content: "";
-  position: fixed;
-  top: calc(50% - 30px);
-  left: calc(50% - 30px);
-  border: 6px solid #fff;
-  border-top-color: #000;
-  border-bottom-color: #fff;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  -webkit-animation: animate-preloader 1s linear infinite;
-  animation: animate-preloader 1s linear infinite;
+	content: "";
+	position: fixed;
+	top: calc(50% - 30px);
+	left: calc(50% - 30px);
+	border: 6px solid #fff;
+	border-top-color: #000;
+	border-bottom-color: #fff;
+	border-radius: 50%;
+	width: 60px;
+	height: 60px;
+	-webkit-animation: animate-preloader 1s linear infinite;
+	animation: animate-preloader 1s linear infinite;
 }
 
 @-webkit-keyframes animate-preloader {
-  0% {
-    transform: rotate(0deg);
-  }
+	0% {
+		transform: rotate(0deg);
+	}
 
-  100% {
-    transform: rotate(360deg);
-  }
+	100% {
+		transform: rotate(360deg);
+	}
 }
 
 @keyframes animate-preloader {
-  0% {
-    transform: rotate(0deg);
-  }
+	0% {
+		transform: rotate(0deg);
+	}
 
-  100% {
-    transform: rotate(360deg);
-  }
+	100% {
+		transform: rotate(360deg);
+	}
 }
 
 /*--------------------------------------------------------------
 # Button Style
 --------------------------------------------------------------*/
 .circle-btn {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  padding: 8px;
-  cursor: pointer;
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	padding: 8px;
+	cursor: pointer;
 }
 
 .oval-btn {
-  width: 100%;
-  height: 100%;
-  border-radius: 40px;
-  padding: 8px 12px;
-  cursor: pointer;
+	width: 100%;
+	height: 100%;
+	border-radius: 40px;
+	padding: 8px 12px;
+	cursor: pointer;
 }
 
 .btn-able {
-  background-color: #3c4043;
+	background-color: #3c4043;
 }
 
 .btn-able:hover {
-  background-color: #4d5256;
+	background-color: #4d5256;
 }
 
 .btn-disable {
-  background-color: #ea4335;
+	background-color: #ea4335;
 }
 
 .btn-disable:hover {
-  background-color: #f44d44;
+	background-color: #f44d44;
 }
 
 .main-btn-clicked {
-  background-color: #176cf5 !important;
+	background-color: #176cf5 !important;
 }
 
 .side-btn-clicked {
-  color: #8ab4f8 !important;
+	color: #8ab4f8 !important;
 }
