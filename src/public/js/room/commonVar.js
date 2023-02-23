@@ -25,3 +25,5 @@ const offcanvasMap = new Map();
 const screenShareMap = new Map();
 
 const participantMap = new Map();
+
+const inviteListArray = [];

@@ -174,6 +174,7 @@ class ChatRoomMod {
 		messageSenderAvatar.appendChild(messageSenderAvatarImg);
 
 		a.href = elementObj.fileUrl;
+		a.setAttribute("target", "_blank");
 		fileName.textContent = elementObj.fileName;
 		fileSize.textContent = elementObj.fileSize;
 		fileIcon.classList.add("fa-solid");

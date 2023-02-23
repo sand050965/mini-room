@@ -11,6 +11,7 @@ import MainDisplayMod from "../models/mainDisplayMod.js";
 import RoomInfoMod from "../models/roomInfoMod.js";
 import ChatRoomMod from "../models/chatRoomMod.js";
 import ParticipantMod from "../models/participantMod.js";
+import MailMod from "../models/mailMod.js";
 
 /**
  * ============================== Initiate Controller ==============================
@@ -27,15 +28,12 @@ const mainDisplayMod = new MainDisplayMod();
 const roomInfoMod = new RoomInfoMod();
 const chatRoomMod = new ChatRoomMod();
 const participantMod = new ParticipantMod();
+const mailMod = new MailMod();
 
 /**
  * ============================== Event Listeners ==============================
  */
-
 const btnsArray = [
-	document.querySelector("#addInviteList"),
-	document.querySelector("#sendEmail"),
-	document.querySelector("#inviteModalCloseBtn"),
 	document.querySelector("#audioBtn"),
 	document.querySelector("#videoBtn"),
 	document.querySelector("#screenShareBtn"),
@@ -46,6 +44,9 @@ const btnsArray = [
 	document.querySelector("#participantOffcanvasBtn"),
 	document.querySelector("#participantOffcanvasCloseBtn"),
 	document.querySelector("#addParticipantBtn"),
+	document.querySelector("#addInviteList"),
+	document.querySelector("#sendEmail"),
+	document.querySelector("#inviteModalCloseBtn"),
 	document.querySelector("#closeParticpantList"),
 	document.querySelector("#searchParticipantBtn"),
 	document.querySelector("#chatOffcanvasBtn"),
@@ -63,7 +64,15 @@ window.addEventListener("beforeunload", roomController.closeWindow);
 
 document
 	.querySelector("#searchParticipantInput")
-	.addEventListener("keyup", roomController.searchInputControl);
+	.addEventListener("keyup", participantMod.searchBtnControl);
+
+document
+	.querySelector("#senderName")
+	.addEventListener("keyup", mailMod.recheckSenderName);
+
+document
+	.querySelector("#recipientEmail")
+	.addEventListener("keyup", mailMod.recheckRecipientEmail);
 
 document
 	.querySelector("#messageInput")
@@ -243,6 +252,7 @@ socket.on("user-connected", async (participantId, participantName) => {
 		screenShareStream: myScreenShareStream,
 	};
 	await connectToNewUser(DOMElement);
+	participantMod.displayJoinRoomNotify(participantName);
 });
 
 /**
@@ -422,7 +432,7 @@ socket.on("user-share-file", (elementObj) => {
 /**
  * user disconnected
  */
-socket.on("user-disconnected", async (participantId) => {
+socket.on("user-disconnected", async (participantId, participantName) => {
 	if (peers[participantId]) {
 		peers[participantId].close();
 	}
@@ -469,4 +479,5 @@ socket.on("user-disconnected", async (participantId) => {
 		otherVideos: document.querySelectorAll('[name="otherVideo"]'),
 	};
 	await mainDisplayMod.setRoomVideoGridStyle(videoDOMElement);
+	participantMod.displayLeaveRoomNotify(participantName);
 });

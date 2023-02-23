@@ -1,3 +1,5 @@
+/** @format */
+
 const express = require("express");
 const meetingController = require("../controllers/meetingController");
 const router = express.Router();

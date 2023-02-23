@@ -1,8 +1,15 @@
+/** @format */
+
 const express = require("express");
-const mailController = require("../controllers/mailController.js");
+const mailValidator = require("../validators/mailValidator");
+const mailController = require("../controllers/mailController");
 const router = express.Router();
 
 // send mail
-router.post("/", mailController.sendInviteEmail);
+router.post(
+	"/",
+	mailValidator.sendEmailValidator,
+	mailController.sendInviteEmail
+);
 
 module.exports = router;

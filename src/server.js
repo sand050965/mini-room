@@ -87,7 +87,7 @@ io.on("connection", (socket) => {
 				roomId: roomId,
 				participantId: participantId,
 			});
-			io.to(roomId).emit("user-disconnected", participantId); // emit to users in the room that a user just leave
+			io.to(roomId).emit("user-disconnected", participantId, participantName); // emit to users in the room that a user just leave
 		});
 	});
 });

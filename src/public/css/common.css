@@ -2,7 +2,7 @@
 
 /**
 * --------------------------------------------------------------
-* # Common
+* # Common (Element)
 * --------------------------------------------------------------
 */
 
@@ -50,6 +50,37 @@ textarea:focus {
 	resize: none;
 }
 
+li a {
+	line-height: 50px;
+}
+
+button {
+	font-family: "Jost", sans-serif;
+}
+
+/**
+* --------------------------------------------------------------
+* # Common (Scroll Bar Style)
+* --------------------------------------------------------------
+*/
+
+::-webkit-scrollbar {
+	-webkit-appearance: none;
+	width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+	border-radius: 5px;
+	background-color: rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+/**
+* --------------------------------------------------------------
+* # Common (Style)
+* --------------------------------------------------------------
+*/
+
 .none {
 	display: none !important;
 }
@@ -89,14 +120,6 @@ textarea:focus {
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-}
-
-li a {
-	line-height: 50px;
-}
-
-button {
-	font-family: "Jost", sans-serif;
 }
 
 .none {

@@ -103,11 +103,8 @@ class RoomController {
 			),
 			micStatusIcon: document.querySelector("#selfMicStatusIcon"),
 		};
-		if (e.target.id === "inviteModalCloseBtn") {
-		} else if (e.target.id === "addInviteList") {
-			this.mailMod.addInviteList();
-		} else if (e.target.id === "sendEmail") {
-		} else if (e.target.id.includes("audioBtn")) {
+		
+		if (e.target.id.includes("audioBtn")) {
 			// muteUnmute btn is clicked
 			const isMuted = await this.streamMod.muteUnmute(DOMElement);
 			this.streamMod.selfAudioControl(isMuted);
@@ -157,10 +154,17 @@ class RoomController {
 			this.offcanvasMod.offcanvasCloseControl(offcanvasDOMElement);
 			this.offcanvasMod.offcanvasCloseGrid();
 		} else if (e.target.id.includes("addParticipantBtn")) {
+			// add email to invite list
 			this.mailMod.initInviteListModal();
+		} else if (e.target.id === "addInviteList") {
+			this.mailMod.addInviteList();
+		} else if (e.target.id.includes("sendEmail")) {
+			// send invitation email
+			this.mailMod.doInvite();
 		} else if (e.target.id.includes("closeParticpantList")) {
 			// cancel search participant
 			this.participantMod.cancelSearchParticipant();
+			this.participantMod.searchBtnControl();
 		} else if (e.target.id.includes("searchParticipantBtn")) {
 			// search participant
 			this.participantMod.doSearchParticipant();
@@ -188,24 +192,8 @@ class RoomController {
 				offcanvasMap.get("isOpen").includes("participant") &&
 				searchParticipantInput.value.trim() !== ""
 			) {
-				this.participantMod.searchParticipant();
+				this.participantMod.doSearchParticipant();
 			}
-		}
-	};
-
-	searchInputControl = (e) => {
-		const searchParticipantBtn = document.querySelector(
-			"#searchParticipantBtn"
-		);
-
-		if (e.target.value === "") {
-			this.participantMod.cancelSearchParticipant();
-		}
-
-		if (e.target.value.trim() === "") {
-			searchParticipantBtn.classList.add("disabled");
-		} else {
-			searchParticipantBtn.classList.remove("disabled");
 		}
 	};
 
