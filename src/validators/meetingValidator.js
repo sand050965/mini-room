@@ -7,20 +7,16 @@ const Joi = require("joi");
 const JoiUtil = require("../utils/joiUtil");
 
 module.exports = {
-	sendEmailValidator: (req, res, next) => {
-		const data = {
-			senderName: req.body.senderName,
-			recipientEmailArray: req.body.recipientEmailArray,
-			roomId: req.body.roomId,
-		};
+	roomIdValidator: (req, res, next) => {
+		const data = { roomId: req.params.roomId };
 
-		if (!shortid.isValid(req.query.roomId)) {
+		if (!shortid.isValid(req.params.roomId)) {
 			return res
 				.status(400)
 				.json({ error: true, message: "Room id is invalid" });
 		}
 
-		const { error, value } = JoiUtil.sendEmailSchema.validate(data, {
+		const { error, value } = JoiUtil.roomIdSchema.validate(data, {
 			abortEarly: false,
 		});
 

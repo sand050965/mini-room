@@ -1,133 +1,183 @@
+/** @format */
+
 const express = require("express");
+require("dotenv").config();
+const shortid = require("shortid");
 const Joi = require("joi");
-
-const roomIdSchema = Joi.object({
-  roomId: Joi.string().required(),
-});
-
-const roomIdAndUserIdSchema = Joi.object({
-  roomId: Joi.string().required(),
-  participantId: Joi.string().required(),
-});
-
-const roomIdAndUserNameSchema = Joi.object({
-  roomId: Joi.string().required(),
-  participantName: Joi.string().required(),
-});
-
-const insertParticipantSchema = Joi.object({
-  roomId: Joi.string().required(),
-  participantId: Joi.string().required(),
-  participantName: Joi.string().required(),
-  avatarImgUrl: Joi.string().required(),
-  isMuted: Joi.boolean().required(),
-  isStoppedVideo: Joi.boolean().required(),
-});
+const JoiUtil = require("../utils/joiUtil");
 
 module.exports = {
-  insertParticipantValidator: (req, res, next) => {
-    const data = {
-      roomId: req.body.roomId,
-      participantId: req.body.participantId,
-      participantName: req.body.participantName,
-      avatarImgUrl: req.body.avatarImgUrl,
-      isMuted: req.body.isMuted,
-      isStoppedVideo: req.body.isStoppedVideo,
-    };
+	readyToJoinValidator: (req, res, next) => {
+		const data = {
+			roomId: req.body.roomId,
+			participantId: req.body.participantId,
+			participantName: req.body.participantName,
+			avatarImgUrl: req.body.avatarImgUrl,
+			isMuted: req.body.isMuted,
+			isStoppedVideo: req.body.isStoppedVideo,
+		};
 
-    const { error, value } = insertParticipantSchema.validate(data, {
-      abortEarly: false,
-    });
+		if (!shortid.isValid(req.body.roomId)) {
+			return res
+				.status(400)
+				.json({ error: true, message: "Room id is invalid" });
+		}
 
-    if (error) {
-      console.log(error);
-      return res.status(400).send(error.details[0].message);
-    }
+		const { error, value } = readyToJoinSchema.validate(data, {
+			abortEarly: false,
+		});
 
-    next();
-  },
+		if (error) {
+			if (process.env.NODE_ENV !== "development") {
+				console.log(error);
+			}
 
-  getParticipantValidator: (req, res, next) => {
-    const data = {
-      roomId: req.params.roomId,
-      participantId: req.query.participantId,
-    };
+			return res
+				.status(400)
+				.json({ error: true, message: error.details[0].message });
+		}
 
-    const { error, value } = roomIdAndUserIdSchema.validate(data, {
-      abortEarly: false,
-    });
+		next();
+	},
 
-    if (error) {
-      console.log(error);
-      return res.status(400).send(error.details[0].message);
-    }
+	getParticipantValidator: (req, res, next) => {
+		const data = {
+			roomId: req.params.roomId,
+			participantId: req.query.participantId,
+		};
 
-    next();
-  },
+		if (!shortid.isValid(req.params.roomId)) {
+			return res
+				.status(400)
+				.json({ error: true, message: "Room id is invalid" });
+		}
 
-  getAllParticipantsValidator: (req, res, next) => {
-    const data = { roomId: req.params.roomId };
+		const { error, value } = JoiUtil.roomParticipantSchema.validate(data, {
+			abortEarly: false,
+		});
 
-    const { error, value } = roomIdSchema.validate(data, { abortEarly: false });
+		if (error) {
+			if (process.env.NODE_ENV !== "development") {
+				console.log(error);
+			}
 
-    if (error) {
-      console.log(error);
-      return res.status(400).send(error.details[0].message);
-    }
+			return res
+				.status(400)
+				.json({ error: true, message: error.details[0].message });
+		}
 
-    next();
-  },
+		next();
+	},
 
-  getParticipantIdsByNameValidator: (req, res, next) => {
-    const data = {
-      roomId: req.query.roomId,
-      participantName: req.query.participantName,
-    };
+	getAllParticipantsValidator: (req, res, next) => {
+		const data = { roomId: req.params.roomId };
 
-    const { error, value } = roomIdAndUserNameSchema.validate(data, {
-      abortEarly: false,
-    });
+		if (!shortid.isValid(req.params.roomId)) {
+			return res
+				.status(400)
+				.json({ error: true, message: "Room id is invalid" });
+		}
 
-    if (error) {
-      console.log(error);
-      return res.status(400).send(error.details[0].message);
-    }
+		const { error, value } = JoiUtil.roomIdSchema.validate(data, {
+			abortEarly: false,
+		});
 
-    next();
-  },
+		if (error) {
+			if (process.env.NODE_ENV !== "development") {
+				console.log(error);
+			}
 
-  deleteAllParticipantsValidator: (req, res, next) => {
-    const data = {
-      roomId: req.body.roomId,
-    };
+			return res
+				.status(400)
+				.json({ error: true, message: error.details[0].message });
+		}
 
-    const { error, value } = roomIdSchema.validate(data, {
-      abortEarly: false,
-    });
+		next();
+	},
 
-    if (error) {
-      console.log(error);
-      return res.status(400).send(error.details[0].message);
-    }
+	searchParticipantValidator: (req, res, next) => {
+		const data = {
+			roomId: req.query.roomId,
+			participantName: req.query.participantName,
+		};
 
-    next();
-  },
+		if (!shortid.isValid(req.query.roomId)) {
+			return res
+				.status(400)
+				.json({ error: true, message: "Room id is invalid" });
+		}
 
-  participantLeaveValidator: (req, res, next) => {
-    const data = {
-      roomId: req.body.roomId,
-      participantId: req.body.participantId,
-    };
+		const { error, value } = JoiUtil.searchParticipantSchema.validate(data, {
+			abortEarly: false,
+		});
 
-    const { error, value } = roomIdAndUserIdSchema.validate(data, {
-      abortEarly: false,
-    });
+		if (error) {
+			if (process.env.NODE_ENV !== "development") {
+				console.log(error);
+			}
 
-    if (error) {
-      console.log(error);
-      return res.status(400).send(error.details[0].message);
-    }
+			return res
+				.status(400)
+				.json({ error: true, message: error.details[0].message });
+		}
 
-    next();
-  },
+		next();
+	},
+
+	participantLeaveValidator: (req, res, next) => {
+		const data = {
+			roomId: req.body.roomId,
+			participantId: req.body.participantId,
+		};
+
+		if (!shortid.isValid(req.body.roomId)) {
+			return res
+				.status(400)
+				.json({ error: true, message: "Room id is invalid" });
+		}
+
+		const { error, value } = JoiUtil.roomParticipantSchema.validate(data, {
+			abortEarly: false,
+		});
+
+		if (error) {
+			if (process.env.NODE_ENV !== "development") {
+				console.log(error);
+			}
+
+			return res
+				.status(400)
+				.json({ error: true, message: error.details[0].message });
+		}
+
+		next();
+	},
+
+	deleteAllParticipantsValidator: (req, res, next) => {
+		const data = {
+			roomId: req.query.roomId,
+		};
+
+		if (!shortid.isValid(req.body.roomId)) {
+			return res
+				.status(400)
+				.json({ error: true, message: "Room id is invalid" });
+		}
+
+		const { error, value } = JoiUtil.roomIdSchema.validate(data, {
+			abortEarly: false,
+		});
+
+		if (error) {
+			if (process.env.NODE_ENV !== "development") {
+				console.log(error);
+			}
+
+			return res
+				.status(400)
+				.json({ error: true, message: error.details[0].message });
+		}
+
+		next();
+	},
 };

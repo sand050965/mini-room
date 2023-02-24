@@ -1,10 +1,15 @@
 /** @format */
 
 const express = require("express");
-const meetingController = require("../controllers/meetingController");
 const router = express.Router();
+const meetingValidator = require("../validators/meetingValidator");
+const meetingController = require("../controllers/meetingController");
 
 // meeting room
-router.get("/:roomId", meetingController.getIntoMeeting);
+router.get(
+	"/:roomId",
+	meetingValidator.roomIdValidator,
+	meetingController.getIntoMeeting
+);
 
 module.exports = router;

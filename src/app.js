@@ -44,8 +44,4 @@ app.get("/", (req, res) => {
 	res.render("index");
 });
 
-app.use("/test/test", (req, res) => {
-	res.render("test");
-});
-
 module.exports = app;

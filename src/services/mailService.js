@@ -12,7 +12,7 @@ module.exports = {
 		const mailContent = {
 			from: `Mini Room <${senderName}>`,
 			to: recipientEmailArray,
-			subject: `Meet Invite from ${senderName}`,
+			subject: `Meeting invite: ${senderName} is inviting you to a meeting`,
 			html: `
         <div style="text-align: center; vertical-align: middle; width: 662px; padding: 20px 20px 40px 20px; background-color: #f1f3f4;">
           <div>

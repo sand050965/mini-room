@@ -1,113 +1,95 @@
+/** @format */
+
 const session = require("express-session");
+require("dotenv").config();
 const express = require("express");
 const Joi = require("joi");
-
-const getUserSchema = Joi.object({
-  email: Joi.string().required().email(),
-});
-
-const signupSchema = Joi.object({
-  email: Joi.string().required().email(),
-  password: Joi.string().min(6).max(30).required(),
-  username: Joi.string().min(1).max(20).required(),
-  avatarImgUrl: Joi.string().required(),
-});
-
-const loginSchema = Joi.object({
-  email: Joi.string().required().email(),
-  password: Joi.string().min(6).max(30).required(),
-});
-
-const changeUserAvatarSchema = Joi.object({
-  email: Joi.string().required().email(),
-  avatarImgUrl: Joi.string().required(),
-});
-
-const changeUsernameSchema = Joi.object({
-  email: Joi.string().required().email(),
-  username: Joi.string().min(1).max(20).required(),
-});
+const JoiUtil = require("../utils/joiUtil");
 
 module.exports = {
-  getUserValidator: (req, res, next) => {
-    const data = { email: req.session.email };
+	getUserValidator: (req, res, next) => {
+		const data = {
+			email: req.user.email,
+		};
 
-    const { error, value } = getUserSchema.validate(data, {
-      abortEarly: false,
-    });
+		const { error, value } = JoiUtil.getUserSchema.validate(data, {
+			abortEarly: false,
+		});
 
-    if (error) {
-      console.log(error);
-      return res.status(400).send(error.details[0].message);
-    }
+		if (error) {
+			if (process.env.NODE_ENV !== "development") {
+				console.log(error);
+			}
 
-    next();
-  },
+			return res
+				.status(400)
+				.json({ error: true, message: error.details[0].message });
+		}
 
-  signupValidator: (req, res, next) => {
-    const data = {
-      email: req.body.email,
-      password: req.body.password,
-      username: req.body.username,
-      avatarImgUrl: req.body.avatarImgUrl,
-    };
+		next();
+	},
 
-    const { error, value } = signupSchema.validate(data, { abortEarly: false });
+	signupValidator: (req, res, next) => {
+		const data = {
+			email: req.body.email,
+			password: req.body.password,
+			username: req.body.username,
+			avatarImgUrl: req.body.avatarImgUrl,
+		};
 
-    if (error) {
-      console.log(error);
-      return res.status(400).send(error.details[0].message);
-    }
+		const { error, value } = JoiUtil.signupSchema.validate(data, {
+			abortEarly: false,
+		});
 
-    next();
-  },
+		if (error) {
+			if (process.env.NODE_ENV !== "development") {
+				console.log(error);
+			}
 
-  loginValidator: (req, res, next) => {
-    const data = { email: req.body.email, password: req.body.password };
+			return res
+				.status(400)
+				.json({ error: true, message: error.details[0].message });
+		}
 
-    const { error, value } = loginSchema.validate(data, { abortEarly: false });
+		next();
+	},
 
-    if (error) {
-      console.log(error);
-      return res.status(400).send(error.details[0].message);
-    }
+	loginValidator: (req, res, next) => {
+		const data = { email: req.body.email, password: req.body.password };
 
-    next();
-  },
+		const { error, value } = JoiUtil.loginSchema.validate(data, {
+			abortEarly: false,
+		});
 
-  changeUserAvatarValidator: (req, res, next) => {
-    const data = {
-      email: req.body.email,
-      avatarImgUrl: req.body.avatarImgUrl,
-    };
+		if (error) {
+			console.log(error);
+			return res.status(400).send(error.details[0].message);
+		}
 
-    const { error, value } = changeUserAvatarSchema.validate(data, {
-      abortEarly: false,
-    });
+		next();
+	},
 
-    if (error) {
-      console.log(error);
-      return res.status(400).send(error.details[0].message);
-    }
+	changeUserInfoValidator: (req, res, next) => {
+		const data = {
+			email: req.body.email,
+			username: req.body.username,
+			avatarImgUrl: req.body.avatarImgUrl,
+		};
 
-    next();
-  },
+		const { error, value } = JoiUtil.changeUserInfoSchema.validate(data, {
+			abortEarly: false,
+		});
 
-  changeUsernameValidator: (req, res, next) => {
-    const data = {
-      email: req.body.email,
-      username: req.body.username,
-    };
+		if (error) {
+			if (process.env.NODE_ENV !== "development") {
+				console.log(error);
+			}
 
-    const { error, value } = changeUsernameSchema.validate(data, {
-      abortEarly: false,
-    });
+			return res
+				.status(400)
+				.json({ error: true, message: error.details[0].message });
+		}
 
-    if (error) {
-      console.log(error);
-      return res.status(400).send(error.details[0].message);
-    }
-
-    next();
-  },
+		next();
+	},
 };

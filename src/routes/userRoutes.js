@@ -1,3 +1,5 @@
+/** @format */
+
 const express = require("express");
 const router = express.Router();
 const userValidator = require("../validators/userValidator");
@@ -6,20 +8,20 @@ const userController = require("../controllers/userController");
 
 router.get("/", userController.getIntoUser);
 router
-  .get("/auth", JWTverify.verifyAccessToken, userController.getUserData)
-  .post("/auth", userValidator.signupValidator, userController.signup)
-  .put("/auth", userValidator.loginValidator, userController.login)
-  .delete("/auth", userController.logout);
+	.get(
+		"/auth",
+		JWTverify.verifyAccessToken,
+		userValidator.getUserValidator,
+		userController.getUserData
+	)
+	.post("/auth", userValidator.signupValidator, userController.signup)
+	.put("/auth", userValidator.loginValidator, userController.login)
+	.delete("/auth", userController.logout);
 
 router.post(
-  "/avatar",
-  userValidator.changeUserAvatarValidator,
-  userController.chageUserAvatar
-);
-router.post(
-  "/name",
-  userValidator.changeUsernameValidator,
-  userController.chageUsername
+	"/info",
+	userValidator.changeUserInfoValidator,
+	userController.chageUserInfo
 );
 
 module.exports = router;

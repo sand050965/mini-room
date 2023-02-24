@@ -1,34 +1,61 @@
-const express = require("express");
-const Joi = require("joi");
+/** @format */
 
-const roomIdSchema = Joi.object({
-  roomId: Joi.string().required(),
-});
+const express = require("express");
+require("dotenv").config();
+const shortid = require("shortid");
+const Joi = require("joi");
+const JoiUtil = require("../utils/joiUtil");
 
 module.exports = {
-  joinRoomValidator: (req, res, next) => {
-    const data = { roomId: req.query.roomId };
+	joinRoomValidator: (req, res, next) => {
+		const data = { roomId: req.query.roomId };
 
-    const { error, value } = roomIdSchema.validate(data, { abortEarly: false });
+		if (!shortid.isValid(req.query.roomId)) {
+			return res
+				.status(400)
+				.json({ error: true, message: "Room id is invalid" });
+		}
 
-    if (error) {
-      console.log(error);
-      return res.status(400).send(error.details[0].message);
-    }
+		const { error, value } = JoiUtil.roomIdSchema.validate(data, {
+			abortEarly: false,
+		});
 
-    next();
-  },
+		if (error) {
+			if (process.env.NODE_ENV !== "development") {
+				console.log(error);
+			}
 
-  closeRoomValidator: (req, res, next) => {
-    const data = { roomId: req.body.roomId };
+			return res
+				.status(400)
+				.json({ error: true, message: error.details[0].message });
+		}
 
-    const { error, value } = roomIdSchema.validate(data, { abortEarly: false });
+		next();
+	},
 
-    if (error) {
-      console.log(error);
-      return res.status(400).send(error.details[0].message);
-    }
+	closeRoomValidator: (req, res, next) => {
+		const data = { roomId: req.body.roomId };
 
-    next();
-  },
+		if (!shortid.isValid(req.query.roomId)) {
+			return res
+				.status(400)
+				.json({ error: true, message: "Room id is invalid" });
+		}
+
+		const { error, value } = JoiUtil.roomIdSchema.validate(data, {
+			abortEarly: false,
+		});
+
+		if (error) {
+			if (process.env.NODE_ENV !== "development") {
+				console.log(error);
+			}
+
+			return res
+				.status(400)
+				.json({ error: true, message: error.details[0].message });
+		}
+
+		next();
+	},
 };
