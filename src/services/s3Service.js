@@ -15,5 +15,8 @@ module.exports = {
 		return data;
 	},
 
-	deleteAvatarImg: async (params) => {},
+	deleteFile: async (params) => {
+		const result = await s3.deleteObject(params).promise();
+		return result;
+	},
 };

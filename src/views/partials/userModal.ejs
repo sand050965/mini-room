@@ -1,0 +1,160 @@
+<!-- @format -->
+
+<!-- ======= Modal ======= -->
+<div
+	id="userModalContainer"
+	class="modal fade"
+	tabindex="-1"
+	aria-labelledby="userModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="userModalLabel">Join Us Now</h1>
+				<button
+					id="userCloseBtn"
+					type="button"
+					class="btn-close"
+					data-bs-dismiss="modal"
+					data-bs-target="#userModalContainer"
+					aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div
+					id="authSuccess"
+					class="alert alert-success d-flex align-items-center none"
+					role="alert">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+						viewBox="0 0 16 16"
+						role="img"
+						aria-label="Success:">
+						<path
+							d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+					</svg>
+					<div id="authSuccessMsg"></div>
+				</div>
+				<div
+					id="authFailed"
+					class="alert alert-danger d-flex align-items-center none"
+					role="alert">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+						viewBox="0 0 16 16"
+						role="img"
+						aria-label="Danger:">
+						<path
+							d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+					</svg>
+					<div id="authFailedMsg"></div>
+				</div>
+				<form id="avatarForm" class="needs-validation">
+					<div
+						id="signUpAvatarContainer"
+						class="sign-up-avatar-container center none">
+						<div class="sign-up-avatar center">
+							<img
+								id="signUpAvatarImg"
+								class="avatar-img"
+								src="https://s3.amazonaws.com/www.miniroom.online/images/avatar.png" />
+							<div class="change-avatar">
+								<label for="avatarFileUpload" class="change-avatar-btn center">
+									<i class="fa-solid fa-camera"></i>
+								</label>
+								<input
+									id="avatarFileUpload"
+									name="avatar"
+									type="file"
+									accept="image/*"
+									class="none" />
+							</div>
+						</div>
+					</div>
+					<div id="signUpAvatarValid" class="valid-feedback">Looks good!</div>
+					<div id="signUpAvatarInvalid" class="invalid-feedback">
+						there are something wrong while avatar image is uploading!
+					</div>
+					<div id="signUpAvatarHelp" class="form-text sign-up-avatar-help">
+						Avatar image is only allowed to be these file types: [jpeg, jpg,
+						png], and the file size must be less than 5MB!
+					</div>
+					<div id="usernameContainer" class="mb-3 none">
+						<label for="username" class="form-label">User Name</label>
+						<input
+							id="username"
+							type="text"
+							class="form-control"
+							maxlength="20" />
+						<div class="valid-feedback">Looks good!</div>
+						<div class="invalid-feedback">name is not allowed to be empty!</div>
+					</div>
+					<div id="emailContainer" class="mb-3">
+						<label for="email" class="form-label">Email address</label>
+						<input
+							id="email"
+							type="email"
+							class="form-control"
+							aria-describedby="emailHelp" />
+						<div class="valid-feedback">Looks good!</div>
+						<div class="invalid-feedback">Email must be a valid email!</div>
+						<div id="emailHelp" class="form-text">
+							We'll never share your email with anyone else.
+						</div>
+					</div>
+					<div id="passwordContainer" class="mb-3">
+						<label for="password" class="form-label">Password</label>
+						<input
+							id="password"
+							type="password"
+							class="form-control"
+							minlength="6"
+							maxlength="30"
+							autocomplete="on" />
+						<div class="valid-feedback">Looks good!</div>
+						<div class="invalid-feedback">
+							password word length must be at 6 ~ 30 characters long!
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<div class="change-auth">
+					<div id="loginContainer">
+						Already have an account?
+						<a id="logIn" class="login">Login now!</a>
+					</div>
+					<div id="signUpContainer" class="none">
+						Don't have an account?
+						<a id="signUp" class="sign-up">Sign Up now!</a>
+					</div>
+				</div>
+				<button
+					id="userModalCloseBtn"
+					type="button"
+					class="btn btn-secondary none"
+					data-bs-dismiss="modal">
+					Close
+				</button>
+				<button id="logInBtn" type="button" class="btn btn-primary">
+					<span
+						id="logInPreloader"
+						class="spinner-border spinner-border-sm none"
+						role="status"
+						aria-hidden="true"></span>
+					<span id="logInBtnContent">Log In</span>
+				</button>
+				<button id="signUpBtn" type="button" class="btn btn-primary">
+					<span
+						id="signUpPreloader"
+						class="spinner-border spinner-border-sm none"
+						role="status"
+						aria-hidden="true"></span>
+					<span id="signUpBtnContent">Sign Up and Log In</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End Modal -->

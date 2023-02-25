@@ -1,11 +1,8 @@
 /** @format */
 
-/**
-* --------------------------------------------------------------
-* # Common (Element)
-* --------------------------------------------------------------
-*/
-
+/*--------------------------------------------------------------
+# Common (Element)
+--------------------------------------------------------------*/
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@600;700&display=swap");
 
 @font-face {
@@ -48,6 +45,10 @@ textarea:focus {
 	border: 0;
 	outline: 0;
 	resize: none;
+}
+
+a {
+	text-decoration: none;
 }
 
 li a {
@@ -124,92 +125,6 @@ button {
 
 .none {
 	display: none;
-}
-
-/*--------------------------------------------------------------
-# Header
---------------------------------------------------------------*/
-header {
-	background-color: rgb(240, 239, 239);
-}
-
-.navbar {
-	width: 1200px;
-}
-
-.navbar-grid {
-	display: grid;
-	grid-template-columns: 90% 5% 5%;
-}
-
-nav .navbar-brand {
-	width: 225px;
-}
-
-nav .navbar-brand .logo {
-	color: rgb(20, 55, 101);
-	padding: 10px;
-	font-size: 30px;
-	font-weight: 700;
-	font-family: "Open Sans", sans-serif;
-}
-
-nav .navbar-brand img {
-	width: 50px;
-	height: 50px;
-}
-
-nav .setting-container {
-	width: 37px;
-	height: 37px;
-}
-
-nav .avatar-container {
-	width: 48px;
-	height: 48px;
-	border: none;
-	background-color: #969699;
-	overflow: hidden;
-	cursor: pointer;
-	border-radius: 50%;
-}
-
-nav .avatar-container:hover {
-	opacity: 0.7;
-}
-
-nav .avatar-container img {
-	cursor: pointer;
-	min-width: 48px;
-}
-
-/*--------------------------------------------------------------
-# User Dropdown Menu
---------------------------------------------------------------*/
-#userDropdownMenu .user-profile {
-	display: grid;
-	grid-template-columns: 48px auto;
-	align-items: center;
-	height: 70px;
-	border-bottom: 1px solid #000;
-}
-
-#userDropdownMenu .user-profile-avatar {
-	width: 48px;
-	height: 48px;
-	border-radius: 50%;
-	background-color: #969699;
-	cursor: pointer;
-	overflow: hidden;
-}
-
-#userDropdownMenu .user-profile-avatar img {
-	width: 100%;
-}
-
-#userDropdownMenu .user-profile-name {
-	font-size: 19px;
-	padding: 15px;
 }
 
 /*--------------------------------------------------------------

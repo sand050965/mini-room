@@ -1,6 +1,5 @@
 /** @format */
 
-
 const JoiUtil = require("../utils/joiUtil");
 const Joi = require("joi");
 
@@ -50,6 +49,11 @@ module.exports = {
 	changeUserInfoSchema: Joi.object({
 		email: Joi.string().required().email(),
 		username: Joi.string().max(20).required(),
+		avatarImgUrl: Joi.string().uri().required(),
+	}),
+
+	// s3
+	deleteAvatarSchema: Joi.object({
 		avatarImgUrl: Joi.string().uri().required(),
 	}),
 

@@ -89,6 +89,10 @@ class UserController {
 		await this.logInBtn.classList.add("none");
 	};
 
+	getToMemberProfile = () => {
+		window.location = "/member";
+	};
+
 	doAuth = async () => {
 		await this.initAuth();
 		if (this.authStatus.textContent === "Log In / Sign Up") {
@@ -139,7 +143,7 @@ class UserController {
 	};
 
 	doSignUp = async () => {
-		this.commonMod.openPreload();
+		this.commonMod.openPreload("#preloader");
 		await this.userMod.setSignUpBtn(true);
 		this.userMod.resetValidateStyle();
 
@@ -183,7 +187,9 @@ class UserController {
 			"https://s3.amazonaws.com/www.miniroom.online/images/avatar.png"
 		) {
 			// upload avatar image to s3 first
-			const s3Result = await this.userMod.storeAvatarToS3();
+			const s3Result = await this.userMod.storeAvatarToS3({
+				file: this.avatarFileUpload.files[0],
+			});
 
 			const isS3Success = await this.displayAuthResult(
 				"avatarUpload",
@@ -219,6 +225,7 @@ class UserController {
 		}
 		await this.userMod.logOut();
 		await this.initAuth();
+		window.location = "/";
 	};
 
 	uploadAvatar = async () => {
@@ -299,6 +306,7 @@ class UserController {
 		) {
 			return;
 		}
+
 		this.authFailed.classList.add("none");
 		if (
 			!this.inputValidator.passwordValidator({ password: this.password.value })
@@ -333,6 +341,10 @@ class UserController {
 			this.authSuccessMsg.textContent = successMsg;
 			return true;
 		}
+	};
+
+	closeUserModal = () => {
+		this.userModal.hide();
 	};
 }
 

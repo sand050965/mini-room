@@ -1,90 +1,153 @@
-/*--------------------------------------------------------------
-# General
---------------------------------------------------------------*/
-@import "common.css";
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  line-height: 1.2;
-}
-
-.form-label,
-.form-text {
-  color: #fff;
-}
-
-.form-label {
-  font-size: 19px;
-  font-weight: 700;
-}
+/** @format */
 
 /*--------------------------------------------------------------
-# Hero Section
+# Header
 --------------------------------------------------------------*/
-.hero {
-  width: 100%;
-  height: 80vh;
-  background: rgb(19, 58, 103);
+header {
+	background-color: rgb(240, 239, 239);
 }
 
-.hero .alert-container {
-  width: 500px;
-  position: absolute;
-  bottom: 200px;
+.navbar {
+	width: 1200px;
 }
 
-@media (max-width: 1400px) {
-  .hero .left-contet {
-    width: 60% !important;
-  }
-
-  .hero .right-contet {
-    width: 40% !important;
-  }
+.navbar-grid {
+	display: grid;
+	grid-template-columns: 90% 5% 5%;
 }
 
-@media (max-width: 1200px) {
-  .navbar {
-    width: 90vw;
-  }
+nav .navbar-brand {
+	width: 225px;
 }
 
-@media (max-width: 991px) {
-  .hero {
-    position: relative;
-    height: 100vh;
-    text-align: center;
-  }
+nav .navbar-brand .logo {
+	color: rgb(20, 55, 101);
+	padding: 10px;
+	font-size: 30px;
+	font-weight: 700;
+	font-family: "Open Sans", sans-serif;
+}
 
-  .hero .left-contet {
-    width: 100% !important;
-  }
+nav .navbar-brand img {
+	width: 50px;
+	height: 50px;
+}
 
-  .hero .right-contet {
-    width: 100% !important;
-  }
+nav .setting-container {
+	width: 37px;
+	height: 37px;
+}
 
-  .hero .animated {
-    -webkit-animation: none;
-    animation: none;
-  }
+nav .avatar-container {
+	width: 48px;
+	height: 48px;
+	border: none;
+	background-color: #969699;
+	overflow: hidden;
+	cursor: pointer;
+	border-radius: 50%;
+}
 
-  .hero .hero-img {
-    position: absolute;
-    top: 180px;
-    max-width: 720px;
-    text-align: center;
-    vertical-align: middle;
-  }
+nav .avatar-container:hover {
+	opacity: 0.7;
+}
 
-  .hero .hero-img img {
-    width: 50%;
-  }
+nav .avatar-container img {
+	cursor: pointer;
+	min-width: 48px;
+}
+
+/*--------------------------------------------------------------
+# User Dropdown Menu
+--------------------------------------------------------------*/
+#userDropdownMenu .user-profile {
+	display: grid;
+	grid-template-columns: 48px auto;
+	align-items: center;
+	height: 70px;
+	border-bottom: 1px solid #000;
+}
+
+#userDropdownMenu .user-profile-avatar {
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	background-color: #969699;
+	cursor: pointer;
+	overflow: hidden;
+}
+
+#userDropdownMenu .user-profile-avatar img {
+	width: 100%;
+}
+
+#userDropdownMenu .user-profile-name {
+	font-size: 19px;
+	padding: 15px;
+}
+
+/*--------------------------------------------------------------
+# User Modal
+--------------------------------------------------------------*/
+.modal .sign-up-avatar-container {
+	position: relative;
+	margin-bottom: 20px;
+}
+
+.modal .sign-up-avatar {
+	width: 200px;
+	height: 200px;
+	border-radius: 50%;
+	overflow: hidden;
+	background-color: #969699;
+}
+
+.modal .sign-up-avatar-container .avatar-img {
+	min-width: 100%;
+}
+
+.modal .sign-up-avatar-container .change-avatar {
+	position: absolute;
+	right: 160px;
+	bottom: 0;
+	cursor: pointer;
+}
+
+.modal .sign-up-avatar-container .change-avatar:hover {
+	color: #3c3c3d;
+}
+
+.modal .sign-up-avatar-container .change-avatar-btn {
+	width: 50px;
+	height: 50px;
+	padding: 5px;
+	border-radius: 50%;
+	background-color: #70a9a1;
+	cursor: pointer;
+}
+
+.modal .sign-up-avatar-container i {
+	cursor: pointer;
+	font-size: 19px;
+}
+
+.modal .sign-up-avatar-help {
+	margin-bottom: 30px;
+}
+
+.modal .change-auth {
+	position: absolute;
+	left: 10px;
+	width: auto;
+}
+
+.modal .sign-up,
+.modal .login {
+	cursor: pointer;
+}
+
+.modal .sign-up:hover,
+.modal .login:hover {
+	color: blue;
+	text-decoration: underline;
 }

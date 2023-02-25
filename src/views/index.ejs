@@ -6,6 +6,12 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!--preload -->
+		<link
+			rel="preload"
+			href="https://kit.fontawesome.com/8de498932c.js"
+			crossorigin="anonymous"
+			as="script" />
 		<!-- favicon -->
 		<link
 			rel="icon"
@@ -20,16 +26,8 @@
 			href="https://getbootstrap.com/docs/5.3/assets/css/docs.css"
 			rel="stylesheet" />
 		<!-- Template Main CSS File -->
+		<link rel="stylesheet" href="/css/user.css" />
 		<link rel="stylesheet" href="/css/index.css" />
-		<!-- Vendor JS Files -->
-		<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-		<script
-			src="https://kit.fontawesome.com/8de498932c.js"
-			crossorigin="anonymous"></script>
-		<script
-			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-			integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-			crossorigin="anonymous"></script>
 		<title>Mini Room</title>
 	</head>
 	<body>
@@ -37,224 +35,11 @@
 		<div id="indexPreloader" class="index-preloader"></div>
 		<div id="preloader" class="preloader none"></div>
 		<!-- ======= Header ======= -->
-		<header class="center">
-			<nav class="navbar navbar-grid">
-				<div>
-					<a class="navbar-brand align-center" href="/">
-						<img
-							src="https://s3.amazonaws.com/www.miniroom.online/images/logo.png"
-							alt=""
-							class="d-inline-block align-text-top" />
-						<span class="logo">Mini Room</span>
-					</a>
-				</div>
-				<!-- <div class="setting-container">
-                    <img src="https://s3.amazonaws.com/www.miniroom.online/images/settings.png" alt=""/>
-                </div> -->
-				<div id="userDropdown" class="dropdown">
-					<button
-						id="userAuth"
-						class="avatar-container center"
-						type="button"
-						aria-expanded="false">
-						<img
-							id="avatarImg"
-							src="https://s3.amazonaws.com/www.miniroom.online/images/avatar.png"
-							alt="" />
-					</button>
-					<ul id="userDropdownMenu" class="dropdown-menu">
-						<li>
-							<button class="dropdown-item" type="button">
-								<div id="userProfile" class="user-profile">
-									<div class="user-profile-avatar center">
-										<img id="userProfileAvatarImg" />
-									</div>
-									<div
-										id="userProfileName"
-										class="user-profile-name left-center"></div>
-								</div>
-							</button>
-						</li>
-						<li>
-							<button class="dropdown-item center" type="button">
-								Shedule
-							</button>
-						</li>
-						<li>
-							<button
-								id="authStatus"
-								class="dropdown-item center"
-								type="button">
-								Log In / Sign Up
-							</button>
-						</li>
-					</ul>
-				</div>
-			</nav>
-			<!-- .logo -->
-		</header>
+		<%- include("./partials/header.ejs") %>
 		<!-- End Header -->
-		<!-- Modal -->
-		<div
-			class="modal fade"
-			id="userModalContainer"
-			tabindex="-1"
-			aria-labelledby="userModalLabel"
-			aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h1 class="modal-title fs-5" id="userModalLabel">Join Us Now</h1>
-						<button
-							type="button"
-							class="btn-close"
-							data-bs-dismiss="modal"
-							aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<div
-							id="authSuccess"
-							class="alert alert-success d-flex align-items-center none"
-							role="alert">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
-								viewBox="0 0 16 16"
-								role="img"
-								aria-label="Success:">
-								<path
-									d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
-							</svg>
-							<div id="authSuccessMsg"></div>
-						</div>
-						<div
-							id="authFailed"
-							class="alert alert-danger d-flex align-items-center none"
-							role="alert">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
-								viewBox="0 0 16 16"
-								role="img"
-								aria-label="Danger:">
-								<path
-									d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-							</svg>
-							<div id="authFailedMsg"></div>
-						</div>
-						<form id="avatarForm" class="needs-validation">
-							<div
-								id="signUpAvatarContainer"
-								class="sign-up-avatar-container center none">
-								<div class="sign-up-avatar center">
-									<img
-										id="signUpAvatarImg"
-										class="avatar-img"
-										src="https://s3.amazonaws.com/www.miniroom.online/images/avatar.png" />
-									<div class="change-avatar">
-										<label
-											for="avatarFileUpload"
-											class="change-avatar-btn center">
-											<i class="fa-solid fa-camera"></i>
-										</label>
-										<input
-											id="avatarFileUpload"
-											name="avatar"
-											type="file"
-											accept="image/*"
-											class="none" />
-									</div>
-								</div>
-							</div>
-							<div id="signUpAvatarValid" class="valid-feedback">
-								Looks good!
-							</div>
-							<div id="signUpAvatarInvalid" class="invalid-feedback">
-								there are something wrong while avatar image is uploading!
-							</div>
-							<div id="signUpAvatarHelp" class="form-text sign-up-avatar-help">
-								Avatar image is only allowed to be these file types: [jpeg, jpg,
-								png], and the file size must be less than 5MB!
-							</div>
-							<div id="usernameContainer" class="mb-3 none">
-								<label for="username" class="form-label">User Name</label>
-								<input
-									id="username"
-									type="text"
-									class="form-control"
-									maxlength="20" />
-								<div class="valid-feedback">Looks good!</div>
-								<div class="invalid-feedback">
-									name is not allowed to be empty!
-								</div>
-							</div>
-							<div id="emailContainer" class="mb-3">
-								<label for="email" class="form-label">Email address</label>
-								<input
-									id="email"
-									type="email"
-									class="form-control"
-									aria-describedby="emailHelp" />
-								<div class="valid-feedback">Looks good!</div>
-								<div class="invalid-feedback">email must be a valid email!</div>
-								<div id="emailHelp" class="form-text">
-									We'll never share your email with anyone else.
-								</div>
-							</div>
-							<div id="passwordContainer" class="mb-3">
-								<label for="password" class="form-label">Password</label>
-								<input
-									id="password"
-									type="password"
-									class="form-control"
-									minlength="6"
-									maxlength="30"
-									autocomplete="on" />
-								<div class="valid-feedback">Looks good!</div>
-								<div class="invalid-feedback">
-									password word length must be at least 6 characters long!
-								</div>
-							</div>
-						</form>
-					</div>
-					<div class="modal-footer">
-						<div class="change-auth">
-							<div id="loginContainer">
-								Already have an account?
-								<a id="logIn" class="login">Login now!</a>
-							</div>
-							<div id="signUpContainer" class="none">
-								Don't have an account?
-								<a id="signUp" class="sign-up">Sign Up now!</a>
-							</div>
-						</div>
-						<button
-							id="userModalCloseBtn"
-							type="button"
-							class="btn btn-secondary none"
-							data-bs-dismiss="modal">
-							Close
-						</button>
-						<button id="logInBtn" type="button" class="btn btn-primary">
-							<span
-								id="logInPreloader"
-								class="spinner-border spinner-border-sm none"
-								role="status"
-								aria-hidden="true"></span>
-							<span id="logInBtnContent">Log In</span>
-						</button>
-						<button id="signUpBtn" type="button" class="btn btn-primary">
-							<span
-								id="signUpPreloader"
-								class="spinner-border spinner-border-sm none"
-								role="status"
-								aria-hidden="true"></span>
-							<span id="signUpBtnContent">Sign Up and Log In</span>
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
+		<!-- ======= Modal ======= -->
+		<%- include("./partials/userModal.ejs") %>
+		<!-- End Modal -->
 		<!-- ======= Hero Section ======= -->
 		<section class="hero center">
 			<div class="container">
@@ -343,6 +128,15 @@
 		<!-- End Hero -->
 	</body>
 </html>
+<!-- Vendor JS Files -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script
+	src="https://kit.fontawesome.com/8de498932c.js"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+	crossorigin="anonymous"></script>
 <!-- Template Main JS File -->
-<script type="module" src="../js/index/index.js"></script>
 <script type="module" src="../js/user/user.js"></script>
+<script type="module" src="../js/index/index.js"></script>

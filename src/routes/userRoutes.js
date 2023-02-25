@@ -2,11 +2,10 @@
 
 const express = require("express");
 const router = express.Router();
-const userValidator = require("../validators/userValidator");
 const JWTverify = require("../middleware/JWTverify");
+const userValidator = require("../validators/userValidator");
 const userController = require("../controllers/userController");
 
-router.get("/", userController.getIntoUser);
 router
 	.get(
 		"/auth",
@@ -18,10 +17,18 @@ router
 	.put("/auth", userValidator.loginValidator, userController.login)
 	.delete("/auth", userController.logout);
 
-router.post(
+router.put(
 	"/info",
+	JWTverify.verifyAccessToken,
 	userValidator.changeUserInfoValidator,
 	userController.chageUserInfo
+);
+
+router.put(
+	"/token",
+	JWTverify.verifyAccessToken,
+	userValidator.refreshUserValidator,
+	userController.refreshUserToken
 );
 
 module.exports = router;

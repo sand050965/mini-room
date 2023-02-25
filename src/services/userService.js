@@ -27,8 +27,12 @@ module.exports = {
 
 	updateUserInfo: async (data) => {
 		return await User.updateOne(
-			{ email: data.email },
-			{ username: data.username, avatarImgUrl: data.avatarImgUrl }
+			{ email: data.originEmail },
+			{
+				email: data.email,
+				username: data.username,
+				avatarImgUrl: data.avatarImgUrl,
+			}
 		);
 	},
 };

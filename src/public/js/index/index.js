@@ -14,7 +14,6 @@ const userController = new UserController();
  */
 const init = async () => {
 	await commonMod.initAOS(AOS);
-	await userController.initAuth();
 	setTimeout(() => {
 		commonMod.closePreload("#indexPreloader");
 	}, 3000);

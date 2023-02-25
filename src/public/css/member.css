@@ -1,0 +1,97 @@
+/** @format */
+
+/*--------------------------------------------------------------
+# General
+--------------------------------------------------------------*/
+@import "common.css";
+
+/*--------------------------------------------------------------
+# Header
+--------------------------------------------------------------*/
+.hero {
+	width: 100%;
+	height: 80vh;
+	background: rgb(19, 58, 103);
+	padding: 100px;
+}
+
+.hero .container {
+	display: grid;
+	grid-template-columns: repeat(2, 50%);
+	background-color: #fff;
+	border-radius: 20px;
+	padding: 50px;
+	height: 100%;
+}
+
+/* left content */
+.hero .left-content img {
+	width: 80%;
+}
+
+/* right-content */
+.hero .right-content {
+	width: 100%;
+}
+
+/*--------------------------------------------------------------
+# Member Form
+--------------------------------------------------------------*/
+.right-content .member-avatar-container {
+	margin-bottom: 20px;
+}
+
+.right-content .member-avatar-content {
+	position: relative;
+}
+
+.right-content .member-avatar {
+	width: 200px;
+	height: 200px;
+	border-radius: 50%;
+	overflow: hidden;
+	background-color: #969699;
+	border: 1px solid #969699;
+}
+
+.right-content .avatar-img {
+	min-width: 100%;
+}
+
+.right-content .change-avatar {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	cursor: pointer;
+}
+
+.right-content .change-avatar:hover {
+	color: #3c3c3d;
+}
+
+.right-content .change-avatar-btn {
+	width: 50px;
+	height: 50px;
+	padding: 5px;
+	border-radius: 50%;
+	background-color: #6e75fb;
+	cursor: pointer;
+}
+
+.right-content .member-avatar-container i {
+	cursor: pointer;
+	font-size: 19px;
+}
+
+.right-content .input-help {
+	font-size: 19px;
+	margin-bottom: 20px;
+}
+
+.right-content .member-btns {
+	margin-top: 20px;
+}
+
+.right-content .member-btns button {
+	margin: 20px;
+}

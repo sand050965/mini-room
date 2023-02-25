@@ -1,91 +1,28 @@
+/** @format */
+
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+
 @import "common.css";
-
-/*--------------------------------------------------------------
-# Header
---------------------------------------------------------------*/
-header {
-  background-color: rgb(240, 239, 239);
-}
-
-.navbar {
-  width: 1200px;
-}
-
-.navbar-grid {
-  display: grid;
-  grid-template-columns: 90% 5% 5%;
-}
-
-nav .navbar-brand {
-  width: 225px;
-}
-
-nav .navbar-brand .logo {
-  color: rgb(20, 55, 101);
-  padding: 10px;
-  font-size: 30px;
-  font-weight: 700;
-  font-family: "Open Sans", sans-serif;
-}
-
-nav .navbar-brand img {
-  width: 50px;
-  height: 50px;
-}
-
-nav .setting-container {
-  width: 37px;
-  height: 37px;
-}
-
-nav .avatar-container {
-  width: 45px;
-  height: 45px;
-}
-
-nav .avatar-container,
-nav .setting-container {
-  border-radius: 50%;
-  cursor: pointer;
-  padding: 5px;
-}
-
-nav .avatar-container:hover,
-nav .setting-container:hover {
-  background-color: #e1e1e3;
-}
-
-nav .avatar-container img {
-  background-color: #969699;
-}
-
-nav .setting-container img,
-nav .avatar-container img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-}
 
 /*--------------------------------------------------------------
 # Hero Section
 --------------------------------------------------------------*/
 .hero {
-  width: 100%;
-  height: 80vh;
-  background: rgb(19, 58, 103);
+	width: 100%;
+	height: 80vh;
+	background: rgb(19, 58, 103);
 }
 
 .hero h1 {
-  margin: 0 0 10px 0;
-  font-size: 48px;
-  font-weight: 700;
-  line-height: 56px;
-  color: #fff;
+	margin: 0 0 10px 0;
+	font-size: 48px;
+	font-weight: 700;
+	line-height: 56px;
+	color: #fff;
 }
 
 .hero .error-title {
-  margin-bottom: 100px;
+	margin-bottom: 100px;
 }

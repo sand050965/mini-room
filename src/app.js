@@ -15,6 +15,7 @@ const mailRoutes = require("./routes/mailRoutes");
 const userRoutes = require("./routes/userRoutes");
 const s3Routes = require("./routes/s3Routes");
 const memberRoutes = require("./routes/memberRoutes");
+const errorRoutes = require("./routes/errorRoutes");
 const thankyouRoutes = require("./routes/thankyouRoutes");
 
 // view engine setup
@@ -35,6 +36,7 @@ app.use("/api/room", roomRoutes);
 app.use("/api/mail", mailRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/s3", s3Routes);
+app.use("/error", errorRoutes);
 app.use("/member", memberRoutes);
 app.use("/thankyou", thankyouRoutes);
 app.use("/", meetingRoutes);
