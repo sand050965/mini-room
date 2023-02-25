@@ -23,7 +23,7 @@ module.exports = {
 				.json({ error: true, message: "Room id is invalid" });
 		}
 
-		const { error, value } = readyToJoinSchema.validate(data, {
+		const { error, value } = JoiUtil.readyToJoinSchema.validate(data, {
 			abortEarly: false,
 		});
 
