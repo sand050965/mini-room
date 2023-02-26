@@ -3,7 +3,7 @@
 const express = require("express");
 const router = express.Router();
 require("dotenv").config();
-const fileUpload = require("../middleware/fileUpload");
+const multerUpload = require("../middleware/multerUpload");
 const s3Validator = require("../validators/s3Validator");
 const s3Controller = require("../controllers/s3Controller");
 
@@ -26,8 +26,8 @@ router.use((error, req, res, next) => {
 // upload avatar
 router.post(
 	"/avatar",
-	fileUpload.uploadAvatarImg.single("avatar"),
-	fileUpload.uploadErrorHandler,
+	multerUpload.uploadAvatarImg.single("avatar"),
+	multerUpload.uploadErrorHandler,
 	s3Controller.uploadAvatarImg
 );
 
@@ -41,8 +41,8 @@ router.delete(
 // upload file
 router.post(
 	"/file",
-	fileUpload.uploadFile.single("file"),
-	fileUpload.uploadErrorHandler,
+	multerUpload.uploadFile.single("file"),
+	multerUpload.uploadErrorHandler,
 	s3Controller.uploadFile
 );
 
