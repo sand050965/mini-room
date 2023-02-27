@@ -21,22 +21,11 @@ const errorRoutes = require("./routes/errorRoutes");
 const thankyouRoutes = require("./routes/thankyouRoutes");
 
 require("dotenv").config();
-// require("./middleware/passport")(passport);
-// require("https").globalAgent.options.rejectUnauthorized = false;
 
 // view engine setup
 const app = express();
 app.set("views", path.resolve(__dirname, "./views"));
 app.set("view engine", "ejs");
-
-// Sessions
-app.use(
-	session({
-		secret: process.env.SECRET,
-		resave: false,
-		saveUninitialized: false,
-	})
-);
 
 // middlewares
 app.use(cors());
@@ -48,7 +37,6 @@ app.use(compression());
 
 // Passport middleware
 app.use(passport.initialize());
-app.use(passport.authenticate("session"));
 
 app.use("/api/participant", participantRoutes);
 app.use("/api/room", roomRoutes);

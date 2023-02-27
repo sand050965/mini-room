@@ -2,9 +2,9 @@
 
 // controller
 import RoomController from "../controllers/roomController.js";
+import AvatarController from "../controllers/avatarController.js";
 
 // modules
-import CommonMod from "../models/commonMod.js";
 import StreamMod from "../models/streamMod.js";
 import ScreenShareMod from "../models/screenShareMod.js";
 import MainDisplayMod from "../models/mainDisplayMod.js";
@@ -17,11 +17,11 @@ import MailMod from "../models/mailMod.js";
  * ============================== Initiate Controller ==============================
  */
 const roomController = new RoomController();
+const avatarController = new AvatarController();
 
 /**
  * ============================== Initiate Module ==============================
  */
-const commonMod = new CommonMod();
 const streamMod = new StreamMod();
 const screenShareMod = new ScreenShareMod();
 const mainDisplayMod = new MainDisplayMod();
@@ -55,6 +55,8 @@ const btnsArray = [
 	document.querySelector("#emojiCloseBtn"),
 	document.querySelector("#sendMsgBtn"),
 ];
+
+const avatarImgs = document.querySelectorAll("img[name='avatarImg']");
 
 window.addEventListener("load", roomController.init);
 
@@ -96,6 +98,10 @@ document
 
 for (const btn of btnsArray) {
 	btn.addEventListener("click", roomController.btnControl);
+}
+
+for (const img of avatarImgs) {
+	img.addEventListener("load", avatarController.resizeAvatar);
 }
 
 /**

@@ -1,9 +1,11 @@
 /** @format */
 
+import AvatarController from "../controllers/avatarController.js";
 import RoomInfoMod from "../models/roomInfoMod.js";
 
 class ChatRoomMod {
 	constructor() {
+		this.avatarController = new AvatarController();
 		this.roomInfoMod = new RoomInfoMod();
 		this.timeout = null;
 		this.uploading = false;
@@ -169,7 +171,11 @@ class ChatRoomMod {
 		messageSender.textContent = elementObj.participantName;
 		messageTime.textContent = elementObj.time;
 		messageSenderAvatarImg.src = elementObj.avatarImgUrl;
-		messageSenderAvatarImg.classList.add("message-avatar-img");
+		messageSenderAvatarImg.setAttribute("name", avatarImg);
+		messageSenderAvatarImg.addEventListener(
+			"load",
+			this.avatarController.resizeAvatar
+		);
 		messageSenderAvatar.classList.add("message-avatar");
 		messageSenderAvatar.appendChild(messageSenderAvatarImg);
 
@@ -239,7 +245,11 @@ class ChatRoomMod {
 		messageSender.textContent = elementObj.participantName;
 		messageTime.textContent = elementObj.time;
 		messageSenderAvatarImg.src = elementObj.avatarImgUrl;
-		messageSenderAvatarImg.classList.add("message-avatar-img");
+		messageSenderAvatarImg.setAttribute("name", "avatarImg");
+		messageSenderAvatarImg.addEventListener(
+			"load",
+			this.avatarController.resizeAvatar
+		);
 		messageSenderAvatar.classList.add("message-avatar");
 		messageSenderAvatar.appendChild(messageSenderAvatarImg);
 		mainMessage.textContent = elementObj.message;

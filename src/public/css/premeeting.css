@@ -68,10 +68,6 @@ body {
 	border-radius: 50%;
 }
 
-.avatar-container .avatar-img {
-	max-width: 100%;
-}
-
 .avatar-container .name-tag {
 	margin-top: 10px;
 }

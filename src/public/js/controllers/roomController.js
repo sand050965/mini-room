@@ -27,6 +27,7 @@ class RoomController {
 
 	init = async () => {
 		try {
+			this.commonMod.openPreload("#preloader");
 			myStream = await this.streamMod.getUserMediaStream();
 			const myVideo = document.createElement("video");
 			myVideo.muted = true;
@@ -76,6 +77,7 @@ class RoomController {
 			);
 			await this.mainDisplayMod.addRoomStream(DOMElement);
 			await this.streamMod.initMediaControl(DOMElement);
+			this.commonMod.closePreload("#preloader");
 		} catch (err) {
 			console.log(err);
 			this.commonMod.closePreload("#preloader");
@@ -103,7 +105,7 @@ class RoomController {
 			),
 			micStatusIcon: document.querySelector("#selfMicStatusIcon"),
 		};
-		
+
 		if (e.target.id.includes("audioBtn")) {
 			// muteUnmute btn is clicked
 			const isMuted = await this.streamMod.muteUnmute(DOMElement);

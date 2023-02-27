@@ -20,7 +20,7 @@ module.exports = {
       }
 
       if (dataId) {
-        participantInfo = await participantService.getParticipantById(dataId);
+        participantInfo = await participantService.getParticipantById({_id: dataId});
 
         if (
           roomId === participantInfo.roomId &&

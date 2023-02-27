@@ -75,7 +75,7 @@ class IndexController {
 	 */
 	joinMeeting = async () => {
 		try {
-			this.commonMod.openPreloader("#preloader");
+			this.commonMod.openPreload("#preloader");
 
 			let roomId = this.roomCodeInput.value.trim();
 
@@ -87,7 +87,7 @@ class IndexController {
 					!roomId.startsWith("localhost")
 				) {
 					this.alert.classList.remove("none");
-					this.commonMod.closePreloader("#preloader");
+					this.commonMod.closePreload("#preloader");
 					return;
 				}
 			}
@@ -101,7 +101,7 @@ class IndexController {
 				roomId = roomId.replace("https://", "");
 				if (!roomId.startsWith("miniroom.online")) {
 					this.alert.classList.remove("none");
-					this.commonMod.closePreloader("#preloader");
+					this.commonMod.closePreload("#preloader");
 					return;
 				}
 			}
@@ -116,11 +116,11 @@ class IndexController {
 				window.location = `/${roomId}`;
 			} else {
 				this.alert.classList.remove("none");
+				this.commonMod.closePreload("#preloader");
 			}
-			this.commonMod.closePreloader("#preloader");
 		} catch (e) {
 			console.log(e);
-			this.commonMod.closePreloader("#preloader");
+			this.commonMod.closePreload("#preloader");
 		}
 	};
 

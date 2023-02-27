@@ -36,20 +36,22 @@ class MemberMod {
 		this.memberAvatarInvalid.removeAttribute("style");
 
 		if (fileSize > 1024 * 1024 * 5) {
-			this.memberAvatarInvalid.style.display = "block";
-			this.memberAvatarInvalid.textContent =
-				"File size must be less than 1 MB!";
+			this.displayAvatarValidateStyle(
+				false,
+				"File size must be less than 1 MB!"
+			);
 			return false;
 		}
 
 		if (!fileTypeArray.includes(fileType)) {
-			this.memberAvatarInvalid.style.display = "block";
-			this.memberAvatarInvalid.textContent =
-				"File is only allowed to be these file types: [jpeg, jpg, png]!";
+			this.displayAvatarValidateStyle(
+				false,
+				"File is only allowed to be these file types: [jpeg, jpg, png]!"
+			);
 			return false;
 		}
 
-		this.memberAvatarValid.style.display = "block";
+		this.displayAvatarValidateStyle(true, "");
 		return true;
 	};
 
@@ -88,6 +90,15 @@ class MemberMod {
 			this.memberUsername.classList.remove("is-invalid");
 			this.memberUsername.classList.add("is-valid");
 			return true;
+		}
+	};
+
+	displayAvatarValidateStyle = (isValid, msg) => {
+		if (isValid) {
+			this.memberAvatarValid.style.display = "block";
+		} else {
+			this.memberAvatarInvalid.style.display = "block";
+			this.memberAvatarInvalid.textContent = msg;
 		}
 	};
 

@@ -9,12 +9,6 @@ module.exports = {
 		);
 	},
 
-	getUserByGoogleId: async (data) => {
-		return await User.findOne(data).select(
-			"_id googleId email username avatarImgUrl"
-		);
-	},
-
 	putUser: async (data) => {
 		return await User.findOne(data).select("email password");
 	},
@@ -24,25 +18,7 @@ module.exports = {
 		return await user.save();
 	},
 
-	updateUserInfo: async (data) => {
-		return await User.updateOne(
-			{ email: data.originEmail },
-			{
-				email: data.email,
-				username: data.username,
-				avatarImgUrl: data.avatarImgUrl,
-			}
-		);
-	},
-
-	updateGoogleId: async (data) => {
-		return await User.updateOne(
-			{ email: data.email },
-			{
-				googleId: data.googleId,
-				username: data.username,
-				avatarImgUrl: data.avatarImgUrl,
-			}
-		);
+	updateUserInfo: async (condition, data) => {
+		return await User.updateOne(condition, data);
 	},
 };

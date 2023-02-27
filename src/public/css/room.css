@@ -251,10 +251,6 @@ video {
 	border-radius: 50%;
 }
 
-.videos-container .avatar-img {
-	max-width: 100%;
-}
-
 .videos-container .mic-status {
 	position: absolute;
 	top: 5px;
@@ -368,10 +364,6 @@ video {
 	background-color: #969699;
 }
 
-#participantOffcanvas .participant-avatar-img {
-	max-width: 100%;
-}
-
 #participantOffcanvas .participant-content {
 	display: grid;
 	align-items: center;
@@ -458,10 +450,6 @@ video {
 	height: 36px;
 	border-radius: 50%;
 	background-color: #969699;
-}
-
-.message-container .message-avatar-img {
-	max-width: 100%;
 }
 
 .message-container .self-message-content {
@@ -855,11 +843,6 @@ video {
 	height: 48px;
 	border-radius: 50%;
 	background-color: #43454b;
-}
-
-.join-room-avatar-img {
-	min-width: 100%;
-	max-width: 100%;
 }
 
 .join-room-content {

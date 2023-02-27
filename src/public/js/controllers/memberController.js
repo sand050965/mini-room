@@ -42,6 +42,7 @@ class MemberController {
 		// content type check
 		const validateResult = await this.memberMod.validateAvatarImg();
 		if (!validateResult) {
+			this.avatarFileUpload.value = "";
 			return;
 		}
 		this.memberAvatarImg.src = URL.createObjectURL(file);
@@ -118,7 +119,7 @@ class MemberController {
 
 	cancelUpdateMemberInfo = () => {
 		this.memberMod.resetInputs(this.initInfo);
-		this.commonMod.resetValidate();
+		this.memberMod.resetValidate();
 		this.reValidateEmail();
 		this.reValidateUsername();
 	};

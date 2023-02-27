@@ -1,9 +1,11 @@
 /** @format */
 
+import AvatarController from "../controllers/avatarController.js";
 import InputValidator from "../validators/inputValidator.js";
 
 class ParticipantMod {
 	constructor() {
+		this.avatarController = new AvatarController();
 		this.inputValidator = new InputValidator();
 		this.joinRoomTimeout = null;
 		this.leaveRoomTimeout = null;
@@ -122,6 +124,11 @@ class ParticipantMod {
 		);
 		participantContainer.setAttribute("name", "participantContainer");
 		participantAvatarImg.src = avatarImgUrl;
+		participantAvatarImg.setAttribute("name", "avatarImg");
+		participantAvatarImg.addEventListener(
+			"load",
+			this.avatarController.resizeAvatar
+		);
 		participantAvatar.appendChild(participantAvatarImg);
 		participantContainer.appendChild(participantAvatar);
 		if (participantName.length > 10) {
@@ -166,7 +173,6 @@ class ParticipantMod {
 		const isStoppedVideo = DOMElement.isStoppedVideo;
 		const participantContainer = DOMElement.participantContainer;
 		const participantAvatar = DOMElement.participantAvatar;
-		const participantAvatarImg = DOMElement.participantAvatarImg;
 		const participantContent = DOMElement.participantContent;
 		const participantNameTag = DOMElement.participantNameTag;
 		const participantMediaContainer = DOMElement.participantMediaContainer;
@@ -179,7 +185,6 @@ class ParticipantMod {
 
 		participantContainer.classList.add("participant-container");
 		participantAvatar.classList.add("participant-avatar");
-		participantAvatarImg.classList.add("participant-avatar-img");
 		participantContent.classList.add("participant-content");
 		participantNameTag.classList.add("participant-name");
 		participantMediaContainer.classList.add("media-container");

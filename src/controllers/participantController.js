@@ -1,3 +1,5 @@
+/** @format */
+
 const express = require("express");
 require("dotenv").config();
 const participantService = require("../services/participantService");
@@ -5,30 +7,26 @@ const participantService = require("../services/participantService");
 module.exports = {
 	readyToJoin: async (req, res) => {
 		try {
-			const participantData = {
+			const participant = await participantService.insertParticipant({
 				roomId: req.body.roomId,
 				participantId: req.body.participantId,
 				participantName: req.body.participantName,
 				avatarImgUrl: req.body.avatarImgUrl,
 				isMuted: req.body.isMuted,
 				isStoppedVideo: req.body.isStoppedVideo,
-			};
-
-			const participant = await participantService.insertParticipant(
-				participantData
-			);
+			});
 
 			return res
 				.status(200)
 				.cookie("dataId", participant.id, {
 					httpOnly: true,
 					secure: process.env.NODE_ENV === "production",
-					maxAge: 60 * 60,
+					maxAge: 60 * 60 * 60,
 				})
 				.cookie("participantId", req.body.participantId, {
 					httpOnly: true,
 					secure: process.env.NODE_ENV === "production",
-					maxAge: 60 * 60,
+					maxAge: 60 * 60 * 60,
 				})
 				.json({ ok: true });
 		} catch (e) {
@@ -44,10 +42,9 @@ module.exports = {
 
 	getAllParticipants: async (req, res) => {
 		try {
-			const roomId = req.params.roomId;
-			const participantCnt = await participantService.getAllParticipantsCnt(
-				roomId
-			);
+			const participantCnt = await participantService.getAllParticipantsCnt({
+				roomId: req.params.roomId,
+			});
 			return res.status(200).json({ data: { participantCnt: participantCnt } });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
@@ -61,16 +58,13 @@ module.exports = {
 
 	getBeforeParticipants: async (req, res) => {
 		try {
-			const participantData = {
+			const participantInfo = await participantService.getParticipant({
 				roomId: req.params.roomId,
 				participantId: req.query.participantId,
-			};
-			const participantInfo = await participantService.getParticipant(
-				participantData
-			);
-			participantData.createdAt = participantInfo.createdAt;
+			});
 			const beforeParticipantCnt =
-				await participantService.getBeforeParticipants(participantData);
+				await participantService.getBeforeParticipants(participantInfo);
+			console.log(beforeParticipantCnt);
 			return res
 				.status(200)
 				.json({ data: { beforeParticipantCnt: beforeParticipantCnt } });
@@ -78,7 +72,7 @@ module.exports = {
 			if (process.env.NODE_ENV !== "development") {
 				console.log(e);
 			}
-			return es
+			return res
 				.status(500)
 				.json({ error: true, message: "Sorry, something went wrong!" });
 		}
@@ -86,13 +80,10 @@ module.exports = {
 
 	getParticipantInfo: async (req, res) => {
 		try {
-			const participantData = {
+			const participantInfo = await participantService.getParticipant({
 				roomId: req.params.roomId,
 				participantId: req.query.participantId,
-			};
-			const participantInfo = await participantService.getParticipant(
-				participantData
-			);
+			});
 			return res.status(200).json({ data: participantInfo });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
@@ -106,14 +97,10 @@ module.exports = {
 
 	searchParticipant: async (req, res) => {
 		try {
-			const participantData = {
+			const participantIds = await participantService.getParticipantIdsByName({
 				roomId: req.query.roomId,
 				participantName: req.query.participantName,
-			};
-
-			const participantIds = await participantService.getParticipantIdsByName(
-				participantData
-			);
+			});
 
 			let participantIdArray = [];
 
@@ -133,11 +120,10 @@ module.exports = {
 
 	participantLeave: async (req, res) => {
 		try {
-			const participantData = {
+			await participantService.deleteParticipant({
 				roomId: req.body.roomId,
 				participantId: req.body.participantId,
-			};
-			await participantService.deleteParticipant(participantData);
+			});
 			return res.status(200).json({ ok: true });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
@@ -151,8 +137,9 @@ module.exports = {
 
 	deleteAllParticipants: async (req, res) => {
 		try {
-			const roomId = req.body.roomId;
-			await participantService.deleteAllParticipants(roomId);
+			await participantService.deleteAllParticipants({
+				roomId: req.body.roomId,
+			});
 			return res.status(200).json({ ok: true });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {

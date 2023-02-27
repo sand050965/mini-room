@@ -46,11 +46,6 @@ io.on("connection", (socket) => {
 			io.to(roomId).emit("user-stop-screen-share", participantId);
 		});
 
-		// users start sharing screen stream event
-		// socket.on("start-screen-share", () => {
-		//   socket.to(roomId).emit("user-start-screen-share", participantId);
-		// });
-
 		// users denied permission to use camera and microphone
 		socket.on("denied-media-permission", () => {
 			socket.to(roomId).emit("user-denied-media-permission", participantId);

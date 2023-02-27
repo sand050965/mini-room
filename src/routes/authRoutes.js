@@ -10,7 +10,6 @@ require("../middleware/passport")(passport);
 router.get(
 	"/google",
 	passport.authenticate("google", {
-		scope: ["profile", "email"],
 		prompt: "select_account",
 	})
 );
@@ -19,7 +18,6 @@ router.get(
 	"/google/callback",
 	passport.authenticate("google", {
 		failureRedirect: "/",
-		failureMessage: true,
 		session: false,
 	}),
 	authController.googleCallback

@@ -24,13 +24,12 @@ module.exports = {
 
 	signup: async (req, res) => {
 		try {
-			const userData = {
+			await userService.postUser({
 				email: req.body.email,
 				password: req.body.password,
 				username: req.body.username,
 				avatarImgUrl: req.body.avatarImgUrl,
-			};
-			await userService.postUser(userData);
+			});
 			return res.status(200).json({ ok: true });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
@@ -117,13 +116,14 @@ module.exports = {
 
 	chageUserInfo: async (req, res) => {
 		try {
-			const userData = {
-				originEmail: req.user.email,
-				email: req.body.email,
-				username: req.body.username,
-				avatarImgUrl: req.body.avatarImgUrl,
-			};
-			await userService.updateUserInfo(userData);
+			await userService.updateUserInfo(
+				{ email: req.user.email },
+				{
+					email: req.body.email,
+					username: req.body.username,
+					avatarImgUrl: req.body.avatarImgUrl,
+				}
+			);
 			return res.status(200).json({ ok: true });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {

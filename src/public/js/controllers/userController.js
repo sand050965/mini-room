@@ -161,18 +161,15 @@ class UserController {
 			isInvalid = true;
 		}
 
-		if (!this.inputValidator.nameValidator(data)) {
-			this.username.classList.add("is-invalid");
+		if (!this.userMod.validateUsername()) {
 			isInvalid = true;
 		}
 
-		if (!this.inputValidator.emailValidator(data)) {
-			this.email.classList.add("is-invalid");
+		if (!this.userMod.validateEmail()) {
 			isInvalid = true;
 		}
 
-		if (!this.inputValidator.passwordValidator(data)) {
-			this.password.classList.add("is-invalid");
+		if (!this.userMod.validatePassword()) {
 			isInvalid = true;
 		}
 
@@ -231,75 +228,35 @@ class UserController {
 	uploadAvatar = async () => {
 		const file = this.avatarFileUpload.files[0];
 		// content type check
-		const validateResult = await this.validateAvatarImg();
+		const validateResult = await this.userMod.validateAvatarImg();
 		if (!validateResult) {
+			this.avatarFileUpload.value = "";
 			return;
 		}
 		this.signUpAvatarImg.src = URL.createObjectURL(file);
 	};
 
-	validateAvatarImg = () => {
-		const file = this.avatarFileUpload.files[0];
-		const fileType = file.name.split(".")[1];
-		const fileTypeArray = ["jpg", "jpeg", "png"];
-		const fileSize = file.size;
-
-		this.signUpAvatarValid.removeAttribute("style");
-		this.signUpAvatarInvalid.removeAttribute("style");
-
-		if (fileSize > 1024 * 1024 * 5) {
-			this.signUpAvatarInvalid.style.display = "block";
-			this.signUpAvatarInvalid.textContent =
-				"File size must be less than 1 MB!";
-			return false;
-		}
-
-		if (!fileTypeArray.includes(fileType)) {
-			this.signUpAvatarInvalid.style.display = "block";
-			this.signUpAvatarInvalid.textContent =
-				"File is only allowed to be these file types: [jpeg, jpg, png]!";
-			return false;
-		}
-
-		this.signUpAvatarValid.style.display = "block";
-		return true;
-	};
-
-	validateUsername = () => {
+	reValidateUsername = () => {
 		if (
 			!this.username.classList.contains("is-valid") &&
 			!this.username.classList.contains("is-invalid")
 		) {
 			return;
 		}
-		this.authFailed.classList.add("none");
-		if (!this.inputValidator.nameValidator({ username: this.username.value })) {
-			this.username.classList.remove("is-valid");
-			this.username.classList.add("is-invalid");
-		} else {
-			this.username.classList.remove("is-invalid");
-			this.username.classList.add("is-valid");
-		}
+		this.userMod.validateUsername();
 	};
 
-	validateEmail = () => {
+	reValidateEmail = () => {
 		if (
 			!this.email.classList.contains("is-valid") &&
 			!this.email.classList.contains("is-invalid")
 		) {
 			return;
 		}
-		this.authFailed.classList.add("none");
-		if (!this.inputValidator.emailValidator({ email: this.email.value })) {
-			this.email.classList.remove("is-valid");
-			this.email.classList.add("is-invalid");
-		} else {
-			this.email.classList.remove("is-invalid");
-			this.email.classList.add("is-valid");
-		}
+		this.userMod.validateEmail();
 	};
 
-	validatePassword = () => {
+	reValidatePassword = () => {
 		if (
 			!this.password.classList.contains("is-valid") &&
 			!this.password.classList.contains("is-invalid")
@@ -307,16 +264,7 @@ class UserController {
 			return;
 		}
 
-		this.authFailed.classList.add("none");
-		if (
-			!this.inputValidator.passwordValidator({ password: this.password.value })
-		) {
-			this.password.classList.remove("is-valid");
-			this.password.classList.add("is-invalid");
-		} else {
-			this.password.classList.remove("is-invalid");
-			this.password.classList.add("is-valid");
-		}
+		this.userMod.validatePassword();
 	};
 
 	displayAuthResult = (type, result) => {

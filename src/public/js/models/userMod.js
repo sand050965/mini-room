@@ -6,6 +6,7 @@ import InputValidator from "../validators/inputValidator.js";
 class UserMod {
 	constructor() {
 		this.commonMod = new CommonMod();
+		this.inputValidator = new InputValidator();
 
 		// auth result
 		this.authSuccess = document.querySelector("#authSuccess");
@@ -16,6 +17,7 @@ class UserMod {
 			"#signUpAvatarContainer"
 		);
 		this.signUpAvatarImg = document.querySelector("#signUpAvatarImg");
+		this.avatarFileUpload = document.querySelector("#avatarFileUpload");
 		this.signUpAvatarValid = document.querySelector("#signUpAvatarValid");
 		this.signUpAvatarInvalid = document.querySelector("#signUpAvatarInvalid");
 
@@ -69,6 +71,15 @@ class UserMod {
 		}
 	};
 
+	displayAvatarValidateStyle = (isValid, msg) => {
+		if (isValid) {
+			this.signUpAvatarValid.style.display = "block";
+		} else {
+			this.signUpAvatarInvalid.style.display = "block";
+			this.signUpAvatarInvalid.textContent = msg;
+		}
+	};
+
 	reset = async () => {
 		await this.resetValue();
 		await this.resetStyle();
@@ -101,11 +112,15 @@ class UserMod {
 		this.resetValidateStyle();
 	};
 
+	resetAvatarValidateStyle = () => {
+		this.signUpAvatarInvalid.removeAttribute("style");
+		this.signUpAvatarValid.removeAttribute("style");
+	};
+
 	resetValidateStyle = () => {
 		this.authSuccess.classList.add("none");
 		this.authFailed.classList.add("none");
-		this.signUpAvatarInvalid.removeAttribute("style");
-		this.signUpAvatarValid.removeAttribute("style");
+		this.resetAvatarValidateStyle();
 		this.username.classList.remove("is-valid");
 		this.username.classList.remove("is-invalid");
 		this.email.classList.remove("is-valid");
@@ -223,6 +238,76 @@ class UserMod {
 		const response = await fetch("/api/user/token", payload);
 		const result = await response.json();
 		return result;
+	};
+
+	validateAvatarImg = () => {
+		const file = this.avatarFileUpload.files[0];
+		const fileType = file.name.split(".")[1];
+		const fileTypeArray = ["jpg", "jpeg", "png"];
+		const fileSize = file.size;
+
+		this.resetAvatarValidateStyle();
+
+		if (fileSize > 1024 * 1024 * 5) {
+			("File size must be less than 1 MB!");
+			this.displayAvatarValidateStyle(
+				false,
+				"File size must be less than 1 MB!"
+			);
+			return false;
+		}
+
+		if (!fileTypeArray.includes(fileType)) {
+			this.displayAvatarValidateStyle(
+				false,
+				"File is only allowed to be these file types: [jpeg, jpg, png]!"
+			);
+			return false;
+		}
+
+		this.displayAvatarValidateStyle(true, "");
+		return true;
+	};
+
+	validateUsername = () => {
+		this.authFailed.classList.add("none");
+		if (!this.inputValidator.nameValidator({ username: this.username.value })) {
+			this.username.classList.remove("is-valid");
+			this.username.classList.add("is-invalid");
+			return false;
+		} else {
+			this.username.classList.remove("is-invalid");
+			this.username.classList.add("is-valid");
+			return true;
+		}
+	};
+
+	validateEmail = () => {
+		this.authFailed.classList.add("none");
+		if (!this.inputValidator.emailValidator({ email: this.email.value })) {
+			this.email.classList.remove("is-valid");
+			this.email.classList.add("is-invalid");
+			return false;
+		} else {
+			this.email.classList.remove("is-invalid");
+			this.email.classList.add("is-valid");
+			return true;
+		}
+	};
+
+	validatePassword = () => {
+		this.authFailed.classList.add("none");
+		if (
+			!this.inputValidator.passwordValidator({ password: this.password.value })
+		) {
+			this.password.classList.remove("is-valid");
+			this.password.classList.add("is-invalid");
+			return false;
+		} else {
+			this.password.classList.remove("is-invalid");
+			this.password.classList.add("is-valid");
+			return true;
+		}
 	};
 }
 
