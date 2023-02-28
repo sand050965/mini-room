@@ -8,6 +8,7 @@ import AvatarController from "../controllers/avatarController.js";
 import StreamMod from "../models/streamMod.js";
 import ScreenShareMod from "../models/screenShareMod.js";
 import MainDisplayMod from "../models/mainDisplayMod.js";
+import OffcanvasMod from "../models/offcanvasMod.js";
 import RoomInfoMod from "../models/roomInfoMod.js";
 import ChatRoomMod from "../models/chatRoomMod.js";
 import ParticipantMod from "../models/participantMod.js";
@@ -25,6 +26,7 @@ const avatarController = new AvatarController();
 const streamMod = new StreamMod();
 const screenShareMod = new ScreenShareMod();
 const mainDisplayMod = new MainDisplayMod();
+const offcanvasMod = new OffcanvasMod();
 const roomInfoMod = new RoomInfoMod();
 const chatRoomMod = new ChatRoomMod();
 const participantMod = new ParticipantMod();
@@ -429,6 +431,7 @@ socket.on("user-denied-media-permission", async (participantId) => {
 socket.on("user-send-message", (elementObj) => {
 	chatRoomMod.displayMessage(elementObj);
 	chatRoomMod.scrollToBottom();
+	offcanvasMod.displayChatBadage(elementObj);
 });
 
 /**

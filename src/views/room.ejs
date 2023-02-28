@@ -131,7 +131,10 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button id="addInviteList" type="button" class="btn btn-info">
+						<button
+							id="addInviteList"
+							type="button"
+							class="btn add-invite-list-btn">
 							Add invite list
 						</button>
 						<button
@@ -412,25 +415,36 @@
 				</div>
 				<div class="side-control-container right-center">
 					<div class="side-control">
-						<div id="infoOffcanvasBtn" class="center side-btn">
+						<div
+							id="infoOffcanvasBtn"
+							class="center side-btn chat-offcanvas-btn">
 							<i id="infoOffcanvasBtnIcon" class="fa-solid fa-circle-info"></i>
 						</div>
-						<div id="participantOffcanvasBtn" class="center side-btn">
-							<i
-								id="participantOffcanvasBtnIcon"
-								class="fa-solid fa-user-group">
-							</i>
+						<div class="participant-offcanvas-btn-container">
+							<span
+								id="participantCnt"
+								class="position-absolute badge rounded-pill bg-secondary participant-cnt"
+								>1</span
+							>
+							<div id="participantOffcanvasBtn" class="center side-btn">
+								<i
+									id="participantOffcanvasBtnIcon"
+									class="fa-solid fa-user-group">
+								</i>
+							</div>
 						</div>
-						<div id="chatOffcanvasBtn" class="center side-btn">
-							<i id="chatOffcanvasBtnIcon" class="fa-solid fa-message"></i>
+						<div class="chat-offcanvas-btn-container">
+							<span
+								id="chatBadage"
+								class="position-absolute translate-middle bg-danger border border-light rounded-circle chat-badage none">
+								<span class="visually-hidden">New alerts</span>
+							</span>
+							<div id="chatOffcanvasBtn" class="center side-btn">
+								<i id="chatOffcanvasBtnIcon" class="fa-solid fa-message"> </i>
+							</div>
 						</div>
 					</div>
 				</div>
-				<span
-					id="participantCnt"
-					class="position-absolute translate-middle badge rounded-pill bg-secondary participant-cnt"
-					>1</span
-				>
 			</div>
 		</div>
 		<div id="inviteNotify" class="invite-notify center">

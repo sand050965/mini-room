@@ -1,3 +1,5 @@
+/** @format */
+
 let myStream = null;
 
 let myScreenShareStream = null;

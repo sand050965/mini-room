@@ -67,6 +67,10 @@ video {
 	word-wrap: break-word;
 }
 
+.modal .add-invite-list-btn {
+	background-color: #76a5f1;
+}
+
 /*--------------------------------------------------------------
 # Main Container
 --------------------------------------------------------------*/
@@ -798,10 +802,20 @@ video {
 	font-size: 20px;
 }
 
-.tool-bar .participant-cnt {
-	top: 20px !important;
-	right: 80px !important;
-	z-index: 99;
+.side-control .participant-offcanvas-btn-container,
+.side-control .chat-offcanvas-btn-container {
+	position: relative;
+}
+
+.side-control .chat-badage {
+	top: 10px !important;
+	right: 0 !important;
+	padding: 0.3rem !important;
+}
+
+.side-control .participant-cnt {
+	top: 0 !important;
+	right: 0 !important;
 }
 
 /*--------------------------------------------------------------

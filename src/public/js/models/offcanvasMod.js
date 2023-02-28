@@ -2,6 +2,7 @@
 
 class OffcanvasMod {
 	constructor() {
+		this.chatBadage = document.querySelector("#chatBadage");
 		this.sideBtnIconsArray = [
 			document.querySelector("#infoOffcanvasBtnIcon"),
 			document.querySelector("#participantOffcanvasBtnIcon"),
@@ -56,6 +57,9 @@ class OffcanvasMod {
 			tagetBsOffcanvas.show();
 			await this.offcanvasOpenControl(offcanvasDOMElement);
 			await this.offcanvasOpenGrid();
+			if (offcanvasDOMElement.target === "chatOffcanvas") {
+				this.chatBadage.classList.add("none");
+			}
 			isOffcanvasOpen = true;
 			offcanvasMap.set("isOpen", btnId);
 		}
@@ -111,6 +115,18 @@ class OffcanvasMod {
 		} else {
 			mainLeftContainer.classList.remove("main-left-screen-share");
 			mainLeftContainer.classList.add("main-left-videos");
+		}
+	};
+
+	displayChatBadage = (elementObj) => {
+		if (elementObj.participantId === PARTICIPANT_ID) {
+			return;
+		}
+
+		if (offcanvasMap.get("isOpen") === "chatOffcanvasBtn") {
+			this.chatBadage.classList.add("none");
+		} else {
+			this.chatBadage.classList.remove("none");
 		}
 	};
 }

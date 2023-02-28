@@ -474,7 +474,7 @@ class MainDisplayMod {
 	};
 
 	listenOnVideoStream = (DOMElement) => {
-		let participantId = DOMElement.participantId;
+		const participantId = DOMElement.participantId;
 		const video = DOMElement.video;
 		video.addEventListener("loadedmetadata", this.startPlayStream);
 		if (participantId === PARTICIPANT_ID) {
