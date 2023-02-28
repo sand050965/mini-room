@@ -8,7 +8,7 @@ module.exports = {
 		const senderName = data.senderName;
 		const recipientEmailArray = data.recipientEmailArray;
 		const roomId = data.roomId;
-		const roomLink = `miniroom.online/${roomId}`;
+		const roomLink = `${process.env.SERVER_URI}/${roomId}`;
 		const mailContent = {
 			from: `Mini Room <${senderName}>`,
 			to: recipientEmailArray,

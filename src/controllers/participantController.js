@@ -1,7 +1,5 @@
 /** @format */
 
-const express = require("express");
-require("dotenv").config();
 const participantService = require("../services/participantService");
 
 module.exports = {

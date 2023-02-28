@@ -250,16 +250,20 @@ const connectToNewUser = async (DOMElement) => {
 /**
  * new user connected
  */
-socket.on("user-connected", async (participantId, participantName) => {
-	const DOMElement = {
-		participantId: participantId,
-		participantName: participantName,
-		videoStream: myStream,
-		screenShareStream: myScreenShareStream,
-	};
-	await connectToNewUser(DOMElement);
-	participantMod.displayJoinRoomNotify(participantName);
-});
+socket.on(
+	"user-connected",
+	async (participantId, participantName, avatarImgUrl) => {
+		const DOMElement = {
+			participantId: participantId,
+			participantName: participantName,
+			videoStream: myStream,
+			screenShareStream: myScreenShareStream,
+			avatarImgUrl: avatarImgUrl,
+		};
+		await connectToNewUser(DOMElement);
+		participantMod.displayJoinRoomNotify(participantName, avatarImgUrl);
+	}
+);
 
 /**
  * user finish render

@@ -1,9 +1,9 @@
 /** @format */
 
 const express = require("express");
+const router = express.Router();
 const participantValidator = require("../validators/participantValidator");
 const participantController = require("../controllers/participantController");
-const router = express.Router();
 
 router.get(
 	"/all/:roomId",

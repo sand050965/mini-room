@@ -3,7 +3,6 @@
 const express = require("express");
 require("dotenv").config();
 const shortid = require("shortid");
-const Joi = require("joi");
 const JoiUtil = require("../utils/joiUtil");
 
 module.exports = {

@@ -2,7 +2,6 @@
 
 const express = require("express");
 const router = express.Router();
-require("dotenv").config();
 const multerUpload = require("../middleware/multerUpload");
 const s3Validator = require("../validators/s3Validator");
 const s3Controller = require("../controllers/s3Controller");

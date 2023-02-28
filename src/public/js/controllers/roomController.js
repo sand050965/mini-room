@@ -82,7 +82,13 @@ class RoomController {
 			console.log(err);
 			this.commonMod.closePreload("#preloader");
 		}
-		socket.emit("join-room", ROOM_ID, PARTICIPANT_ID, PARTICIPANT_NAME);
+		socket.emit(
+			"join-room",
+			ROOM_ID,
+			PARTICIPANT_ID,
+			PARTICIPANT_NAME,
+			AVATAR_IMG_URL
+		);
 	};
 
 	btnControl = async (e) => {

@@ -1,6 +1,5 @@
 /** @format */
 
-const JoiUtil = require("../utils/joiUtil");
 const Joi = require("joi");
 
 module.exports = {

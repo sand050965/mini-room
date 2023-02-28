@@ -166,24 +166,31 @@ class MailMod {
 
 	doInvite = async () => {
 		this.commonMod.openPreload("#preloader");
-		this.inviteFailedMsg.classList.add("none");
-		if (inviteListArray.length === 0) {
-			this.displayInviteFailedMsg("There are no email address!");
-			return;
+		try {
+			this.inviteFailedMsg.classList.add("none");
+			if (inviteListArray.length === 0) {
+				this.displayInviteFailedMsg("There are no email address!");
+				this.commonMod.closePreload("#preloader");
+				return;
+			}
+			clearTimeout(this.timeout);
+			const result = await this.sendMail();
+			if (result.error) {
+				this.displayInviteFailedMsg(result.message);
+				this.commonMod.closePreload("#preloader");
+				return;
+			}
+			inviteListArray.length = 0;
+			this.inviteNotify.classList.add("invite-notify-active");
+			this.clearInviteInputsAndList();
+			this.sendEmailBtnControl();
+			this.inviteModalCloseBtn.click();
+			this.commonMod.closePreload("#preloader");
+			this.timer = setTimeout(this.clearInviteNotify, 10000);
+		} catch (e) {
+			console.log(e);
+			this.commonMod.closePreload("#preloader");
 		}
-		clearTimeout(this.timeout);
-		const result = await this.sendMail();
-		if (result.error) {
-			this.displayInviteFailedMsg(result.message);
-			return;
-		}
-		inviteListArray.length = 0;
-		this.inviteNotify.classList.add("invite-notify-active");
-		this.clearInviteInputsAndList();
-		this.sendEmailBtnControl();
-		this.inviteModalCloseBtn.click();
-		this.commonMod.closePreload("#preloader");
-		this.timer = setTimeout(this.clearInviteNotify, 10000);
 	};
 
 	sendEmailBtnControl = () => {

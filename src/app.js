@@ -2,13 +2,15 @@
 
 "use strict";
 const express = require("express");
-const session = require("express-session");
 const compression = require("compression");
 const cors = require("cors");
 const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
+
+require("dotenv").config({ path: path.resolve(__dirname, "./.env") });
+
 const meetingRoutes = require("./routes/meetingRoutes");
 const participantRoutes = require("./routes/participantRoutes");
 const roomRoutes = require("./routes/roomRoutes");
@@ -19,8 +21,6 @@ const s3Routes = require("./routes/s3Routes");
 const memberRoutes = require("./routes/memberRoutes");
 const errorRoutes = require("./routes/errorRoutes");
 const thankyouRoutes = require("./routes/thankyouRoutes");
-
-require("dotenv").config();
 
 // view engine setup
 const app = express();

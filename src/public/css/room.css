@@ -830,19 +830,19 @@ video {
 }
 
 .invite-notify {
-	left: 10px;
+	left: 20px;
 	bottom: 140px;
 }
 
 .leave-room-notify {
-	left: 10px;
+	left: 20px;
 	bottom: 190px;
 }
 
 .join-room-notify {
 	display: grid;
 	grid-template-columns: 100px auto;
-	left: 10px;
+	left: 20px;
 	top: 140px;
 }
 
@@ -852,22 +852,25 @@ video {
 	opacity: 1;
 }
 
-.join-room-avatar-container {
+.join-room-notify .join-room-avatar-container {
 	background-color: #6d6e71;
 	padding: 10px;
 }
 
-.join-room-avatar {
+.join-room-notify .join-room-avatar {
 	width: 48px;
 	height: 48px;
 	border-radius: 50%;
 	background-color: #43454b;
 }
 
-.join-room-content {
+.join-room-notify .join-room-content {
 	padding: 10px 30px 10px 10px;
 }
 
+/*--------------------------------------------------------------
+# Media Query
+--------------------------------------------------------------*/
 @media (max-width: 2000px) {
 	.main-container .main-left-screen-share {
 		grid-template-columns: 100%;

@@ -1,10 +1,8 @@
 /** @format */
 
-const express = require("express");
 const crypto = require("crypto");
 const util = require("util");
 const randomBytes = util.promisify(crypto.randomBytes);
-require("dotenv").config();
 const s3Service = require("../services/s3Service");
 
 module.exports = {

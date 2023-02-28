@@ -21,6 +21,7 @@ class ParticipantMod {
 		this.leaveRoomNotify = document.querySelector("#leaveRoomNotify");
 		this.joinRoomNotify = document.querySelector("#joinRoomNotify");
 		this.joinRoomContent = document.querySelector("#joinRoomContent");
+		this.notifyAvatarImg = document.querySelector("#notifyAvatarImg");
 	}
 
 	getAllParticipants = async () => {
@@ -308,10 +309,15 @@ class ParticipantMod {
 		this.leaveRoomTimeout = setTimeout(this.hideLeaveRoomNotify, 5000);
 	};
 
-	displayJoinRoomNotify = (participantName) => {
+	displayJoinRoomNotify = (participantName, avatarImgUrl) => {
 		clearTimeout(this.joinRoomTimeout);
 		this.joinRoomNotify.classList.add("join-room-notify-active");
 		this.joinRoomContent.textContent = `${participantName} joined this meeting`;
+		this.notifyAvatarImg.src = avatarImgUrl;
+		this.notifyAvatarImg.addEventListener(
+			"load",
+			this.avatarController.resizeAvatar
+		);
 		this.joinRoomTimeout = setTimeout(this.hideJoinRoomNotify, 5000);
 	};
 
