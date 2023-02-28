@@ -1,14 +1,19 @@
-const mongoose = require("mongoose");
+const mongoose = require("../utils/DBUtil");
 
-const roomSchema = new mongoose.Schema({
-  roomId: { type: String, required: true },
-  userId: { type: String, required: true },
-  userName: { type: String, required: true },
-  audioAuth: { type: Boolean, required: true },
-  videoAuth: { type: Boolean, required: true },
-  isMuted: { type: Boolean, required: true },
-  isStoppedVideo: { type: Boolean, required: true },
-  isReadyState: { type: Boolean, required: true, default: false },
-});
+const roomShcema = new mongoose.Schema(
+  {
+    roomId: { type: String, required: true, unique: true, trim: true },
+    status: {
+      type: String,
+      required: true,
+      index: true,
+      enum: ["start", "preStart", "inUse", "closed"],
+      trim: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-module.exports = mongoose.model("Room", roomSchema);
+module.exports = mongoose.model("Room", roomShcema);

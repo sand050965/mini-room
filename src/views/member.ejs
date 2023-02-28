@@ -1,0 +1,161 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- favicon -->
+		<link
+			rel="icon"
+			href="https://s3.amazonaws.com/www.miniroom.online/images/favicon.ico"
+			type="image/x-icon" />
+		<!-- Vendor CSS Files -->
+		<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+			rel="stylesheet" />
+		<link
+			href="https://getbootstrap.com/docs/5.3/assets/css/docs.css"
+			rel="stylesheet" />
+		<!-- Template Main CSS File -->
+		<link rel="stylesheet" href="/css/user.css" />
+		<link rel="stylesheet" href="/css/member.css" />
+		<title>Mini Room</title>
+	</head>
+	<body>
+		<!-- Preloader -->
+		<div id="preloader" class="preloader none"></div>
+		<!-- ======= Header ======= -->
+		<%- include("./partials/header.ejs") %>
+		<!-- End Header -->
+		<!-- ======= Modal ======= -->
+		<%- include("./partials/userModal.ejs") %>
+		<!-- End Modal -->
+		<!-- ======= Hero Section ======= -->
+		<section class="hero center">
+			<!-- ======= row ======= -->
+			<div class="container center">
+				<div class="left-content left-center">
+					<img src="/img/hero-img_member.png" class="" alt="" />
+				</div>
+				<div class="right-content center">
+					<form id="memberForm" class="member-form">
+						<div class="member-avatar-container center">
+							<div id="memberAvatarContent" class="member-avatar-content">
+								<div class="member-avatar center">
+									<img
+										id="memberAvatarImg"
+										name="avatarImg"
+										src="https://s3.amazonaws.com/www.miniroom.online/images/avatar.png" />
+									<div class="change-avatar">
+										<label
+											for="avatarFileUpload"
+											class="change-avatar-btn center">
+											<i class="fa-solid fa-camera"></i>
+										</label>
+										<input
+											id="avatarFileUpload"
+											name="avatar"
+											type="file"
+											accept=".png, .jpg, .jpeg"
+											class="none" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="memberAvatarValid" class="valid-feedback">Looks good!</div>
+						<div id="memberAvatarInvalid" class="invalid-feedback">
+							there are something wrong while avatar image is uploading!
+						</div>
+						<div id="memberAvatarHelp" class="form-text input-help">
+							Avatar image is only allowed to be these file types: [jpeg, jpg,
+							png], and the file size must be less than 5MB!
+						</div>
+						<div id="memberEmailContainer" class="mb-3">
+							<label for="memberEmail" class="form-label">Email address</label>
+							<input id="memberEmail" type="email" accept=".png, .jpg, .jpeg" class="form-control" />
+							<div class="valid-feedback">Looks good!</div>
+							<div class="invalid-feedback">Email must be a valid email!</div>
+						</div>
+						<div id="memberUsernameContainer" class="mb-3">
+							<label for="memberUsername" class="form-label">User Name</label>
+							<input
+								id="memberUsername"
+								type="text"
+								class="form-control"
+								maxlength="20" />
+							<div class="valid-feedback">Looks good!</div>
+							<div class="invalid-feedback">
+								name is not allowed to be empty!
+							</div>
+						</div>
+						<div class="member-btns center">
+							<button id="cancelBtn" type="button" class="btn btn-secondary">
+								<span
+									id="cancelPreloader"
+									class="spinner-border spinner-border-sm none"
+									role="status"
+									aria-hidden="true"></span>
+								<span id="cancelBtnContent">Cancel</span>
+							</button>
+							<button id="saveBtn" type="button" class="btn btn-primary">
+								<span
+									id="savePreloader"
+									class="spinner-border spinner-border-sm none"
+									role="status"
+									aria-hidden="true"></span>
+								<span id="saveBtnContent">Save</span>
+							</button>
+						</div>
+						<div
+							id="updateMemberFailed"
+							class="alert alert-danger d-flex align-items-center none"
+							role="alert">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+								viewBox="0 0 16 16"
+								role="img"
+								aria-label="Warning:">
+								<path
+									d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+							</svg>
+							<div id="updateMemberFailedMsg"></div>
+						</div>
+						<div
+							id="updataeMemberSuccess"
+							class="alert alert-success d-flex align-items-center none"
+							role="alert">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+								viewBox="0 0 16 16"
+								role="img"
+								aria-label="Warning:">
+								<path
+									d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+							</svg>
+							<div id="updataeMemberSuccessMsg"></div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<!-- /.row -->
+		</section>
+		<!-- End Hero -->
+	</body>
+</html>
+<!-- Vendor JS Files -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script
+	src="https://kit.fontawesome.com/8de498932c.js"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+	crossorigin="anonymous"></script>
+<!-- Template Main JS File -->
+<script type="module" src="../js/user/user.js"></script>
+<script type="module" src="../js/member/member.js"></script>

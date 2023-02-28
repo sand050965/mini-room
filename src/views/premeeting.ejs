@@ -1,104 +1,175 @@
+<!-- @format -->
+
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- favicon -->
-        <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
-        <!-- Vendor CSS Files -->
-        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-              rel="stylesheet"
-              integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
-              crossorigin="anonymous">
-        <!-- Template Main CSS File -->
-        <link rel="stylesheet" href="/css/premeeting.css">
-        <script>
-            const ROOM_ID = '<%= roomId %>';
-            const ACTION = '<%= action %>';
-        </script>
-        <title>Mini Room</title>
-    </head>
-    <body>
-        <!-- Preloader -->
-        <div id="preloader" class="preloader"></div>
-        <!-- Modal -->
-        <div class="modal fade"
-             id="modalContainer"
-             tabindex="-1"
-             aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Allow Mini Room to use your camera and microphone</h1>
-                        <button type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Mini Room needs access to your camera and microphone so that other participants can see and hear you. Mini Room will ask you to confirm this decision on each browser and computer you use.
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Dismiss</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Main Content -->
-        <div class="premeetin-container">
-            <div id="avatarContainer" class="avatar-container center none">
-                <div class="avatar-content vertical-center">
-                    <div class="avatar">
-                        <img id="avatarImg" src="../img/avatar.png"/>
-                    </div>
-                    <div id="nameTag" class="name-tag center">
-                        <span id="userName" class="user-name center"></span>
-                    </div>
-                </div>
-            </div>
-            <div id="videoContainer" class="video-container"></div>
-            <div id="sideBar" class="side-bar center">
-                <div class="side-bar-grid">
-                    <h1 id="title" class="title">Join This Meeting</h1>
-                    <h5 id="subtitle" class="subtitle">Ready to join this meeting ?</h5>
-                    <div class="premeeting-input-container">
-                        <input id="nameInput"
-                               class="form-control form-control-lg"
-                               autocomplete="name"
-                               type="text"
-                               placeholder="Enter Your Name">
-                    </div>
-                    <div class="premeeting-button-container">
-                        <button id="confirmBtn"
-                                type="button"
-                                class="btn btn-primary btn-lg btn-block">Enter Your Name</button>
-                    </div>
-                    <div class="center">
-                        <div class="icons-container center">
-                            <div id="audioBtn">
-                                <i id="audioBtnIcon" class="fa-solid fa-microphone-slash disable"></i>
-                            </div>
-                            <div id="videoBtn">
-                                <i id="videoBtnIcon" class="fa-solid fa-video-slash disable"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- favicon -->
+		<link
+			rel="icon"
+			href="https://s3.amazonaws.com/www.miniroom.online/images/favicon.ico"
+			type="image/x-icon" />
+		<!-- Vendor CSS Files -->
+		<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+			rel="stylesheet" />
+		<link
+			href="https://getbootstrap.com/docs/5.3/assets/css/docs.css"
+			rel="stylesheet" />
+		<!-- Template Main CSS File -->
+		<link rel="stylesheet" href="/css/premeeting.css" />
+		<script>
+			const ROOM_ID = "<%= roomId %>";
+		</script>
+		<title>Mini Room</title>
+	</head>
+	<body>
+		<!-- Header -->
+		<header class="none">
+			<div id="authStatus"></div>
+		</header>
+		<!-- Preloader -->
+		<div id="preloader" class="preloader"></div>
+		<!-- Modal -->
+		<div
+			id="modalContainer"
+			class="modal fade"
+			tabindex="-1"
+			aria-labelledby="premeetingModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="premeetingModalLabel"></h1>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div id="premeetingModalBody" class="modal-body">
+						Mini Room needs access to your camera and microphone so that other
+						participants can see and hear you. Mini Room will ask you to confirm
+						this decision on each browser and computer you use.
+					</div>
+					<div class="modal-footer">
+						<button
+							type="button"
+							class="btn btn-primary"
+							data-bs-dismiss="modal">
+							close
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Main Content -->
+		<div class="premeetin-container">
+			<!-- Avatar -->
+			<div id="avatarContainer" class="avatar-container center none">
+				<div class="avatar-content vertical-center">
+					<div class="avatar center">
+						<img
+							id="avatarImg"
+							name="avatarImg"
+							class="avatar-img"
+							src="https://s3.amazonaws.com/www.miniroom.online/images/avatar.png" />
+					</div>
+					<div id="nameTag" class="name-tag center">
+						<span id="participantName" class="user-name center"></span>
+					</div>
+				</div>
+			</div>
+			<!-- Video -->
+			<div id="videoContainer" class="video-container"></div>
+			<!-- Side Bar -->
+			<div id="sideBar" class="side-bar center">
+				<div class="side-bar-grid">
+					<h1 id="title" class="title">Join This Meeting</h1>
+					<h5 id="subtitle" class="subtitle">Ready to join this meeting ?</h5>
+					<form id="nameForm">
+						<div class="premeeting-input-container">
+							<!-- Name Input -->
+							<input
+								id="nameInput"
+								class="form-control form-control-lg"
+								autocomplete="name"
+								type="text"
+								placeholder="Enter Your Name"
+								maxlength="20"
+								required />
+							<div class="invalid-feedback">Please enter your name.</div>
+						</div>
+					</form>
+					<div class="premeeting-button-container">
+						<!-- Confirm Button -->
+						<button
+							id="confirmBtn"
+							type="button"
+							class="btn btn-primary btn-lg btn-block">
+							Enter Your Name
+						</button>
+						<!-- Media Button -->
+						<div class="media-buttons-container center">
+							<div id="audioBtn" class="center circle-btn btn-able">
+								<i id="audioBtnIcon" class="center fa-solid fa-microphone"></i>
+							</div>
+							<div id="videoBtn" class="center circle-btn btn-able">
+								<i id="videoBtnIcon" class="center fa-solid fa-video"></i>
+							</div>
+						</div>
+					</div>
+					<!-- Alert Failed -->
+					<div
+						id="failedAlert"
+						class="alert alert-danger d-flex align-items-center alert-init-diaplay"
+						role="alert">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+							viewBox="0 0 16 16"
+							role="img"
+							aria-label="Warning:">
+							<path
+								d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+						</svg>
+						<div>Failed to access your microphone or camera</div>
+					</div>
+					<!-- Alert Success -->
+					<div
+						id="successAlert"
+						class="alert alert-success d-flex align-items-center alert-init-diaplay"
+						role="alert">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+							viewBox="0 0 16 16"
+							role="img"
+							aria-label="Warning:">
+							<path
+								d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+						</svg>
+						<div>Looks like everything works fine!</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>
 <!-- Vendor JS Files -->
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
 <script src="https://WebRTC.github.io/adapter/adapter-latest.js"></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script src="https://kit.fontawesome.com/8de498932c.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+<script
+	src="https://kit.fontawesome.com/8de498932c.js"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+	crossorigin="anonymous"></script>
 <!-- Template Main JS File -->
-<script type="module" src="../js/premeeting.js"></script>
+<script type="module" src="../js/premeeting/premeeting.js"></script>

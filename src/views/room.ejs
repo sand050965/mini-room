@@ -1,169 +1,467 @@
+<!-- @format -->
+
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- favicon -->
-        <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
-        <!-- Vendor CSS Files -->
-        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-        <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css"
-              rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-              rel="stylesheet">
-        <!-- Template Main CSS File -->
-        <link rel="stylesheet" href="/css/room.css">
-        <script>
-            const ROOM_ID = '<%= roomId %>';
-            const USER_ID = '<%= userId %>'
-            const USER_NAME = '<%= userName %>';
-            const AUDIO_AUTH = '<%= audioAuth %>';
-            const VIDEO_AUTH = '<%= videoAuth %>';
-            const IS_MUTED = '<%= isMuted %>';
-            const IS_STOPPED_VIDEO = '<%= isStoppedVideo %>';
-        </script>
-        <title>Mini Room</title>
-    </head>
-    <body>
-        <!-- Preloader -->
-        <div id="preloader" class="preloader"></div>
-        <!-- Modal -->
-        <div class="modal fade"
-             id="modalContainer"
-             tabindex="-1"
-             aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Allow Mini Room to use your camera and microphone</h1>
-                        <button type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Mini Room needs access to your camera and microphone so that other participants can see and hear you.
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Dismiss</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="mainContainer" class="main-container">
-            <div class="main-left center">
-                <div id="videosContainer" class="videos-container"></div>
-            </div>
-            <div class="main-right">
-                <!-- Info Offcanvas -->
-                <div id="infoOffcanvas"
-                     class="offcanvas offcanvas-end offcanvas-outlayer"
-                     data-bs-backdrop="false"
-                     tabindex="-1"
-                     aria-labelledby="offcanvasRightLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="staticBackdropLabel">Meeting details</h5>
-                        <button type="button"
-                                class="btn-close"
-                                data-bs-dismiss="offcanvas"
-                                data-bs-target="#infoSideBar"
-                                aria-label="Close">
-                        </button>
-                    </div>
-                    <div class="offcanvas-body">
-                        <div class="warning">I will not close if you click outside of me.</div>
-                        <div class=""></div>
-                    </div>
-                </div>
-                <!-- Participants Offcanvas -->
-                <div id="participantOfcanvas"
-                     class="offcanvas offcanvas-end offcanvas-outlayer"
-                     data-bs-backdrop="false"
-                     tabindex="-1"
-                     aria-labelledby="offcanvasRightLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="staticBackdropLabel">People</h5>
-                        <button type="button"
-                                class="btn-close"
-                                data-bs-dismiss="offcanvas"
-                                data-bs-target="#participantsSideBar"
-                                aria-label="Close">
-                        </button>
-                    </div>
-                    <div class="offcanvas-body">
-                        <div class="warning">I will not close if you click outside of me.</div>
-                        <div></div>
-                    </div>
-                </div>
-                <!-- Chat Offcanvas -->
-                <div id="chatOffcanvas"
-                     class="offcanvas offcanvas-end offcanvas-outlayer"
-                     data-bs-backdrop="false"
-                     tabindex="-1"
-                     aria-labelledby="offcanvasRightLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="staticBackdropLabel">In-call Messages</h5>
-                        <button type="button"
-                                class="btn-close"
-                                data-bs-dismiss="offcanvas"
-                                data-bs-target="#chatSideBar"
-                                aria-label="Close">
-                        </button>
-                    </div>
-                    <div class="warning">Messages can only be seen by people in the call and are deleted when the call ends.</div>
-                    <div class="offcanvas-body">
-                        <div id="messageContainer" class="message-container"></div>
-                    </div>
-                    <div id="messageInputContainer" class="message-input-container">
-                        <textarea id="messageInput" rows="1" type="text" class="message-input center" placeholder="Send a message to everyone"></textarea>
-                        <span id="sendMsgBtn" type="btn" class="send-msg-btn center" type="button"><i class="fa-solid fa-paper-plane"></i></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tool-bar">
-            <div class="meeting-info"></div>
-            <div class="control-btns">
-                <div class="main-control-container center">
-                    <div class="main-control">
-                        <div id="audioBtn" class="center circle-btn btn-able">
-                            <i id="audioBtnIcon" class="fa-solid fa-microphone"></i>
-                        </div>
-                        <div id="videoBtn" class="center circle-btn btn-able">
-                            <i id="videoBtnIcon" class="fa-solid fa-video"></i>
-                        </div>
-                        <div id="shareBtn" class="center circle-btn btn-able">
-                            <i id="shareBtnIcon" class="fa-solid fa-arrow-up-from-bracket"></i>
-                        </div>
-                        <div id="leaveBtn" class="center oval-btn btn-disable">
-                            <i id="leaveBtnIcon" class="fa-solid fa-phone rotate"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="side-control-container right-center">
-                    <div class="side-control">
-                        <div id="infoBtn" class="center side-btn">
-                            <i id="infoBtnIcon" class="fa-solid fa-circle-info"></i>
-                        </div>
-                        <div id="participantBtn" class="center side-btn">
-                            <i id="participantBtnIcon" class="fa-solid fa-user-group"></i>
-                        </div>
-                        <div id="chatBtn" class="center side-btn">
-                            <i id="chatBtnIcon" class="fa-solid fa-message"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </body>
-    </html>
-    <!-- Vendor JS Files -->
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
-    <script src="https://WebRTC.github.io/adapter/adapter-latest.js"> </script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://kit.fontawesome.com/8de498932c.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-    <!-- Template Main JS File -->
-    <script type="module" src="../js/room.js"></script>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- favicon -->
+		<link
+			rel="icon"
+			href="https://s3.amazonaws.com/www.miniroom.online/images/favicon.ico"
+			type="image/x-icon" />
+		<!-- Vendor CSS Files -->
+		<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+			rel="stylesheet" />
+		<link
+			href="https://getbootstrap.com/docs/5.3/assets/css/docs.css"
+			rel="stylesheet" />
+		<!-- Main CSS File -->
+		<link rel="stylesheet" href="/css/room.css" />
+		<script>
+			const ROOM_ID = "<%= roomId %>";
+			const PARTICIPANT_ID = "<%= participantId %>";
+			const PARTICIPANT_NAME = "<%= participantName %>";
+			const AVATAR_IMG_URL = "<%= avatarImgUrl %>";
+			const IS_MUTED = "<%= isMuted %>";
+			const IS_STOPPED_VIDEO = "<%= isStoppedVideo %>";
+		</script>
+		<title>Mini Room</title>
+	</head>
+	<body>
+		<!-- Preloader -->
+		<div id="preloader" class="preloader none"></div>
+		<!-- Modal -->
+		<div
+			id="modalContainer"
+			class="modal fade"
+			tabindex="-1"
+			aria-labelledby="roomModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="roomModalLabel"></h1>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div id="roomModalBody" class="modal-body">
+						Mini Room needs access to your camera and microphone so that other
+						participants can see and hear you. Mini Room will ask you to confirm
+						this decision on each browser and computer you use.
+					</div>
+					<div class="modal-footer">
+						<button
+							type="button"
+							class="btn btn-primary"
+							data-bs-dismiss="modal">
+							close
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Add Participan Modal -->
+		<div
+			id="addParticipantModal"
+			class="modal fade"
+			tabindex="-1"
+			aria-labelledby="inviteParticipantModal"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="exampleModalLabel">
+							Invite People
+						</h1>
+						<button
+							id="inviteModalCloseBtn"
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div
+							id="inviteFailedMsg"
+							class="alert alert-danger d-flex align-items-center none"
+							role="alert">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+								viewBox="0 0 16 16"
+								role="img"
+								aria-label="Warning:">
+								<path
+									d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+							</svg>
+							<div></div>
+						</div>
+						<form>
+							<div class="mb-3 input-container">
+								<label for="sender-name" class="col-form-label"
+									>Sent By(Your Name):</label
+								>
+								<input id="senderName" type="text" class="form-control" />
+								<div class="valid-feedback">Looks good!</div>
+								<div class="invalid-feedback">Please enter sender's name.</div>
+							</div>
+							<div class="mb-3 input-container">
+								<label for="recipient-name" class="col-form-label"
+									>Email:</label
+								>
+								<input id="recipientEmail" type="text" class="form-control" />
+								<div class="valid-feedback">Looks good!</div>
+								<div
+									id="recipientEmailInvalidMsg"
+									class="invalid-feedback"></div>
+							</div>
+							<div class="mb-3 invite-list-container">
+								<label for="message-text" class="col-form-label"
+									>Invite List:</label
+								>
+								<div id="inviteList" class=""></div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button id="addInviteList" type="button" class="btn btn-info">
+							Add invite list
+						</button>
+						<button
+							id="sendEmail"
+							type="button"
+							class="btn btn-primary"
+							disabled>
+							Send email
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- / Add Participan Modal Ends -->
+		<!-- Main Container -->
+		<div id="mainContainer" class="main-container main-middle">
+			<!-- Main Left -->
+			<div
+				id="screenShareContainer"
+				class="main-left screen-share-container center">
+				<div
+					id="screenShareAlertContainer"
+					class="alert alert-primary d-flex align-items-center screen-share-alert none"
+					role="alert">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+						viewBox="0 0 16 16"
+						role="img"
+						aria-label="Warning:">
+						<path
+							d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+					</svg>
+					<div id="screenShareAlert"></div>
+				</div>
+				<div class="screen-share-content center">
+					<div id="screenShare"></div>
+				</div>
+			</div>
+			<!-- Main Middle -->
+			<div class="main-middle center">
+				<!-- Videos Conntainer -->
+				<div id="videosContainer" class="videos-container"></div>
+			</div>
+			<!-- Main Right -->
+			<div class="main-right">
+				<!-- Info Offcanvas -->
+				<div
+					id="infoOffcanvas"
+					class="offcanvas offcanvas-end offcanvas-outlayer"
+					data-bs-keyboard="false"
+					data-bs-backdrop="false"
+					tabindex="-1"
+					aria-labelledby="offcanvasRightLabel">
+					<div class="offcanvas-header">
+						<h5 class="offcanvas-title" id="staticBackdropLabel">
+							Meeting details
+						</h5>
+						<button
+							id="infoOffcanvasCloseBtn"
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="offcanvas"
+							aria-label="Close"></button>
+					</div>
+					<div class="offcanvas-body">
+						<div class="hint">How to join this meeting</div>
+						<textarea
+							id="roomPath"
+							class="room-path"
+							type="text"
+							readonly></textarea>
+						<button
+							id="copyInfoBtn"
+							type="button"
+							class="btn copy-info-btn"
+							data-bs-toggle="tooltip"
+							data-bs-placement="bottom"
+							data-bs-title="Copied Success!"
+							data-clipboard-target="#roomPath">
+							<i class="fa-regular fa-clone"></i>
+							&nbsp;&nbsp;
+							<span class="copy-info">Copy joining info</span>
+						</button>
+					</div>
+				</div>
+				<!-- Participants Offcanvas -->
+				<div
+					id="participantOffcanvas"
+					class="offcanvas offcanvas-end offcanvas-outlayer"
+					data-bs-keyboard="false"
+					data-bs-backdrop="false"
+					tabindex="-1"
+					aria-labelledby="offcanvasRightLabel">
+					<div class="offcanvas-header">
+						<h5 class="offcanvas-title" id="staticBackdropLabel">People</h5>
+						<button
+							id="participantOffcanvasCloseBtn"
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="offcanvas"
+							aria-label="Close"></button>
+					</div>
+					<div class="offcanvas-body">
+						<div class="invite-participant">
+							<button
+								id="addParticipantBtn"
+								type="button"
+								class="btn btn-outline-primary center"
+								data-bs-toggle="modal"
+								data-bs-target="#addParticipantModal">
+								<i id="addParticipantBtnIcon" class="fa-solid fa-user-plus"></i>
+								&nbsp;&nbsp;
+								<span id="addParticipantBtnContent">Add people</span>
+							</button>
+						</div>
+						<div
+							class="input-group input-group-lg mb-3 search-participant-container">
+							<input
+								id="searchParticipantInput"
+								type="text"
+								class="form-control"
+								placeholder="Search for people"
+								aria-describedby="button-addon2" />
+							<button
+								id="searchParticipantBtn"
+								class="btn btn-primary disabled"
+								type="button"
+								id="button-addon2">
+								<i
+									id="searchParticipantBtnIcon"
+									class="fa-solid fa-magnifying-glass"></i>
+							</button>
+						</div>
+						<div class="participant-list-title">In call</div>
+						<div id="participantList" class="participant-list">
+							<button
+								id="closeParticpantList"
+								type="button"
+								class="btn-close close-participant-list none"
+								aria-label="Close"></button>
+							<div id="searchMsg" class="participant-list-title none"></div>
+						</div>
+					</div>
+				</div>
+				<!-- Chat Offcanvas -->
+				<div
+					id="chatOffcanvas"
+					class="offcanvas offcanvas-end offcanvas-outlayer"
+					data-bs-keyboard="false"
+					data-bs-backdrop="false"
+					tabindex="-1"
+					aria-labelledby="offcanvasRightLabel">
+					<div class="offcanvas-header">
+						<h5 class="offcanvas-title" id="staticBackdropLabel">
+							In-call Messages
+						</h5>
+						<button
+							id="chatOffcanvasCloseBtn"
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="offcanvas"
+							aria-label="Close"></button>
+					</div>
+					<div class="warning">
+						Messages can only be seen by people in the call and are deleted when
+						the call ends.
+					</div>
+					<div id="chatOffcanvasBody" class="offcanvas-body">
+						<div id="messageContainer" class="message-container"></div>
+					</div>
+					<div>
+						<div id="fileShareContainer" class="file-share-container none">
+							<div class="center">
+								<i id="uploadFileIcon" class="fa-solid fa-file"></i>
+							</div>
+							<div class="file-share-info">
+								<div id="uploadFileName" class="file-name"></div>
+								<div id="uploadFileSize" class="file-size"></div>
+							</div>
+						</div>
+						<div class="center">
+							<div
+								id="fileShareUploading"
+								class="d-flex align-items-center none">
+								<strong class="file-uploading">Uploading...</strong>
+								<div
+									class="spinner-border ms-auto file-uploading"
+									role="status"
+									aria-hidden="true"></div>
+							</div>
+						</div>
+						<div id="fileShareErrMsg" class="error-msg none">
+							Failed to share file!
+						</div>
+					</div>
+					<div id="messageInputContainer" class="message-input-container">
+						<textarea
+							id="messageInput"
+							class="form-control message-input"
+							placeholder="Send a message."></textarea>
+						<div class="message-btns">
+							<label for="fileShare">
+								<span
+									id="fileShareBtn"
+									type="btn"
+									class="send-btn center"
+									type="button"
+									><i id="fileShareBtnIcon" class="fa-solid fa-paperclip"></i
+								></span>
+							</label>
+							<input id="fileShare" type="file" class="none" />
+							<span
+								id="emojiSelectorBtn"
+								type="btn"
+								class="send-btn center"
+								type="button"
+								><i id="emojiSelectorIcon" class="fa-regular fa-face-smile"></i
+							></span>
+							<span
+								id="sendMsgBtn"
+								type="btn"
+								class="send-msg-btn center"
+								type="button"
+								><i id="sendMsgBtnIcon" class="fa-solid fa-paper-plane"></i
+							></span>
+						</div>
+						<ul class="emoji-selector-container">
+							<li id="emojiSelector" class="emoji-selector">
+								<div class="emoji-search-container">
+									<button
+										id="emojiCloseBtn"
+										type="button"
+										class="btn-close"
+										aria-label="Close"></button>
+									<input
+										id="emojiSearch"
+										class="emoji-search"
+										type="text"
+										name=""
+										id=""
+										placeholder="Search..." />
+								</div>
+								<ul id="emojiList" class="emoji-list"></ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- / Offcanvas Ends -->
+			</div>
+			<!-- / Main Right Ends -->
+		</div>
+		<!-- / Main Container Ends -->
+		<div class="tool-bar">
+			<div class="meeting-room-info left-center">
+				<div id="clock" class="clock"></div>
+				<div id="meetingRoomId" class="meeting-room-id"></div>
+			</div>
+			<div class="control-btns position-relative">
+				<div class="main-control-container center">
+					<div class="main-control">
+						<div id="audioBtn" class="center circle-btn btn-able">
+							<i id="audioBtnIcon" class="fa-solid fa-microphone"></i>
+						</div>
+						<div id="videoBtn" class="center circle-btn btn-able">
+							<i id="videoBtnIcon" class="fa-solid fa-video"></i>
+						</div>
+						<div id="screenShareBtn" class="center circle-btn btn-able">
+							<i
+								id="screenShareBtnIcon"
+								class="fa-solid fa-arrow-up-from-bracket"></i>
+						</div>
+						<div id="screenRecordBtn" class="center circle-btn btn-able">
+							<i id="screenRecordBtnIcon" class="fa-solid fa-record-vinyl"></i>
+						</div>
+						<div id="leaveBtn" class="center oval-btn btn-disable">
+							<i id="leaveBtnIcon" class="fa-solid fa-phone rotate"></i>
+						</div>
+					</div>
+				</div>
+				<div class="side-control-container right-center">
+					<div class="side-control">
+						<div id="infoOffcanvasBtn" class="center side-btn">
+							<i id="infoOffcanvasBtnIcon" class="fa-solid fa-circle-info"></i>
+						</div>
+						<div id="participantOffcanvasBtn" class="center side-btn">
+							<i
+								id="participantOffcanvasBtnIcon"
+								class="fa-solid fa-user-group">
+							</i>
+						</div>
+						<div id="chatOffcanvasBtn" class="center side-btn">
+							<i id="chatOffcanvasBtnIcon" class="fa-solid fa-message"></i>
+						</div>
+					</div>
+				</div>
+				<span
+					id="participantCnt"
+					class="position-absolute translate-middle badge rounded-pill bg-secondary participant-cnt"
+					>1</span
+				>
+			</div>
+		</div>
+		<div id="inviteNotify" class="invite-notify center">
+			Invitation emails have been sent
+		</div>
+		<div id="leaveRoomNotify" class="leave-room-notify">he left</div>
+		<div id="joinRoomNotify" class="join-room-notify">
+			<div class="join-room-avatar-container center">
+				<div class="join-room-avatar">
+					<img
+						name="avatarImg"
+						src="https://s3.amazonaws.com/www.miniroom.online/images/avatar.png" />
+				</div>
+			</div>
+			<div id="joinRoomContent" class="join-room-content left-center"></div>
+		</div>
+	</body>
+</html>
+<!-- Vendor JS Files -->
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+<script src="https://WebRTC.github.io/adapter/adapter-latest.js"></script>
+<script
+	src="https://kit.fontawesome.com/8de498932c.js"
+	crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/6.1.4/adapter.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Template Main JS File -->
+<script type="text/javascript" src="../js/room/commonVar.js"></script>
+<script type="module" src="../js/room/room.js"></script>

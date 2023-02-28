@@ -1,0 +1,217 @@
+/** @format */
+
+/*--------------------------------------------------------------
+# Header
+--------------------------------------------------------------*/
+header {
+	background-color: rgb(240, 239, 239);
+}
+
+.navbar {
+	width: 1200px;
+}
+
+.navbar-grid {
+	display: grid;
+	grid-template-columns: 90% 5% 5%;
+}
+
+nav .navbar-brand {
+	width: 225px;
+}
+
+nav .navbar-brand .logo {
+	color: rgb(20, 55, 101);
+	padding: 10px;
+	font-size: 30px;
+	font-weight: 700;
+	font-family: "Open Sans", sans-serif;
+}
+
+nav .navbar-brand img {
+	width: 50px;
+	height: 50px;
+}
+
+nav .setting-container {
+	width: 37px;
+	height: 37px;
+}
+
+nav .avatar-container {
+	width: 48px;
+	height: 48px;
+	border: none;
+	background-color: #969699;
+	overflow: hidden;
+	cursor: pointer;
+	border-radius: 50%;
+	padding: 0;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 32%);
+}
+
+nav .avatar-container:hover {
+	opacity: 0.7;
+}
+
+nav .avatar-container img {
+	cursor: pointer;
+}
+
+/*--------------------------------------------------------------
+# User Dropdown Menu
+--------------------------------------------------------------*/
+#userDropdownMenu .user-profile {
+	display: grid;
+	grid-template-columns: 48px auto;
+	align-items: center;
+	height: 70px;
+	border-bottom: 1px solid #000;
+}
+
+#userDropdownMenu .user-profile-avatar {
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	background-color: #969699;
+	cursor: pointer;
+	overflow: hidden;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 32%);
+}
+
+#userDropdownMenu .user-profile-name {
+	font-size: 19px;
+	padding: 15px;
+}
+
+/*--------------------------------------------------------------
+# User Modal
+--------------------------------------------------------------*/
+.modal .sign-up-avatar-container {
+	position: relative;
+	margin-bottom: 20px;
+}
+
+.modal .sign-up-avatar {
+	width: 200px;
+	height: 200px;
+	border-radius: 50%;
+	overflow: hidden;
+	background-color: #969699;
+	border: 5px solid #fcfcfc;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 32%);
+}
+
+.modal .sign-up-avatar-container .change-avatar {
+	position: absolute;
+	right: 160px;
+	bottom: 0;
+	cursor: pointer;
+}
+
+.modal .sign-up-avatar-container .change-avatar:hover {
+	color: #3c3c3d;
+}
+
+.modal .sign-up-avatar-container .change-avatar-btn {
+	width: 50px;
+	height: 50px;
+	padding: 5px;
+	border-radius: 50%;
+	background-color: rgb(19, 58, 103);
+	cursor: pointer;
+}
+
+.modal .sign-up-avatar-container i {
+	cursor: pointer;
+	font-size: 19px;
+	color: #fff;
+}
+
+.modal .sign-up-avatar-help {
+	margin-bottom: 30px;
+}
+
+.modal .change-auth {
+	position: absolute;
+	left: 10px;
+	width: auto;
+}
+
+.modal .sign-up,
+.modal .login {
+	cursor: pointer;
+}
+
+.modal .sign-up:hover,
+.modal .login:hover {
+	color: blue;
+	text-decoration: underline;
+}
+
+.modal .google-btn-dark-container {
+	padding: 10px 0;
+}
+
+.modal .google-btn-dark {
+	margin: 8px;
+	padding: 0 11px;
+	position: relative;
+	display: inline-block;
+	height: 40px;
+	cursor: pointer;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.32);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.32);
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-transition: all 400ms ease 0s;
+	-moz-transition: all 400ms ease 0s;
+	-ms-transition: all 400ms ease 0s;
+	-o-transition: all 400ms ease 0s;
+	transition: all 400ms ease 0s;
+	color: transparent;
+	background-color: #4285f4;
+}
+
+.modal .google-btn-dark .google-icon-svg {
+	position: absolute;
+	margin-top: 10px;
+	margin-left: 10px;
+	width: 18px;
+	height: 18px;
+}
+
+.modal .google-btn-dark .google-svg-container {
+	background: #fff;
+	position: absolute;
+	height: 38px;
+	width: 38px;
+	left: 1px;
+	top: 1px;
+	-webkit-border-radius: 1px;
+	border-radius: 1px;
+}
+
+.modal .google-btn-dark .btn-text {
+	margin: 10px 0 10px 40px;
+	font-size: 14px;
+	letter-spacing: 0.4px;
+	font-family: Roboto;
+	font-weight: 500;
+	color: #fff;
+}
+
+.modal .google-btn-dark:active {
+	-webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.24);
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.24);
+	background: #3367d6;
+}
+
+.modal .google-btn-dark:hover {
+	box-shadow: 0 3px 8px rgba(117, 117, 117, 0.5);
+	user-select: none;
+}
