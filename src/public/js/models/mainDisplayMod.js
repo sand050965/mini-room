@@ -376,7 +376,10 @@ class MainDisplayMod {
 		this.resetRoomVideoGrid(videoDOMElement);
 
 		// add common style
-		videosContainer.classList.add("more-videos-grid");
+		videosContainer.classList.add("screen-share-videos-grid");
+		if (cnt > 5) {
+			videosContainer.classList.add("screen-share-videos-grid-column");
+		}
 
 		// add self video style
 		selfVideoItemContainer.classList.add("video-container");
@@ -424,6 +427,8 @@ class MainDisplayMod {
 
 		// remove common style
 		videosContainer.classList.remove("more-videos-grid");
+		videosContainer.classList.remove("screen-share-videos-grid");
+		videosContainer.classList.remove("screen-share-videos-grid-column");
 		videosContainer.style.removeProperty("grid-template-columns");
 
 		// remove self video style

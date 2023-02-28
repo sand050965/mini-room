@@ -83,36 +83,34 @@ class OffcanvasMod {
 
 	offcanvasOpenGrid = () => {
 		const mainContainer = document.querySelector("#mainContainer");
+		const mainLeftContainer = document.querySelector("#mainLeftContainer");
+		mainContainer.classList.remove("main-left");
+		mainContainer.classList.add("main-left-right");
 
 		if (isScreenSharing) {
-			mainContainer.classList.remove("main-middle");
-			mainContainer.classList.remove("main-left-middle");
-			mainContainer.classList.remove("main-middle-right");
-			mainContainer.classList.add("main-left-middle-right");
+			mainLeftContainer.classList.remove("main-left-videos");
+			mainLeftContainer.classList.add("main-left-screen-share");
 		} else {
 			if (cnt === 2) {
 				selfVideoItemContainer.classList.add("offcanvas-open");
 			}
-			mainContainer.classList.remove("main-middle");
-			mainContainer.classList.remove("main-left-middle");
-			mainContainer.classList.add("main-middle-right");
-			mainContainer.classList.remove("main-left-middle-right");
+			mainLeftContainer.classList.remove("main-left-screen-share");
+			mainLeftContainer.classList.add("main-left-videos");
 		}
 	};
 
 	offcanvasCloseGrid = () => {
 		const mainContainer = document.querySelector("#mainContainer");
+		const mainLeftContainer = document.querySelector("#mainLeftContainer");
+		mainContainer.classList.remove("main-left-right");
+		mainContainer.classList.add("main-left");
 
 		if (isScreenSharing) {
-			mainContainer.classList.remove("main-middle");
-			mainContainer.classList.add("main-left-middle");
-			mainContainer.classList.remove("main-middle-right");
-			mainContainer.classList.remove("main-left-middle-right");
+			mainLeftContainer.classList.remove("main-left-videos");
+			mainLeftContainer.classList.add("main-left-screen-share");
 		} else {
-			mainContainer.classList.add("main-middle");
-			mainContainer.classList.remove("main-left-middle");
-			mainContainer.classList.remove("main-middle-right");
-			mainContainer.classList.remove("main-left-middle-right");
+			mainLeftContainer.classList.remove("main-left-screen-share");
+			mainLeftContainer.classList.add("main-left-videos");
 		}
 	};
 }
