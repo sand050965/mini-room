@@ -64,7 +64,6 @@ module.exports = {
 			});
 			const beforeParticipantCnt =
 				await participantService.getBeforeParticipants(participantInfo);
-			console.log(beforeParticipantCnt);
 			return res
 				.status(200)
 				.json({ data: { beforeParticipantCnt: beforeParticipantCnt } });

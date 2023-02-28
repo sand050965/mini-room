@@ -21,8 +21,7 @@ class ChatRoomMod {
 		this.uploadFileIcon = document.querySelector("#uploadFileIcon");
 		this.uploadFileName = document.querySelector("#uploadFileName");
 		this.uploadFileSize = document.querySelector("#uploadFileSize");
-		this.fileShareProgress = document.querySelector("#fileShareProgress");
-		this.progressBar = document.querySelector("#progressBar");
+		this.fileShareUploading = document.querySelector("#fileShareUploading");
 		this.fileShareErrMsg = document.querySelector("#fileShareErrMsg");
 		this.emojiList = document.querySelector("#emojiList");
 		this.emojiSelector = document.querySelector("#emojiSelector");
@@ -49,23 +48,20 @@ class ChatRoomMod {
 			return;
 		}
 		clearTimeout(this.timeout);
-		this.displayFileUploadProgress(file);
+		this.displayFileUploading(file);
 		const formData = new FormData();
 		formData.append("file", file);
-		const config = {
-			onUploadProgress: (progressEvent) => {
-				const percentCompleted = Math.round(
-					(progressEvent.loaded / progressEvent.total) * 100
-				);
-				this.progressBar.style.width = `${percentCompleted}%`;
-			},
-		};
-		const s3Result = await axios.post("/api/s3/file", formData, config);
 
-		this.hideFileUploadProgress();
+		const response = await fetch("/api/s3/file", {
+			method: "POST",
+			body: formData,
+		});
+
+		const s3Result = await response.json();
+
 		const timeElement = this.roomInfoMod.getTime();
 		const fileObj = {
-			fileUrl: s3Result.data.data.url,
+			fileUrl: s3Result.data.url,
 			fileName: file.name,
 			fileSize: this.uploadFileSize.textContent,
 			fileType: file.type,
@@ -75,10 +71,10 @@ class ChatRoomMod {
 		this.fileShare.value = "";
 		this.uploading = false;
 		socket.emit("file-share", fileObj);
+		this.hideFileUploading();
 	};
 
-	displayFileUploadProgress = (file) => {
-		this.progressBar.style.width = "0%";
+	displayFileUploading = (file) => {
 		this.uploadFileName.textContent = file.name;
 		if (file.size / 1024 / 1024 > 1) {
 			this.uploadFileSize.textContent = `${(file.size / 1024 / 1024).toFixed(
@@ -102,24 +98,23 @@ class ChatRoomMod {
 			this.uploadFileIcon.classList.add("fa-file");
 		}
 		this.fileShareErrMsg.classList.add("none");
-		this.progressBar.classList.remove("error-progress-bar");
 		this.fileShareContainer.classList.remove("none");
-		this.fileShareProgress.classList.remove("none");
+		this.fileShareUploading.classList.remove("none");
 	};
 
 	displayFileUploadErrMsg = () => {
-		this.progressBar.classList.add("error-progress-bar");
+		this.fileShareUploading.classList.add("none");
 		this.fileShareErrMsg.classList.remove("none");
 	};
 
-	hideFileUploadProgress = () => {
+	hideFileUploading = () => {
 		this.fileShareContainer.classList.add("none");
-		this.fileShareProgress.classList.add("none");
+		this.fileShareUploading.classList.add("none");
 	};
 
 	hideFileUploadErrMsg = () => {
 		this.fileShareContainer.classList.add("none");
-		this.fileShareProgress.classList.add("none");
+		this.fileShareUploading.classList.add("none");
 		this.fileShareErrMsg.classList.add("none");
 	};
 
@@ -271,12 +266,19 @@ class ChatRoomMod {
 			this.searchEmoji();
 			this.emojiList.scrollTo({ top: 0 });
 		}
-		this.chatOffcanvasBody.classList.toggle("offcanvas-body-emoji-active");
+		this.emojiSelector.classList.toggle("active");
 		this.messageInputContainer.classList.toggle(
 			"message-input-container-emoji-active"
 		);
-		this.emojiSelector.classList.toggle("active");
+		this.chatOffcanvasBody.classList.toggle("offcanvas-body-emoji-active");
 		this.scrollToBottom();
+	};
+
+	closeEmoji = () => {
+		this.emojiSelector.classList.remove("active");
+		this.messageInputContainer.classList.remove(
+			"message-input-container-emoji-active"
+		);
 	};
 
 	loadEmoji = async () => {

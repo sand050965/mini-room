@@ -146,6 +146,7 @@ class RoomController {
 				btnId: e.target.id.replace("Icon", ""),
 				target: e.target.id.replace("Icon", "").replace("Btn", ""),
 			};
+			this.chatRoomMod.closeEmoji();
 			this.offcanvasMod.toggleOffcanvas(offcanvasDOMElement);
 		} else if (e.target.id.includes("OffcanvasCloseBtn")) {
 			// offcanvas close btn is clicked
@@ -195,6 +196,10 @@ class RoomController {
 				searchParticipantInput.value.trim() !== ""
 			) {
 				this.participantMod.doSearchParticipant();
+			}
+		} else if (e.which === 27) {
+			if (offcanvasMap.get("isOpen").includes("chat")) {
+				this.chatRoomMod.closeEmoji();
 			}
 		}
 	};

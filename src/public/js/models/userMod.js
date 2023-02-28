@@ -88,6 +88,7 @@ class UserMod {
 	resetValue = () => {
 		this.signUpAvatarImg.src =
 			"https://s3.amazonaws.com/www.miniroom.online/images/avatar.png";
+		this.avatarFileUpload.value = "";
 		this.username.value = "";
 		this.email.value = "";
 		this.password.value = "";

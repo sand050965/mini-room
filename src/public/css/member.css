@@ -52,6 +52,8 @@
 	overflow: hidden;
 	background-color: #969699;
 	border: 1px solid #969699;
+	border: 5px solid #fcfcfc;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 32%);
 }
 
 .right-content .change-avatar {
@@ -70,13 +72,14 @@
 	height: 50px;
 	padding: 5px;
 	border-radius: 50%;
-	background-color: #6e75fb;
+	background-color: rgb(19, 58, 103);
 	cursor: pointer;
 }
 
 .right-content .member-avatar-container i {
 	cursor: pointer;
 	font-size: 19px;
+	color: #fff;
 }
 
 .right-content .input-help {

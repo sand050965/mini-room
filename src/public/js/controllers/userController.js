@@ -14,6 +14,8 @@ class UserController {
 			document.querySelector("#userModalContainer")
 		);
 
+		this.validFile = null;
+
 		// dropdown list
 		this.avatarImg = document.querySelector("#avatarImg");
 		this.userDropdown = document.querySelector("#userDropdown");
@@ -75,6 +77,7 @@ class UserController {
 	};
 
 	initLogIn = async () => {
+		this.validFile = null;
 		await this.userMod.reset();
 		await this.signUpAvatarContainer.classList.add("none");
 		await this.signUpAvatarHelp.classList.add("none");
@@ -110,20 +113,17 @@ class UserController {
 			email: this.email.value,
 			password: this.password.value,
 		};
-		let isInvalid = false;
-		if (!this.inputValidator.emailValidator(data)) {
-			this.email.classList.add("is-invalid");
-			isInvalid = true;
-		}
-		if (!this.inputValidator.passwordValidator(data)) {
-			this.password.classList.add("is-invalid");
-			isInvalid = true;
-		}
-		if (isInvalid) {
+
+		const emailCheck = this.userMod.validateEmail();
+		const passwordCheck = this.userMod.validatePassword();
+
+		if (!emailCheck || !passwordCheck) {
 			this.userMod.setLogInBtn(false);
 			this.commonMod.closePreload("#preloader");
 			return;
 		}
+		
+		this.userMod.resetValidateStyle();
 		const result = await this.userMod.logIn(data);
 		const isSuccess = await this.displayAuthResult("login", result);
 		await this.userMod.setLogInBtn(false);
@@ -149,7 +149,6 @@ class UserController {
 
 		let avatarImgUrl =
 			"https://s3.amazonaws.com/www.miniroom.online/images/avatar.png";
-		let isInvalid = false;
 
 		const data = {
 			username: this.username.value,
@@ -157,27 +156,18 @@ class UserController {
 			password: this.password.value,
 		};
 
-		if (this.signUpAvatarInvalid.style === "block") {
-			isInvalid = true;
-		}
+		const avatarCheck = this.userMod.validateAvatarImg();
+		const usernameCheck = this.userMod.validateUsername();
+		const emailCheck = this.userMod.validateEmail();
+		const passwordCheck = this.userMod.validatePassword();
 
-		if (!this.userMod.validateUsername()) {
-			isInvalid = true;
-		}
-
-		if (!this.userMod.validateEmail()) {
-			isInvalid = true;
-		}
-
-		if (!this.userMod.validatePassword()) {
-			isInvalid = true;
-		}
-
-		if (isInvalid) {
+		if (!avatarCheck || !usernameCheck || !emailCheck || !passwordCheck) {
 			this.userMod.setSignUpBtn(false);
 			this.commonMod.closePreload("#preloader");
 			return;
 		}
+
+		this.userMod.resetValidateStyle();
 
 		if (
 			this.signUpAvatarImg.src !==
@@ -185,7 +175,7 @@ class UserController {
 		) {
 			// upload avatar image to s3 first
 			const s3Result = await this.userMod.storeAvatarToS3({
-				file: this.avatarFileUpload.files[0],
+				file: this.validFile,
 			});
 
 			const isS3Success = await this.displayAuthResult(
@@ -234,6 +224,7 @@ class UserController {
 			return;
 		}
 		this.signUpAvatarImg.src = URL.createObjectURL(file);
+		this.validFile = file;
 	};
 
 	reValidateUsername = () => {

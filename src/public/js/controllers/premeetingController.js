@@ -17,6 +17,7 @@ class PremeetingController {
 		this.inputValidator = new InputValidator();
 
 		this.participantId;
+		this.isJoining = false;
 		this.isPermissionDenied = true;
 		this.isMuted = false;
 		this.isStoppedVideo = false;
@@ -66,6 +67,9 @@ class PremeetingController {
 	hotKeysControl = (e) => {
 		if (e.which === 13) {
 			e.preventDefault();
+			if (this.isJoining) {
+				return;
+			}
 			this.confirmState();
 		}
 	};
@@ -102,14 +106,20 @@ class PremeetingController {
 	 * Confirm State
 	 */
 	confirmState = async () => {
-		try {
-			const modalDOMElement = {
-				page: "premeeting",
-				isDisplayModal: this.isPermissionDenied,
-				title: "Allow Mini Room to use your camera and microphone",
-				msg: "Mini Room needs access to your camera and microphone so that other participants can see and hear you. Mini Room will ask you to confirm this decision on each browser and computer you use.",
-			};
+		if (this.isJoining) {
+			return;
+		}
 
+		this.isJoining = true;
+
+		const modalDOMElement = {
+			page: "premeeting",
+			isDisplayModal: this.isPermissionDenied,
+			title: "Allow Mini Room to use your camera and microphone",
+			msg: "Mini Room needs access to your camera and microphone so that other participants can see and hear you. Mini Room will ask you to confirm this decision on each browser and computer you use.",
+		};
+
+		try {
 			const validateData = {
 				username: this.nameInput.value.trim(),
 			};
@@ -121,6 +131,7 @@ class PremeetingController {
 			}
 
 			if (!this.commonMod.displayModal(modalDOMElement) || !isName) {
+				this.isJoining = false;
 				return;
 			}
 
@@ -153,6 +164,7 @@ class PremeetingController {
 
 					if (!this.commonMod.displayModal(modalDOMElement)) {
 						this.premeetingMod.setConfirmBtnEnabled();
+						this.isJoining = false;
 						return;
 					}
 				}
@@ -166,6 +178,7 @@ class PremeetingController {
 
 				this.commonMod.displayModal(modalDOMElement);
 				this.setConfirmBtnEnabled();
+				this.isJoining = false;
 				return;
 			}
 		} catch (e) {
@@ -177,8 +190,8 @@ class PremeetingController {
 				title: "Somthing Went Wrong",
 				msg: "Sorry there are some problems, please try again!",
 			};
-
 			this.commonMod.displayModal(modalDOMElement);
+			this.isJoining = false;
 		}
 	};
 }

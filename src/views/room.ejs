@@ -182,6 +182,7 @@
 				<div
 					id="infoOffcanvas"
 					class="offcanvas offcanvas-end offcanvas-outlayer"
+					data-bs-keyboard="false"
 					data-bs-backdrop="false"
 					tabindex="-1"
 					aria-labelledby="offcanvasRightLabel">
@@ -221,6 +222,7 @@
 				<div
 					id="participantOffcanvas"
 					class="offcanvas offcanvas-end offcanvas-outlayer"
+					data-bs-keyboard="false"
 					data-bs-backdrop="false"
 					tabindex="-1"
 					aria-labelledby="offcanvasRightLabel">
@@ -279,6 +281,7 @@
 				<div
 					id="chatOffcanvas"
 					class="offcanvas offcanvas-end offcanvas-outlayer"
+					data-bs-keyboard="false"
 					data-bs-backdrop="false"
 					tabindex="-1"
 					aria-labelledby="offcanvasRightLabel">
@@ -312,16 +315,13 @@
 						</div>
 						<div class="center">
 							<div
-								id="fileShareProgress"
-								class="progress file-share-progress none"
-								role="progressbar"
-								aria-valuenow="25"
-								aria-valuemin="0"
-								aria-valuemax="100">
+								id="fileShareUploading"
+								class="d-flex align-items-center none">
+								<strong class="file-uploading">Uploading...</strong>
 								<div
-									id="progressBar"
-									class="progress-bar"
-									style="width: 0%"></div>
+									class="spinner-border ms-auto file-uploading"
+									role="status"
+									aria-hidden="true"></div>
 							</div>
 						</div>
 						<div id="fileShareErrMsg" class="error-msg none">
@@ -459,7 +459,6 @@
 <script
 	src="https://kit.fontawesome.com/8de498932c.js"
 	crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/6.1.4/adapter.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

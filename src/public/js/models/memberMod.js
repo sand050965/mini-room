@@ -138,6 +138,7 @@ class MemberMod {
 	};
 
 	resetInputs = (data) => {
+		this.avatarFileUpload.value = "";
 		this.memberAvatarImg.src = data.avatarImgUrl;
 		this.memberEmail.value = data.email;
 		this.memberUsername.value = data.username;

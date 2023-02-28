@@ -13,6 +13,7 @@ class MemberController {
 		this.userMod = new UserMod();
 		this.memberMod = new MemberMod();
 		this.inputValidator = new InputValidator();
+		this.validFile = null;
 		this.initInfo = null;
 		this.memberAvatarImg = document.querySelector("#memberAvatarImg");
 		this.avatarFileUpload = document.querySelector("#avatarFileUpload");
@@ -46,6 +47,7 @@ class MemberController {
 			return;
 		}
 		this.memberAvatarImg.src = URL.createObjectURL(file);
+		this.validFile = file;
 	};
 
 	saveUpdataMemberInfo = async () => {
@@ -68,6 +70,8 @@ class MemberController {
 				return;
 			}
 
+			this.memberMod.resetValidate();
+
 			const data = {
 				email: this.memberEmail.value,
 				username: this.memberUsername.value,
@@ -76,7 +80,7 @@ class MemberController {
 
 			if (this.initInfo.avatarImgUrl !== this.memberAvatarImg.src) {
 				const s3Result = await this.userMod.storeAvatarToS3({
-					file: this.avatarFileUpload.files[0],
+					file: this.validFile,
 				});
 
 				const isS3Success = await this.memberMod.displayUpdateResult(
@@ -118,6 +122,7 @@ class MemberController {
 	};
 
 	cancelUpdateMemberInfo = () => {
+		this.validFile = null;
 		this.memberMod.resetInputs(this.initInfo);
 		this.memberMod.resetValidate();
 		this.reValidateEmail();

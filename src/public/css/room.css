@@ -133,10 +133,13 @@ video {
 	padding: 15px 15px 15px;
 }
 
+.main-middle .videos-container-more {
+	padding: 5vw 0;
+}
+
 .main-middle .more-videos-grid {
 	display: grid;
 	grid-auto-rows: 1fr;
-	gap: 20px;
 	width: 80vw;
 }
 
@@ -186,8 +189,8 @@ video {
 
 .videos-container .more-item {
 	position: relative;
-	width: inherit;
-	max-height: 100%;
+	width: 100%;
+	height: 100%;
 	border-radius: 10px;
 	background-color: #43454b;
 }
@@ -213,8 +216,8 @@ video {
 }
 
 .videos-container .video {
-	width: 100%;
-	height: 100%;
+	min-width: 100%;
+	max-height: 100%;
 }
 
 .videos-container .one-self-avatar-container {
@@ -472,7 +475,7 @@ video {
 }
 
 .message-container .self-message {
-	background-color: #0761f2;
+	background-color: #2e78f0;
 }
 
 .message-container .other-message {
@@ -481,21 +484,21 @@ video {
 
 .message-container .message-file-icon {
 	font-size: 32px !important;
-	color: #fff;
+	color: #010521;
 }
 
 .message-container .message-file-name {
 	font-size: 16px;
-	color: #fff;
+	color: #000;
 	margin-bottom: 10px;
 }
 
 .message-container .message-file-size {
 	font-size: 13px;
-	color: #e8e8e8;
+	color: #000;
 }
 
-/* file share progress */
+/* file share */
 #chatOffcanvas .file-share-container {
 	display: grid;
 	grid-template-columns: 50px auto;
@@ -503,6 +506,7 @@ video {
 	margin: 10px;
 	border-radius: 10px;
 	border: 1px solid #eee;
+	background-color: #e8e8e8;
 }
 
 #chatOffcanvas .file-share-container i {
@@ -522,18 +526,14 @@ video {
 	color: rgb(89, 89, 89);
 }
 
-#chatOffcanvas .file-share-progress {
-	width: 360px;
-	margin: 0 10px;
-}
-
-#chatOffcanvas .error-progress-bar {
-	background-color: red;
+#chatOffcanvas .file-uploading {
+	color: rgb(89, 89, 89);
 }
 
 #chatOffcanvas .error-msg {
 	color: red;
 	text-align: center;
+	font-weight: 700;
 }
 
 /* message input and buttons control */
