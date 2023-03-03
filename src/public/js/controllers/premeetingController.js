@@ -131,6 +131,7 @@ class PremeetingController {
 			}
 
 			if (!this.commonMod.displayModal(modalDOMElement) || !isName) {
+				this.commonMod.closePreload("#preloader");
 				this.isJoining = false;
 				return;
 			}
@@ -164,6 +165,7 @@ class PremeetingController {
 
 					if (!this.commonMod.displayModal(modalDOMElement)) {
 						this.premeetingMod.setConfirmBtnEnabled();
+						this.commonMod.closePreload("#preloader");
 						this.isJoining = false;
 						return;
 					}
@@ -176,6 +178,7 @@ class PremeetingController {
 					msg: "Sorry this room is full, please try another one!",
 				};
 
+				this.commonMod.closePreload("#preloader");
 				this.commonMod.displayModal(modalDOMElement);
 				this.setConfirmBtnEnabled();
 				this.isJoining = false;
@@ -190,6 +193,7 @@ class PremeetingController {
 				title: "Somthing Went Wrong",
 				msg: "Sorry there are some problems, please try again!",
 			};
+			this.commonMod.closePreload("#preloader");
 			this.commonMod.displayModal(modalDOMElement);
 			this.isJoining = false;
 		}

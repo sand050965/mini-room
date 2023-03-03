@@ -214,7 +214,7 @@ class RoomController {
 		await socket.disconnect();
 		await this.participantMod.removeParticipant(ROOM_ID, PARTICIPANT_ID);
 	};
-
+	
 	leaveRoom = async () => {
 		await this.commonMod.openPreload("#preloader");
 		await socket.disconnect();

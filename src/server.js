@@ -80,12 +80,24 @@ io.on("connection", (socket) => {
 			}); // emit to users in the room what file that user attach
 
 			// user disconnect event
-			socket.on("disconnect", async () => {
-				await participantService.deleteParticipant({
-					roomId: roomId,
-					participantId: participantId,
-				});
-				io.to(roomId).emit("user-disconnected", participantId, participantName); // emit to users in the room that a user just leave
+			socket.on("disconnect", async (reason) => {
+				console.log(reason);
+				if (
+					reason === "client namespace disconnect" ||
+					reason === "transport close"
+				) {
+					await participantService.deleteParticipant({
+						roomId: roomId,
+						participantId: participantId,
+					});
+					io.to(roomId).emit(
+						"user-disconnected",
+						participantId,
+						participantName
+					); // emit to users in the room that a user just leave
+				} else {
+					return;
+				}
 			});
 		}
 	);

@@ -443,6 +443,15 @@ socket.on("user-share-file", (elementObj) => {
 });
 
 /**
+ * user reconnected
+ */
+socket.on("connect_error", () => {
+	setTimeout(() => {
+		socket.connect();
+	}, 1000);
+});
+
+/**
  * user disconnected
  */
 socket.on("user-disconnected", async (participantId, participantName) => {
@@ -453,8 +462,6 @@ socket.on("user-disconnected", async (participantId, participantName) => {
 	await participantMod.removeParticipant(ROOM_ID, participantId);
 
 	cnt = await participantMod.getAllParticipants();
-
-	beforeCnt = await participantMod.getBeforeParticipants();
 
 	await participantMod.removeParticipantList(participantId);
 
