@@ -7,11 +7,11 @@
 
 .thankyou-container {
 	display: grid;
-	grid-template-rows: 300px auto 300px;
+	grid-template-rows: 20vh 40vh 20vh;
 	justify-items: center;
 	align-items: center;
 	background-color: rgb(2, 60, 81);
-	height: 90vh;
+	height: 80vh;
 }
 
 .thankyou-container h1 {

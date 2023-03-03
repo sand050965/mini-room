@@ -28,7 +28,13 @@ class ScreenRecordMod {
 
 	startRecording = async () => {
 		try {
-			this.stream = await this.streamMod.getDisplayMediaStream();
+			this.stream = await this.streamMod.getDisplayMediaStream({
+				video: {
+					cursor: "always",
+				},
+				selfBrowserSurface: "exclude",
+				surfaceSwitching: "exclude",
+			});
 			this.audio = await this.streamMod.getUserAudioStream();
 			if (this.stream && this.audio) {
 				this.mixedStream = new MediaStream([

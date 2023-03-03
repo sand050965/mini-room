@@ -26,3 +26,8 @@
 .hero .error-title {
 	margin-bottom: 100px;
 }
+
+.hero button {
+	font-size: 28px;
+	color: #fff;
+}

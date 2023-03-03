@@ -21,11 +21,6 @@
 		<!-- Template Main CSS File -->
 		<link rel="stylesheet" href="/css/user.css" />
 		<link rel="stylesheet" href="/css/error.css" />
-		<!-- Vendor JS Files -->
-		<script
-			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-			integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-			crossorigin="anonymous"></script>
 		<title>Mini Room</title>
 	</head>
 	<body>
@@ -40,11 +35,19 @@
 		<section class="hero flex-row-center">
 			<h1 class="error-title">Sorry! The room code is invalid!</h1>
 			<a href="/">
-				<button type="button" class="btn btn-light">Back to home</button>
+				<button type="button" class="btn btn-secondary">Back to home...</button>
 			</a>
 		</section>
 		<!-- End Header -->
+		<!-- ======= Footer ======= -->
+		<%- include("./partials/footer.ejs") %>
+		<!-- End Footer -->
 	</body>
 </html>
+<!-- Vendor JS Files -->
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+	crossorigin="anonymous"></script>
 <!-- Template Main JS File -->
 <script type="module" src="../js/user/user.js"></script>

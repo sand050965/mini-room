@@ -17,7 +17,11 @@ class ScreenShareMod {
 		}
 
 		try {
-			myScreenShareStream = await this.streamMod.getDisplayMediaStream();
+			myScreenShareStream = await this.streamMod.getDisplayMediaStream({
+				video: {
+					cursor: "always",
+				},
+			});
 			screenShareMap.set("screenSharing", PARTICIPANT_ID);
 			const screenShareDOMElement = {
 				screenShareId: PARTICIPANT_ID,
