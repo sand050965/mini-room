@@ -821,6 +821,26 @@ video {
 /*--------------------------------------------------------------
 # Notify
 --------------------------------------------------------------*/
+.screen-record-notify {
+	position: fixed;
+	display: grid;
+	grid-template-columns: 60px auto;
+	justify-content: center;
+	align-items: center;
+	width: 200px;
+	height: 50px;
+	border-radius: 10px;
+	top: 50px;
+	right: 500px;
+	background-color: rgb(118, 118, 180);
+	opacity: 0;
+}
+
+.screen-record-notify-content {
+	color: #fff;
+	padding-right: 10px;
+}
+
 .invite-notify,
 .leave-room-notify {
 	position: fixed;
@@ -860,6 +880,7 @@ video {
 	top: 140px;
 }
 
+.screen-record-notify-active,
 .invite-notify-active,
 .leave-room-notify-active,
 .join-room-notify-active {

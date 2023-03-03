@@ -15,6 +15,7 @@ class ScreenRecordMod {
 		this.mediaRecorder = null;
 		this.tracks = [];
 		this.isRecording = false;
+		this.screenRecordNotify = document.querySelector("#screenRecordNotify");
 		this.screenRecordBtnIcon = document.querySelector("#screenRecordBtnIcon");
 	}
 
@@ -31,8 +32,8 @@ class ScreenRecordMod {
 			this.stream = await this.streamMod.getDisplayMediaStream({
 				video: {
 					cursor: "always",
+					displaySurface: "monitor",
 				},
-				selfBrowserSurface: "exclude",
 				surfaceSwitching: "exclude",
 			});
 			this.audio = await this.streamMod.getUserAudioStream();
@@ -57,6 +58,7 @@ class ScreenRecordMod {
 				this.addStreamToRecorder
 			);
 			this.isRecording = true;
+			this.screenRecordNotify.classList.toggle("screen-record-notify-active");
 			this.screenRecordBtnIcon.classList.toggle("is-recording");
 		} catch (e) {
 			console.log(e);
@@ -95,6 +97,7 @@ class ScreenRecordMod {
 		a.download = `${dateElement.y}.${dateElement.m}.${dateElement.d}_${timeElement.h}:${timeElement.m}:${timeElement.s}_${ROOM_ID}.webm`;
 		a.click();
 		this.isRecording = false;
+		this.screenRecordNotify.classList.toggle("screen-record-notify-active");
 		this.screenRecordBtnIcon.classList.toggle("is-recording");
 	};
 }

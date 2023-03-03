@@ -7,7 +7,7 @@ module.exports = {
 		return await Room.findOne({
 			$and: [
 				{ roomId: data.roomId },
-				{ status: ["start", "preStart", "inUse"] },
+				{ status: ["start"] },
 			],
 		});
 	},
