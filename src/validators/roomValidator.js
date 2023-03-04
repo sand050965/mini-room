@@ -1,6 +1,5 @@
 /** @format */
 
-require("dotenv").config();
 const shortid = require("shortid");
 const JoiUtil = require("../utils/JoiUtil");
 
