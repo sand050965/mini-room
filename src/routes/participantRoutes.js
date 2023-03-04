@@ -10,11 +10,6 @@ router.get(
 	participantValidator.getAllParticipantsValidator,
 	participantController.getAllParticipants
 );
-router.get(
-	"/before/:roomId",
-	participantValidator.getParticipantValidator,
-	participantController.getBeforeParticipants
-);
 
 router.get(
 	"/:roomId",
@@ -38,12 +33,6 @@ router.delete(
 	"/",
 	participantValidator.participantLeaveValidator,
 	participantController.participantLeave
-);
-
-router.delete(
-	"/all",
-	participantValidator.deleteAllParticipantsValidator,
-	participantController.deleteAllParticipants
 );
 
 module.exports = router;

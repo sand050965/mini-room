@@ -6,6 +6,7 @@ const server = require("http").Server(app);
 const io = require("socket.io")(server);
 const PORT = process.env.PORT || 3000;
 const participantService = require("./services/participantService");
+const roomService = require("./services/roomService");
 
 // -------------Socket IO-------------
 io.on("connection", (socket) => {
@@ -82,21 +83,36 @@ io.on("connection", (socket) => {
 			// user disconnect event
 			socket.on("disconnect", async (reason) => {
 				console.log(reason);
-				if (
-					reason === "client namespace disconnect" ||
-					reason === "transport close"
-				) {
+				if (reason === "transport close") {
 					await participantService.deleteParticipant({
 						roomId: roomId,
 						participantId: participantId,
 					});
+
+					const participantCheck =
+						await participantService.getAllParticipantsCnt({
+							roomId: roomId,
+						});
+
+					if (!participantCheck) {
+						await roomService.updateRoomStatus(
+							{
+								roomId: roomId,
+							},
+							{ status: "closed" }
+						);
+					}
+				}
+
+				if (
+					reason === "client namespace disconnect" ||
+					reason === "transport close"
+				) {
 					io.to(roomId).emit(
 						"user-disconnected",
 						participantId,
 						participantName
 					); // emit to users in the room that a user just leave
-				} else {
-					return;
 				}
 			});
 		}

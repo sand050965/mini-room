@@ -214,11 +214,17 @@ class RoomController {
 		await socket.disconnect();
 		await this.participantMod.removeParticipant(ROOM_ID, PARTICIPANT_ID);
 	};
-	
+
 	leaveRoom = async () => {
 		await this.commonMod.openPreload("#preloader");
 		await socket.disconnect();
-		await this.participantMod.removeParticipant(ROOM_ID, PARTICIPANT_ID);
+		const cnt = await this.participantMod.removeParticipant(
+			ROOM_ID,
+			PARTICIPANT_ID
+		);
+		if (cnt === 0) {
+			await this.roomInfoMod.closeRoom(ROOM_ID);
+		}
 		window.location = "/thankyou";
 	};
 }

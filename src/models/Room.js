@@ -9,7 +9,7 @@ const roomShcema = new mongoose.Schema(
 			type: String,
 			required: true,
 			index: true,
-			enum: ["start", "preStart", "inUse", "closed"],
+			enum: ["start", "closed"],
 			trim: true,
 		},
 	},

@@ -35,14 +35,6 @@ class ParticipantMod {
 		return cnt;
 	};
 
-	getBeforeParticipants = async () => {
-		const response = await fetch(
-			`/api/participant/before/${ROOM_ID}?participantId=${PARTICIPANT_ID}`
-		);
-		const result = await response.json();
-		return result.data.beforeParticipantCnt;
-	};
-
 	getParticipantInfo = async (participantId) => {
 		const response = await fetch(
 			`/api/participant/${ROOM_ID}?participantId=${participantId}`

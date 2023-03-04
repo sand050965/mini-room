@@ -8,13 +8,37 @@ module.exports = {
 		try {
 			let roomId = shortid.generate();
 
-			//   check whether the room_id is duplicated
-			const checkRoom = await roomService.getValidRoom({
-				roomId: roomId,
-			});
+			//   check whether the room_id status is closed
+			const checkInvalidRoom = await roomService.getRoomCheck(
+				{
+					roomId: roomId,
+				},
+				{
+					status: "closed",
+				}
+			);
 
-			if (checkRoom !== null) {
+			//   check whether the room_id is duplicated
+			const checkValidRoom = await roomService.getRoomCheck(
+				{
+					roomId: roomId,
+				},
+				{
+					status: "start",
+				}
+			);
+
+			if (checkValidRoom !== null) {
 				roomId = shortid.generate();
+			} else if (checkInvalidRoom !== null) {
+				await roomService.updateRoomStatus(
+					{
+						roomId: roomId,
+					},
+					{
+						status: "start",
+					}
+				);
 			}
 
 			await roomService.createRoom({
@@ -58,10 +82,6 @@ module.exports = {
 
 	closeRoom: async (req, res) => {
 		try {
-			const roomData = {
-				roomId: req.query.roomId,
-				status: "close",
-			};
 			await roomService.updateRoomStatus(
 				{
 					roomId: req.query.roomId,

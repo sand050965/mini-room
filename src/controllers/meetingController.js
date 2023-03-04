@@ -11,10 +11,26 @@ module.exports = {
 			const { participantId, dataId } = req.cookies;
 			const roomId = req.params.roomId;
 
-			const roomCheck = await roomService.getValidRoom({ roomId: roomId });
+			const checkInValidRoom = await roomService.getRoomCheck(
+				{
+					roomId: roomId,
+				},
+				{
+					status: "closed",
+				}
+			);
+			console.log(checkInValidRoom);
+			const checkValidRoom = await roomService.getRoomCheck(
+				{
+					roomId: roomId,
+				},
+				{
+					status: "start",
+				}
+			);
 
-			//   check if the roomId exists
-			if (roomCheck === null) {
+			//   check if the roomId is valid
+			if (checkInValidRoom === null && checkValidRoom === null) {
 				return res.render("error");
 			}
 

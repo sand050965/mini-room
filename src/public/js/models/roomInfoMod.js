@@ -8,6 +8,21 @@ class RoomInfoMod {
 		});
 	}
 
+	closeRoom = async (roomId) => {
+		const payload = {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				roomId: roomId,
+			}),
+		};
+		const response = await fetch("/api/room", payload);
+		const result = await response.json();
+		return result;
+	};
+
 	initInfo = () => {
 		this.copyInfoBtnTooltip.hide();
 		document.querySelector("#roomPath").value = window.location.href;
