@@ -1,7 +1,7 @@
 /** @format */
 
 "use strict";
-const app = require("./app");
+const app = require("./app/app");
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
 const PORT = process.env.PORT || 3000;
@@ -82,7 +82,6 @@ io.on("connection", (socket) => {
 
 			// user disconnect event
 			socket.on("disconnect", async (reason) => {
-				console.log(reason);
 				if (reason === "transport close") {
 					await participantService.deleteParticipant({
 						roomId: roomId,

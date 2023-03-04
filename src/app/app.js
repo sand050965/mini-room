@@ -9,27 +9,27 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
 
-require("dotenv").config({ path: path.resolve(__dirname, "./.env") });
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
-const meetingRoutes = require("./routes/meetingRoutes");
-const participantRoutes = require("./routes/participantRoutes");
-const roomRoutes = require("./routes/roomRoutes");
-const mailRoutes = require("./routes/mailRoutes");
-const userRoutes = require("./routes/userRoutes");
-const authRoutes = require("./routes/authRoutes");
-const s3Routes = require("./routes/s3Routes");
-const memberRoutes = require("./routes/memberRoutes");
-const errorRoutes = require("./routes/errorRoutes");
-const thankyouRoutes = require("./routes/thankyouRoutes");
+const meetingRoutes = require("../routes/meetingRoutes");
+const participantRoutes = require("../routes/participantRoutes");
+const roomRoutes = require("../routes/roomRoutes");
+const mailRoutes = require("../routes/mailRoutes");
+const userRoutes = require("../routes/userRoutes");
+const authRoutes = require("../routes/authRoutes");
+const s3Routes = require("../routes/s3Routes");
+const memberRoutes = require("../routes/memberRoutes");
+const errorRoutes = require("../routes/errorRoutes");
+const thankyouRoutes = require("../routes/thankyouRoutes");
 
 // view engine setup
 const app = express();
-app.set("views", path.resolve(__dirname, "./views"));
+app.set("views", path.resolve(__dirname, "../views"));
 app.set("view engine", "ejs");
 
 // middlewares
 app.use(cors());
-app.use(express.static(path.resolve(__dirname, "./public")));
+app.use(express.static(path.resolve(__dirname, "../public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
