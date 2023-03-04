@@ -1,7 +1,7 @@
 /** @format */
 
 require("dotenv").config();
-const JoiUtil = require("../utils/joiUtil");
+const JoiUtil = require("../utils/JoiUtil");
 
 module.exports = {
 	getUserValidator: (req, res, next) => {

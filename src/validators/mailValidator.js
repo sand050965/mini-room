@@ -1,7 +1,7 @@
 /** @format */
 
 const express = require("express");
-const JoiUtil = require("../utils/joiUtil");
+const JoiUtil = require("../utils/JoiUtil");
 
 module.exports = {
 	sendEmailValidator: (req, res, next) => {
