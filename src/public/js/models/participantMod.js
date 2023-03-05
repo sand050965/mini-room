@@ -1,5 +1,3 @@
-/** @format */
-
 import AvatarController from "../controllers/avatarController.js";
 import InputValidator from "../validators/inputValidator.js";
 

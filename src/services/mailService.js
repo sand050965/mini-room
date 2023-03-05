@@ -1,5 +1,3 @@
-/** @format */
-
 const nodemailer = require("nodemailer");
 const mailer = require("../utils/mailUtil.js");
 

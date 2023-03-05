@@ -1,5 +1,3 @@
-/** @format */
-
 const crypto = require("crypto");
 const util = require("util");
 const randomBytes = util.promisify(crypto.randomBytes);

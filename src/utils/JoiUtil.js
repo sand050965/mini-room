@@ -3,12 +3,10 @@
 const Joi = require("joi");
 
 module.exports = {
-	// room
 	roomIdSchema: Joi.object({
 		roomId: Joi.string().required(),
 	}),
 
-	// participant
 	roomParticipantSchema: Joi.object({
 		roomId: Joi.string().required(),
 		participantId: Joi.string().required(),
@@ -28,7 +26,6 @@ module.exports = {
 		isStoppedVideo: Joi.boolean().required(),
 	}),
 
-	// user
 	getUserSchema: Joi.object({
 		email: Joi.string().required().email(),
 	}),
@@ -51,12 +48,10 @@ module.exports = {
 		avatarImgUrl: Joi.string().uri().required(),
 	}),
 
-	// s3
 	deleteAvatarSchema: Joi.object({
 		avatarImgUrl: Joi.string().uri().required(),
 	}),
 
-	// mail
 	sendEmailSchema: Joi.object({
 		senderName: Joi.string().required(),
 		recipientEmailArray: Joi.array()

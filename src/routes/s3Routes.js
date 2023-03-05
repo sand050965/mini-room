@@ -1,5 +1,3 @@
-/** @format */
-
 const express = require("express");
 const router = express.Router();
 const multerUpload = require("../middleware/multerUpload");
@@ -22,7 +20,6 @@ router.use((error, req, res, next) => {
 	}
 });
 
-// upload avatar
 router.post(
 	"/avatar",
 	multerUpload.uploadAvatarImg.single("avatar"),
@@ -30,14 +27,12 @@ router.post(
 	s3Controller.uploadAvatarImg
 );
 
-// delete avatar
 router.delete(
 	"/avatar",
 	s3Validator.deleteAvatarValidator,
 	s3Controller.deleteAvatarImg
 );
 
-// upload file
 router.post(
 	"/file",
 	multerUpload.uploadFile.single("file"),

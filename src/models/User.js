@@ -1,5 +1,3 @@
-/** @format */
-
 const mongoose = require("../utils/DBUtil");
 const bcrypt = require("bcrypt");
 
@@ -10,6 +8,7 @@ const userSchema = new mongoose.Schema(
 		googleId: {
 			type: String,
 			unique: true,
+			sparse: true
 		},
 
 		email: {
@@ -48,12 +47,10 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save", async function (next) {
-	// Login with google oauth has no password
 	if (this.googleID) {
 		return next();
 	}
 
-	//  Only hash password when registering
 	if (!this.isModified("password")) {
 		return next();
 	}

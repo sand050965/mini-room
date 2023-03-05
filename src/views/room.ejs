@@ -1,5 +1,3 @@
-<!-- @format -->
-
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -381,6 +379,50 @@
 						</ul>
 					</div>
 				</div>
+				<!-- Hand Tracking Offcanvas -->
+				<div
+					id="handCanvasOffcanvas"
+					class="offcanvas offcanvas-end offcanvas-outlayer"
+					data-bs-keyboard="false"
+					data-bs-backdrop="false"
+					tabindex="-1"
+					aria-labelledby="offcanvasRightLabel">
+					<div class="offcanvas-header">
+						<h5 class="offcanvas-title" id="staticBackdropLabel">
+							Hand Tracking Canvas
+						</h5>
+						<button
+							id="handCanvasOffcanvasCloseBtn"
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="offcanvas"
+							aria-label="Close"></button>
+					</div>
+					<div class="offcanvas-body">
+						<div class="download-btns-container">
+							<div class="download-btn">
+								<button type="button" class="btn btn-primary">
+									<span>
+										<img
+											src="https://go.overwolf.com/wp-content/uploads/2022/02/Windows.svg"
+											alt="windows" />
+										Download for Windows
+									</span>
+								</button>
+							</div>
+							<div class="download-btn">
+								<button type="button" class="btn btn-primary">
+									<span>
+										<img
+											src="https://go.overwolf.com/wp-content/uploads/2022/02/Apple_logo_black-1.svg"
+											alt="windows" />
+										Download for MacOS (Intel)
+									</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
 				<!-- / Offcanvas Ends -->
 			</div>
 			<!-- / Main Right Ends -->
@@ -443,6 +485,27 @@
 								<i id="chatOffcanvasBtnIcon" class="fa-solid fa-message"> </i>
 							</div>
 						</div>
+						<div class="hand-canvas-offcanvas-btn-container">
+							<div id="handCanvasOffcanvasBtn" class="center side-btn">
+								<i
+									id="handCanvasOffcanvasBtnIcon"
+									class="fa-regular fa-hand-point-up"></i>
+							</div>
+						</div>
+						<div class="demo-mode">
+							<div>
+								<div>Selection Mode</div>
+								<img src="" />
+							</div>
+							<div>
+								<div>Drawing Mode</div>
+								<img src="" />
+							</div>
+							<div>
+								<div>Shape Mode</div>
+								<img src="" />
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -451,7 +514,9 @@
 			<div class="spinner-grow text-danger" role="status">
 				<span class="visually-hidden">Loading...</span>
 			</div>
-			<div class="screen-record-notify-content left-center">Recording is on</div>
+			<div class="screen-record-notify-content left-center">
+				Recording is on
+			</div>
 		</div>
 		<div id="inviteNotify" class="invite-notify center">
 			Invitation emails have been sent

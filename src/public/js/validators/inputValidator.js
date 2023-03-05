@@ -1,5 +1,3 @@
-/** @format */
-
 class InputValidator {
 	constructor() {}
 

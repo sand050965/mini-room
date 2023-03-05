@@ -1,5 +1,3 @@
-/** @format */
-
 const mongoose = require("../utils/DBUtil");
 
 const roomShcema = new mongoose.Schema(

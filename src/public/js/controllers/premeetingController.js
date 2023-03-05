@@ -1,5 +1,3 @@
-/** @format */
-
 import PremeetingMod from "../models/premeetingMod.js";
 import CommonMod from "../models/commonMod.js";
 import StreamMod from "../models/streamMod.js";
@@ -43,9 +41,6 @@ class PremeetingController {
 		};
 	}
 
-	/**
-	 * Init App
-	 */
 	init = async (id) => {
 		this.participantId = id;
 		this.participantName.innerHTML = `${this.participantId}`;
@@ -53,7 +48,6 @@ class PremeetingController {
 		myVideo.muted = true;
 		this.DOMElement.video = myVideo;
 
-		// Get User Stream
 		this.DOMElement = await this.premeetingMod.getStream(this.DOMElement);
 		await this.premeetingMod.initAuth();
 		this.isPermissionDenied = this.DOMElement.isPermissionDenied;
@@ -61,9 +55,6 @@ class PremeetingController {
 		this.isStoppedVideo = this.DOMElement.isStoppedVideo;
 	};
 
-	/**
-	 * Hotkeys Control
-	 */
 	hotKeysControl = (e) => {
 		if (e.which === 13) {
 			e.preventDefault();
@@ -74,9 +65,6 @@ class PremeetingController {
 		}
 	};
 
-	/**
-	 * Buttons Control
-	 */
 	btnControl = (e) => {
 		const newDOMElement = {
 			page: "premeeting",
@@ -95,16 +83,10 @@ class PremeetingController {
 		}
 	};
 
-	/**
-	 * Display Name
-	 */
 	displayName = () => {
 		this.premeetingMod.displayName(this.participantId);
 	};
 
-	/**
-	 * Confirm State
-	 */
 	confirmState = async () => {
 		if (this.isJoining) {
 			return;

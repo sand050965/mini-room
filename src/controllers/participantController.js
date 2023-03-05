@@ -1,5 +1,3 @@
-/** @format */
-
 const participantService = require("../services/participantService");
 const roomService = require("../services/roomService");
 

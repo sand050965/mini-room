@@ -1,5 +1,3 @@
-/** @format */
-
 "use strict";
 const app = require("./app/app");
 const server = require("http").Server(app);
@@ -8,54 +6,44 @@ const PORT = process.env.PORT || 3000;
 const participantService = require("./services/participantService");
 const roomService = require("./services/roomService");
 
-// -------------Socket IO-------------
 io.on("connection", (socket) => {
-	//user join room event
 	socket.on(
 		"join-room",
 		(roomId, participantId, participantName, avatarImgUrl) => {
-			socket.join(roomId); //user join room event
+			socket.join(roomId);
 
 			socket
 				.to(roomId)
-				.emit("user-connected", participantId, participantName, avatarImgUrl); // emit to users in the room that a new user connected
+				.emit("user-connected", participantId, participantName, avatarImgUrl);
 
-			// users finished rendering event
 			socket.on("finished-render", () => {
 				socket.to(roomId).emit("user-finished-render", participantId);
 			});
 
-			// users mute event
 			socket.on("mute", () => {
 				socket.to(roomId).emit("user-mute", participantId);
 			});
 
-			// users unmute event
 			socket.on("unmute", () => {
 				socket.to(roomId).emit("user-unmute", participantId);
 			});
 
-			// users stop sharing video stream event
 			socket.on("stop-video", () => {
 				socket.to(roomId).emit("user-stop-video", participantId);
 			});
 
-			// users play video stream event
 			socket.on("play-video", () => {
 				socket.to(roomId).emit("user-play-video", participantId);
 			});
 
-			// users stop sharing screen stream event
 			socket.on("stop-screen-share", () => {
 				io.to(roomId).emit("user-stop-screen-share", participantId);
 			});
 
-			// users denied permission to use camera and microphone
 			socket.on("denied-media-permission", () => {
 				socket.to(roomId).emit("user-denied-media-permission", participantId);
 			});
 
-			// users send message event
 			socket.on("message", (msgObj) => {
 				io.to(roomId).emit("user-send-message", {
 					message: msgObj.message,
@@ -63,10 +51,9 @@ io.on("connection", (socket) => {
 					avatarImgUrl: msgObj.avatarImgUrl,
 					participantId: participantId,
 					participantName: participantName,
-				}); // emit to users in the room what message that user sent
+				});
 			});
 
-			// users attach file event
 			socket.on("file-share", (fileObj) => {
 				io.to(roomId).emit("user-share-file", {
 					fileUrl: fileObj.fileUrl,
@@ -78,9 +65,8 @@ io.on("connection", (socket) => {
 					participantId: participantId,
 					participantName: participantName,
 				});
-			}); // emit to users in the room what file that user attach
+			});
 
-			// user disconnect event
 			socket.on("disconnect", async (reason) => {
 				if (reason === "transport close") {
 					await participantService.deleteParticipant({
@@ -111,7 +97,7 @@ io.on("connection", (socket) => {
 						"user-disconnected",
 						participantId,
 						participantName
-					); // emit to users in the room that a user just leave
+					);
 				}
 			});
 		}

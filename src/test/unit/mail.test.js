@@ -1,5 +1,3 @@
-/** @format */
-
 const request = require("supertest");
 const app = require("../../middleware/app.js");
 

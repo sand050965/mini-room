@@ -1,5 +1,3 @@
-/** @format */
-
 class RoomInfoMod {
 	constructor() {
 		new ClipboardJS("#copyInfoBtn");

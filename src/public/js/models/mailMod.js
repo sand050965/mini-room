@@ -1,5 +1,3 @@
-/** @format */
-
 import CommonMod from "../models/commonMod.js";
 import InputValidator from "../validators/inputValidator.js";
 

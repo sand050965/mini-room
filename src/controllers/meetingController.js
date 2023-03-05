@@ -1,9 +1,6 @@
-/** @format */
-
 const participantService = require("../services/participantService");
 const roomService = require("../services/roomService");
 
-// meeting room
 module.exports = {
 	getIntoMeeting: async (req, res) => {
 		try {
@@ -29,7 +26,6 @@ module.exports = {
 				}
 			);
 
-			//   check if the roomId is valid
 			if (checkInValidRoom === null && checkValidRoom === null) {
 				return res.render("error");
 			}
@@ -58,7 +54,6 @@ module.exports = {
 				}
 			}
 
-			// premeeting
 			return res.render("premeeting", {
 				roomId: roomId,
 			});

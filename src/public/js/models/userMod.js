@@ -1,5 +1,3 @@
-/** @format */
-
 import CommonMod from "../models/commonMod.js";
 import InputValidator from "../validators/inputValidator.js";
 
@@ -8,11 +6,9 @@ class UserMod {
 		this.commonMod = new CommonMod();
 		this.inputValidator = new InputValidator();
 
-		// auth result
 		this.authSuccess = document.querySelector("#authSuccess");
 		this.authFailed = document.querySelector("#authFailed");
 
-		// sign up avatar
 		this.signUpAvatarContainer = document.querySelector(
 			"#signUpAvatarContainer"
 		);
@@ -21,23 +17,18 @@ class UserMod {
 		this.signUpAvatarValid = document.querySelector("#signUpAvatarValid");
 		this.signUpAvatarInvalid = document.querySelector("#signUpAvatarInvalid");
 
-		// user name
 		this.usernameContainer = document.querySelector("#usernameContainer");
 		this.username = document.querySelector("#username");
 
-		// email
 		this.emailContainer = document.querySelector("#emailContainer");
 		this.email = document.querySelector("#email");
 
-		// password
 		this.passwordContainer = document.querySelector("#passwordContainer");
 		this.password = document.querySelector("#password");
 
-		// change to sign up or log in
 		this.signUpContainer = document.querySelector("#signUpContainer");
 		this.loginContainer = document.querySelector("#loginContainer");
 
-		// btns
 		this.userModalCloseBtn = document.querySelector("#userModalCloseBtn");
 		this.logInBtn = document.querySelector("#logInBtn");
 		this.logInPreloader = document.querySelector("#logInPreloader");

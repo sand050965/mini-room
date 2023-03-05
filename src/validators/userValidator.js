@@ -1,5 +1,3 @@
-/** @format */
-
 const JoiUtil = require("../utils/JoiUtil");
 
 module.exports = {

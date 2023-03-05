@@ -1,5 +1,3 @@
-/** @format */
-
 import MemberController from "../controllers/memberController.js";
 
 const memberController = new MemberController();

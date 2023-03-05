@@ -1,5 +1,3 @@
-/** @format */
-
 "use strict";
 const express = require("express");
 const compression = require("compression");
@@ -34,8 +32,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compression());
-
-// Passport middleware
 app.use(passport.initialize());
 
 app.use("/api/participant", participantRoutes);
@@ -49,7 +45,6 @@ app.use("/member", memberRoutes);
 app.use("/thankyou", thankyouRoutes);
 app.use("/", meetingRoutes);
 
-// index page
 app.get("/", (req, res) => {
 	res.render("index");
 });

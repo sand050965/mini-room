@@ -1,5 +1,3 @@
-/** @format */
-
 const jwt = require("jsonwebtoken");
 const userService = require("../services/userService.js");
 
@@ -40,7 +38,6 @@ module.exports = {
 				}
 			}
 
-			// check if the user already exists
 			const accessToken = await jwt.sign(
 				user._doc,
 				process.env.JWT_ACCESS_TOKEN_SECRET,

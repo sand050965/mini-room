@@ -1,5 +1,3 @@
-/** @format */
-
 import UserMod from "../models/userMod.js";
 import CommonMod from "../models/commonMod.js";
 import InputValidator from "../validators/inputValidator.js";
@@ -16,7 +14,6 @@ class UserController {
 
 		this.validFile = null;
 
-		// dropdown list
 		this.avatarImg = document.querySelector("#avatarImg");
 		this.userDropdown = document.querySelector("#userDropdown");
 		this.userDropdownMenu = document.querySelector("#userDropdown");
@@ -24,13 +21,11 @@ class UserController {
 		this.userProfileName = document.querySelector("#userProfileName");
 		this.authStatus = document.querySelector("#authStatus");
 
-		// auth result
 		this.authSuccess = document.querySelector("#authSuccess");
 		this.authSuccessMsg = document.querySelector("#authSuccessMsg");
 		this.authFailed = document.querySelector("#authFailed");
 		this.authFailedMsg = document.querySelector("#authFailedMsg");
 
-		// sign up avatar
 		this.signUpAvatarContainer = document.querySelector(
 			"#signUpAvatarContainer"
 		);
@@ -40,21 +35,16 @@ class UserController {
 		this.signUpAvatarHelp = document.querySelector("#signUpAvatarHelp");
 		this.avatarFileUpload = document.querySelector("#avatarFileUpload");
 
-		// user name
 		this.usernameContainer = document.querySelector("#usernameContainer");
 		this.username = document.querySelector("#username");
 
-		// email
 		this.email = document.querySelector("#email");
 
-		// password
 		this.password = document.querySelector("#password");
 
-		// change to sign up or log in
 		this.signUpContainer = document.querySelector("#signUpContainer");
 		this.loginContainer = document.querySelector("#loginContainer");
 
-		// btns
 		this.userModalCloseBtn = document.querySelector("#userModalCloseBtn");
 		this.logInBtn = document.querySelector("#logInBtn");
 		this.signUpBtn = document.querySelector("#signUpBtn");
@@ -122,7 +112,7 @@ class UserController {
 			this.commonMod.closePreload("#preloader");
 			return;
 		}
-		
+
 		this.userMod.resetValidateStyle();
 		const result = await this.userMod.logIn(data);
 		const isSuccess = await this.displayAuthResult("login", result);
@@ -147,16 +137,22 @@ class UserController {
 		await this.userMod.setSignUpBtn(true);
 		this.userMod.resetValidateStyle();
 
-		let avatarImgUrl =
-			"https://s3.amazonaws.com/www.miniroom.online/images/avatar.png";
-
 		const data = {
 			username: this.username.value,
 			email: this.email.value,
 			password: this.password.value,
 		};
 
-		const avatarCheck = this.userMod.validateAvatarImg();
+		let avatarCheck = false;
+		if (
+			this.signUpAvatarImg.src !==
+			"https://s3.amazonaws.com/www.miniroom.online/images/avatar.png"
+		) {
+			avatarCheck = this.userMod.validateAvatarImg();
+		} else {
+			avatarCheck = true;
+		}
+
 		const usernameCheck = this.userMod.validateUsername();
 		const emailCheck = this.userMod.validateEmail();
 		const passwordCheck = this.userMod.validatePassword();
@@ -169,11 +165,10 @@ class UserController {
 
 		this.userMod.resetValidateStyle();
 
-		if (
-			this.signUpAvatarImg.src !==
-			"https://s3.amazonaws.com/www.miniroom.online/images/avatar.png"
-		) {
-			// upload avatar image to s3 first
+		let avatarImgUrl =
+			"https://s3.amazonaws.com/www.miniroom.online/images/avatar.png";
+
+		if (this.signUpAvatarImg.src !== avatarImgUrl) {
 			const s3Result = await this.userMod.storeAvatarToS3({
 				file: this.validFile,
 			});
@@ -217,7 +212,6 @@ class UserController {
 
 	uploadAvatar = async () => {
 		const file = this.avatarFileUpload.files[0];
-		// content type check
 		const validateResult = await this.userMod.validateAvatarImg();
 		if (!validateResult) {
 			this.avatarFileUpload.value = "";

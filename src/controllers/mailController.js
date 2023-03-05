@@ -1,5 +1,3 @@
-/** @format */
-
 const mailService = require("../services/mailService");
 
 module.exports = {

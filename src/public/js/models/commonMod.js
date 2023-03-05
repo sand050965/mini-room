@@ -1,11 +1,6 @@
-/** @format */
-
 class CommonMod {
 	constructor() {}
 
-	/**
-	 * Init AOS
-	 */
 	initAOS = (AOS) => {
 		AOS.init({
 			easing: "ease-in-out",
@@ -14,25 +9,16 @@ class CommonMod {
 		});
 	};
 
-	/**
-	 * Close Preloader
-	 */
 	closePreload = (preloaderId) => {
 		const preloader = document.querySelector(preloaderId);
 		preloader.classList.add("none");
 	};
 
-	/**
-	 * Open Preloader
-	 */
 	openPreload = (preloaderId) => {
 		const preloader = document.querySelector(preloaderId);
 		preloader.classList.remove("none");
 	};
 
-	/**
-	 * Display Modal
-	 */
 	displayModal = (DOMElement) => {
 		const page = DOMElement.page;
 		const isDisplayModal = DOMElement.isDisplayModal;

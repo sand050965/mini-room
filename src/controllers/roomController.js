@@ -8,7 +8,6 @@ module.exports = {
 		try {
 			let roomId = shortid.generate();
 
-			//   check whether the room_id status is closed
 			const checkInvalidRoom = await roomService.getRoomCheck(
 				{
 					roomId: roomId,
@@ -18,7 +17,6 @@ module.exports = {
 				}
 			);
 
-			//   check whether the room_id is duplicated
 			const checkValidRoom = await roomService.getRoomCheck(
 				{
 					roomId: roomId,
@@ -59,10 +57,14 @@ module.exports = {
 
 	joinMeeting: async (req, res) => {
 		try {
-			//   check if the roomId exists
-			const checkRoom = await roomService.getValidRoom({
-				roomId: req.query.roomId,
-			});
+			const checkRoom = await roomService.getRoomCheck(
+				{
+					roomId: req.query.roomId,
+				},
+				{
+					status: "start",
+				}
+			);
 			if (checkRoom === null) {
 				res
 					.status(400)
