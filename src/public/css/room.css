@@ -729,8 +729,8 @@ video {
 #handCanvasOffcanvas .demo-mode {
 	display: grid;
 	grid-template-rows: repeat(3, 1fr);
-	gap: 20px;
-	height: calc(100% - 500px);
+	gap: 10%;
+	height: 100%;
 }
 
 #handCanvasOffcanvas .demo-mode img {

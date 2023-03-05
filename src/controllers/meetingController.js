@@ -16,7 +16,6 @@ module.exports = {
 					status: "closed",
 				}
 			);
-			console.log(checkInValidRoom);
 			const checkValidRoom = await roomService.getRoomCheck(
 				{
 					roomId: roomId,

@@ -6,7 +6,7 @@ module.exports = {
 		const data = { roomId: req.params.roomId };
 
 		if (!shortid.isValid(req.params.roomId)) {
-			return res.render(error);
+			return res.render("error");
 		}
 
 		const { error, value } = JoiUtil.roomIdSchema.validate(data, {
@@ -18,7 +18,7 @@ module.exports = {
 				console.log(error);
 			}
 
-			return res.render(error);
+			return res.render("error");
 		}
 
 		next();
