@@ -1,8 +1,4 @@
-/** @format */
-
-const express = require("express");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 const userService = require("../services/userService.js");
 
 module.exports = {
@@ -42,7 +38,6 @@ module.exports = {
 				}
 			}
 
-			// check if the user already exists
 			const accessToken = await jwt.sign(
 				user._doc,
 				process.env.JWT_ACCESS_TOKEN_SECRET,

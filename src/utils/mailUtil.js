@@ -1,8 +1,4 @@
-/** @format */
-
 const nodemailer = require("nodemailer");
-const path = require("path");
-require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 module.exports = nodemailer.createTransport({
 	host: process.env.MAIL_HOST,

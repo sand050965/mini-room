@@ -1,5 +1,3 @@
-/** @format */
-
 import IndexController from "../controllers/indexController.js";
 
 const indexController = new IndexController();

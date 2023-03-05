@@ -1,14 +1,9 @@
-/** @format */
-
 const Room = require("../models/Room");
 
 module.exports = {
-	getValidRoom: async (data) => {
+	getRoomCheck: async (data, condition) => {
 		return await Room.findOne({
-			$and: [
-				{ roomId: data.roomId },
-				{ status: ["start", "preStart", "inUse"] },
-			],
+			$and: [data, condition],
 		});
 	},
 

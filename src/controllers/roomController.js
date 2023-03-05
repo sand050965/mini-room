@@ -1,8 +1,5 @@
 /** @format */
 
-const express = require("express");
-require("dotenv").config();
-const session = require("express-session");
 const shortid = require("shortid");
 const roomService = require("../services/roomService");
 
@@ -11,13 +8,35 @@ module.exports = {
 		try {
 			let roomId = shortid.generate();
 
-			//   check whether the room_id is duplicated
-			const checkRoom = await roomService.getValidRoom({
-				roomId: roomId,
-			});
+			const checkInvalidRoom = await roomService.getRoomCheck(
+				{
+					roomId: roomId,
+				},
+				{
+					status: "closed",
+				}
+			);
 
-			if (checkRoom !== null) {
+			const checkValidRoom = await roomService.getRoomCheck(
+				{
+					roomId: roomId,
+				},
+				{
+					status: "start",
+				}
+			);
+
+			if (checkValidRoom !== null) {
 				roomId = shortid.generate();
+			} else if (checkInvalidRoom !== null) {
+				await roomService.updateRoomStatus(
+					{
+						roomId: roomId,
+					},
+					{
+						status: "start",
+					}
+				);
 			}
 
 			await roomService.createRoom({
@@ -38,10 +57,14 @@ module.exports = {
 
 	joinMeeting: async (req, res) => {
 		try {
-			//   check if the roomId exists
-			const checkRoom = await roomService.getValidRoom({
-				roomId: req.query.roomId,
-			});
+			const checkRoom = await roomService.getRoomCheck(
+				{
+					roomId: req.query.roomId,
+				},
+				{
+					status: "start",
+				}
+			);
 			if (checkRoom === null) {
 				res
 					.status(400)
@@ -61,10 +84,6 @@ module.exports = {
 
 	closeRoom: async (req, res) => {
 		try {
-			const roomData = {
-				roomId: req.query.roomId,
-				status: "close",
-			};
 			await roomService.updateRoomStatus(
 				{
 					roomId: req.query.roomId,

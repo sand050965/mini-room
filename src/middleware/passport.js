@@ -1,8 +1,4 @@
-/** @format */
-
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-
-require("dotenv").config();
 
 module.exports = (passport) => {
 	passport.use(

@@ -1,10 +1,5 @@
-/** @format */
-
-const express = require("express");
-require("dotenv").config();
 const shortid = require("shortid");
-const Joi = require("joi");
-const JoiUtil = require("../utils/joiUtil");
+const JoiUtil = require("../utils/JoiUtil");
 
 module.exports = {
 	readyToJoinValidator: (req, res, next) => {
@@ -137,34 +132,6 @@ module.exports = {
 		}
 
 		const { error, value } = JoiUtil.roomParticipantSchema.validate(data, {
-			abortEarly: false,
-		});
-
-		if (error) {
-			if (process.env.NODE_ENV !== "development") {
-				console.log(error);
-			}
-
-			return res
-				.status(400)
-				.json({ error: true, message: error.details[0].message });
-		}
-
-		next();
-	},
-
-	deleteAllParticipantsValidator: (req, res, next) => {
-		const data = {
-			roomId: req.query.roomId,
-		};
-
-		if (!shortid.isValid(req.body.roomId)) {
-			return res
-				.status(400)
-				.json({ error: true, message: "Room id is invalid" });
-		}
-
-		const { error, value } = JoiUtil.roomIdSchema.validate(data, {
 			abortEarly: false,
 		});
 

@@ -1,8 +1,5 @@
-/** @format */
-
 const express = require("express");
 const router = express.Router();
-require("dotenv").config();
 const multerUpload = require("../middleware/multerUpload");
 const s3Validator = require("../validators/s3Validator");
 const s3Controller = require("../controllers/s3Controller");
@@ -23,7 +20,6 @@ router.use((error, req, res, next) => {
 	}
 });
 
-// upload avatar
 router.post(
 	"/avatar",
 	multerUpload.uploadAvatarImg.single("avatar"),
@@ -31,14 +27,12 @@ router.post(
 	s3Controller.uploadAvatarImg
 );
 
-// delete avatar
 router.delete(
 	"/avatar",
 	s3Validator.deleteAvatarValidator,
 	s3Controller.deleteAvatarImg
 );
 
-// upload file
 router.post(
 	"/file",
 	multerUpload.uploadFile.single("file"),

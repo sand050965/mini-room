@@ -1,5 +1,3 @@
-/** @format */
-
 import StreamMod from "../models/streamMod.js";
 import RoomInfoMod from "../models/roomInfoMod.js";
 import CommonMod from "../models/commonMod.js";
@@ -15,6 +13,7 @@ class ScreenRecordMod {
 		this.mediaRecorder = null;
 		this.tracks = [];
 		this.isRecording = false;
+		this.screenRecordNotify = document.querySelector("#screenRecordNotify");
 		this.screenRecordBtnIcon = document.querySelector("#screenRecordBtnIcon");
 	}
 
@@ -28,7 +27,13 @@ class ScreenRecordMod {
 
 	startRecording = async () => {
 		try {
-			this.stream = await this.streamMod.getDisplayMediaStream();
+			this.stream = await this.streamMod.getDisplayMediaStream({
+				video: {
+					cursor: "always",
+					displaySurface: "monitor",
+				},
+				surfaceSwitching: "exclude",
+			});
 			this.audio = await this.streamMod.getUserAudioStream();
 			if (this.stream && this.audio) {
 				this.mixedStream = new MediaStream([
@@ -51,6 +56,7 @@ class ScreenRecordMod {
 				this.addStreamToRecorder
 			);
 			this.isRecording = true;
+			this.screenRecordNotify.classList.toggle("screen-record-notify-active");
 			this.screenRecordBtnIcon.classList.toggle("is-recording");
 		} catch (e) {
 			console.log(e);
@@ -89,6 +95,7 @@ class ScreenRecordMod {
 		a.download = `${dateElement.y}.${dateElement.m}.${dateElement.d}_${timeElement.h}:${timeElement.m}:${timeElement.s}_${ROOM_ID}.webm`;
 		a.click();
 		this.isRecording = false;
+		this.screenRecordNotify.classList.toggle("screen-record-notify-active");
 		this.screenRecordBtnIcon.classList.toggle("is-recording");
 	};
 }

@@ -1,5 +1,3 @@
-/** @format */
-
 import AvatarController from "../controllers/avatarController.js";
 import RoomInfoMod from "../models/roomInfoMod.js";
 

@@ -1,5 +1,3 @@
-/** @format */
-
 import UserController from "./userController.js";
 import IndexMod from "../models/indexMod.js";
 import CommonMod from "../models/commonMod.js";
@@ -14,9 +12,6 @@ class IndexController {
 		this.alert = document.querySelector("#alert");
 	}
 
-	/**
-	 * Init App
-	 */
 	init = async () => {
 		await this.commonMod.initAOS(AOS);
 		setTimeout(() => {
@@ -24,16 +19,10 @@ class IndexController {
 		}, 1000);
 	};
 
-	/**
-	 * Input Button Control
-	 */
 	showDisableBtn = () => {
 		this.joinBtn.classList.remove("none");
 	};
 
-	/**
-	 * Hide Button
-	 */
 	hideBtn = (e) => {
 		if (e.target.value !== "") {
 			return;
@@ -41,9 +30,6 @@ class IndexController {
 		this.joinBtn.classList.add("none");
 	};
 
-	/**
-	 * Show Button
-	 */
 	showBtn = (e) => {
 		switch (e.target.value.trim()) {
 			case "":
@@ -62,24 +48,17 @@ class IndexController {
 		}
 	};
 
-	/**
-	 * Start Meeting
-	 */
 	startMeeting = async () => {
 		const result = await this.indexMod.startMeeting();
 		window.location = `/${result.roomId}`;
 	};
 
-	/**
-	 * Join Meeting
-	 */
 	joinMeeting = async () => {
 		try {
 			this.commonMod.openPreload("#preloader");
 
 			let roomId = this.roomCodeInput.value.trim();
 
-			// localhost
 			if (roomId.startsWith("http://")) {
 				roomId = roomId.replace("http://", "");
 				if (
@@ -96,7 +75,6 @@ class IndexController {
 				roomId = roomId.replace("localhost:3000/", "");
 			}
 
-			// miniroom.online
 			if (roomId.startsWith("https://")) {
 				roomId = roomId.replace("https://", "");
 				if (!roomId.startsWith("miniroom.online")) {
@@ -124,9 +102,6 @@ class IndexController {
 		}
 	};
 
-	/**
-	 * Hot Keys Control
-	 */
 	hotKeysControl = (e) => {
 		if (e.which === 13 && this.roomCodeInput.value.trim() !== "") {
 			this.joinMeeting();

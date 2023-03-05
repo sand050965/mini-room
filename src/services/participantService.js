@@ -1,5 +1,3 @@
-/** @format */
-
 const Participant = require("../models/Participant");
 
 module.exports = {
@@ -9,13 +7,6 @@ module.exports = {
 
 	getAllParticipantsCnt: async (data) => {
 		return await Participant.countDocuments(data);
-	},
-
-	getBeforeParticipants: async (data) => {
-		return await Participant.countDocuments({
-			roomId: data.roomId,
-			createdAt: { $lte: data.createdAt },
-		});
 	},
 
 	getParticipant: async (data) => {
@@ -37,9 +28,5 @@ module.exports = {
 
 	deleteParticipant: async (data) => {
 		return await Participant.deleteOne(data);
-	},
-
-	deleteAllParticipants: async (data) => {
-		return await Participant.deleteMany(data);
 	},
 };

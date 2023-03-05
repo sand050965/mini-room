@@ -1,5 +1,3 @@
-/** @format */
-
 class RoomInfoMod {
 	constructor() {
 		new ClipboardJS("#copyInfoBtn");
@@ -7,6 +5,21 @@ class RoomInfoMod {
 			trigger: "manual",
 		});
 	}
+
+	closeRoom = async (roomId) => {
+		const payload = {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				roomId: roomId,
+			}),
+		};
+		const response = await fetch("/api/room", payload);
+		const result = await response.json();
+		return result;
+	};
 
 	initInfo = () => {
 		this.copyInfoBtnTooltip.hide();

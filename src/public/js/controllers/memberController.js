@@ -1,5 +1,3 @@
-/** @format */
-
 import UserController from "../controllers/userController.js";
 import UserMod from "../models/userMod.js";
 import MemberMod from "../models/memberMod.js";
@@ -40,7 +38,6 @@ class MemberController {
 
 	uploadAvatar = async () => {
 		const file = this.avatarFileUpload.files[0];
-		// content type check
 		const validateResult = await this.memberMod.validateAvatarImg();
 		if (!validateResult) {
 			this.avatarFileUpload.value = "";

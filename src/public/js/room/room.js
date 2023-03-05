@@ -1,5 +1,3 @@
-/** @format */
-
 // controller
 import RoomController from "../controllers/roomController.js";
 import AvatarController from "../controllers/avatarController.js";
@@ -8,23 +6,19 @@ import AvatarController from "../controllers/avatarController.js";
 import StreamMod from "../models/streamMod.js";
 import ScreenShareMod from "../models/screenShareMod.js";
 import MainDisplayMod from "../models/mainDisplayMod.js";
+import OffcanvasMod from "../models/offcanvasMod.js";
 import RoomInfoMod from "../models/roomInfoMod.js";
 import ChatRoomMod from "../models/chatRoomMod.js";
 import ParticipantMod from "../models/participantMod.js";
 import MailMod from "../models/mailMod.js";
 
-/**
- * ============================== Initiate Controller ==============================
- */
 const roomController = new RoomController();
 const avatarController = new AvatarController();
 
-/**
- * ============================== Initiate Module ==============================
- */
 const streamMod = new StreamMod();
 const screenShareMod = new ScreenShareMod();
 const mainDisplayMod = new MainDisplayMod();
+const offcanvasMod = new OffcanvasMod();
 const roomInfoMod = new RoomInfoMod();
 const chatRoomMod = new ChatRoomMod();
 const participantMod = new ParticipantMod();
@@ -54,6 +48,8 @@ const btnsArray = [
 	document.querySelector("#emojiSelectorBtn"),
 	document.querySelector("#emojiCloseBtn"),
 	document.querySelector("#sendMsgBtn"),
+	document.querySelector("#handCanvasOffcanvasBtn"),
+	document.querySelector("#handCanvasOffcanvasCloseBtn"),
 ];
 
 const avatarImgs = document.querySelectorAll("img[name='avatarImg']");
@@ -111,16 +107,9 @@ peer.on("error", async (err) => {
 	console.log(err);
 });
 
-/**
- * 1. Receive stream from other users who are already in room
- * 2. Answer call by sending our stream back
- * 3. listen to other users made
- */
 peer.on("call", async (call) => {
-	// Answer video call
 	await call.answer(myStream);
 
-	// Respond to stream that comes in
 	await call.on("stream", async (userStream) => {
 		if (call.metadata.type === "video") {
 			if (!peers[call.peer]) {
@@ -176,11 +165,6 @@ peer.on("call", async (call) => {
 	});
 });
 
-/**
- * 1. Make call to new connected user
- * 2. send stream to new connected user
- * 3. liset the call we made and get stream from new connected user
- */
 const connectToNewUser = async (DOMElement) => {
 	const participantId = DOMElement.participantId;
 	const participantName = DOMElement.participantName;
@@ -197,7 +181,6 @@ const connectToNewUser = async (DOMElement) => {
 		});
 	}
 
-	// Receive new connected user's stream when they join room (Listen to someone answer our call)
 	await call.on("stream", async (userStream) => {
 		if (!peers[call.peer]) {
 			peers[call.peer] = call;
@@ -247,23 +230,21 @@ const connectToNewUser = async (DOMElement) => {
 	});
 };
 
-/**
- * new user connected
- */
-socket.on("user-connected", async (participantId, participantName) => {
-	const DOMElement = {
-		participantId: participantId,
-		participantName: participantName,
-		videoStream: myStream,
-		screenShareStream: myScreenShareStream,
-	};
-	await connectToNewUser(DOMElement);
-	participantMod.displayJoinRoomNotify(participantName);
-});
+socket.on(
+	"user-connected",
+	async (participantId, participantName, avatarImgUrl) => {
+		const DOMElement = {
+			participantId: participantId,
+			participantName: participantName,
+			videoStream: myStream,
+			screenShareStream: myScreenShareStream,
+			avatarImgUrl: avatarImgUrl,
+		};
+		await connectToNewUser(DOMElement);
+		participantMod.displayJoinRoomNotify(participantName, avatarImgUrl);
+	}
+);
 
-/**
- * user finish render
- */
 socket.on("user-finished-render", (participantId) => {
 	if (JSON.parse(IS_MUTED) === myStream.getAudioTracks()[0].enabled) {
 		if (!myStream.getAudioTracks()[0].enabled) {
@@ -290,9 +271,6 @@ socket.on("user-finished-render", (participantId) => {
 	}
 });
 
-/**
- * display other user mute
- */
 socket.on("user-mute", async (participantId) => {
 	let stream = null;
 	if (participantMap.get(participantId)) {
@@ -314,9 +292,6 @@ socket.on("user-mute", async (participantId) => {
 	await streamMod.mute(DOMElement);
 });
 
-/**
- * display other user unmute
- */
 socket.on("user-unmute", async (participantId) => {
 	let stream = null;
 	if (participantMap.get(participantId)) {
@@ -338,9 +313,6 @@ socket.on("user-unmute", async (participantId) => {
 	await streamMod.unmute(DOMElement);
 });
 
-/**
- * stop other user video
- */
 socket.on("user-stop-video", async (participantId) => {
 	let stream = null;
 	if (participantMap.get(participantId)) {
@@ -361,9 +333,6 @@ socket.on("user-stop-video", async (participantId) => {
 	await streamMod.stopVideo(DOMElement);
 });
 
-/**
- * play other user video
- */
 socket.on("user-play-video", async (participantId) => {
 	let stream = null;
 	if (participantMap.get(participantId)) {
@@ -384,9 +353,6 @@ socket.on("user-play-video", async (participantId) => {
 	await streamMod.playVideo(DOMElement);
 });
 
-/**
- * stop share other user screen
- */
 socket.on("user-stop-screen-share", async (participantId) => {
 	if (screenShareMap.get("screenSharing") === participantId) {
 		screenShareMod.stopSreenShareVideo();
@@ -394,9 +360,6 @@ socket.on("user-stop-screen-share", async (participantId) => {
 	}
 });
 
-/**
- * user denied permission to use camera and microphone
- */
 socket.on("user-denied-media-permission", async (participantId) => {
 	let stream = null;
 	if (participantMap.get(participantId)) {
@@ -419,25 +382,23 @@ socket.on("user-denied-media-permission", async (participantId) => {
 	await streamMod.stopVideo(DOMElement);
 });
 
-/**
- * create message
- */
 socket.on("user-send-message", (elementObj) => {
 	chatRoomMod.displayMessage(elementObj);
 	chatRoomMod.scrollToBottom();
+	offcanvasMod.displayChatBadage(elementObj);
 });
 
-/**
- * share file
- */
 socket.on("user-share-file", (elementObj) => {
 	chatRoomMod.displayFileShared(elementObj);
 	chatRoomMod.scrollToBottom();
 });
 
-/**
- * user disconnected
- */
+socket.on("connect_error", () => {
+	setTimeout(() => {
+		socket.connect();
+	}, 1000);
+});
+
 socket.on("user-disconnected", async (participantId, participantName) => {
 	if (peers[participantId]) {
 		peers[participantId].close();
@@ -447,8 +408,6 @@ socket.on("user-disconnected", async (participantId, participantName) => {
 
 	cnt = await participantMod.getAllParticipants();
 
-	beforeCnt = await participantMod.getBeforeParticipants();
-
 	await participantMod.removeParticipantList(participantId);
 
 	await mainDisplayMod.removeRoomVideoItemContainer(participantId);
@@ -457,7 +416,6 @@ socket.on("user-disconnected", async (participantId, participantName) => {
 		await screenShareMod.stopSreenShareVideo();
 	}
 
-	// set avatar style after participant leave
 	const avatarDOMElement = {
 		selfAvatarContainer: document.querySelector("#selfAvatarContainer"),
 		selfAvatarContent: document.querySelector("#selfAvatarContent"),
@@ -473,7 +431,6 @@ socket.on("user-disconnected", async (participantId, participantName) => {
 
 	await mainDisplayMod.setRoomAvatarStyle(avatarDOMElement);
 
-	// set video grid style after participant leave
 	const videoDOMElement = {
 		selfVideoItemContainer: document.querySelector("#selfVideoItemContainer"),
 		selfVideoItem: document.querySelector("#selfVideoItem"),

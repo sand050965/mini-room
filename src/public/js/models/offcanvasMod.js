@@ -1,7 +1,6 @@
-/** @format */
-
 class OffcanvasMod {
 	constructor() {
+		this.chatBadage = document.querySelector("#chatBadage");
 		this.sideBtnIconsArray = [
 			document.querySelector("#infoOffcanvasBtnIcon"),
 			document.querySelector("#participantOffcanvasBtnIcon"),
@@ -16,15 +15,20 @@ class OffcanvasMod {
 		this.BsChatOffcanvas = new bootstrap.Offcanvas(
 			document.querySelector("#chatOffcanvas")
 		);
+		this.BsHandCnavasOffcanvas = new bootstrap.Offcanvas(
+			document.querySelector("#handCanvasOffcanvas")
+		);
 		this.bsOffcanvasArray = [
 			this.BsInfoOffcanvas,
 			this.BsParticipantOffcanvas,
 			this.BsChatOffcanvas,
+			this.BsHandCnavasOffcanvas,
 		];
 		this.bsOffcanvasObj = {
 			infoOffcanvas: this.BsInfoOffcanvas,
 			participantOffcanvas: this.BsParticipantOffcanvas,
 			chatOffcanvas: this.BsChatOffcanvas,
+			handCanvasOffcanvas: this.BsHandCnavasOffcanvas,
 		};
 	}
 
@@ -56,6 +60,9 @@ class OffcanvasMod {
 			tagetBsOffcanvas.show();
 			await this.offcanvasOpenControl(offcanvasDOMElement);
 			await this.offcanvasOpenGrid();
+			if (offcanvasDOMElement.target === "chatOffcanvas") {
+				this.chatBadage.classList.add("none");
+			}
 			isOffcanvasOpen = true;
 			offcanvasMap.set("isOpen", btnId);
 		}
@@ -78,41 +85,52 @@ class OffcanvasMod {
 		const targetBtn = document.querySelector(
 			`#${offcanvasDOMElement.btnId}Icon`
 		);
+
 		targetBtn.classList.add("side-btn-clicked");
 	};
 
 	offcanvasOpenGrid = () => {
 		const mainContainer = document.querySelector("#mainContainer");
+		const mainLeftContainer = document.querySelector("#mainLeftContainer");
+		mainContainer.classList.remove("main-left");
+		mainContainer.classList.add("main-left-right");
 
 		if (isScreenSharing) {
-			mainContainer.classList.remove("main-middle");
-			mainContainer.classList.remove("main-left-middle");
-			mainContainer.classList.remove("main-middle-right");
-			mainContainer.classList.add("main-left-middle-right");
+			mainLeftContainer.classList.remove("main-left-videos");
+			mainLeftContainer.classList.add("main-left-screen-share");
 		} else {
 			if (cnt === 2) {
 				selfVideoItemContainer.classList.add("offcanvas-open");
 			}
-			mainContainer.classList.remove("main-middle");
-			mainContainer.classList.remove("main-left-middle");
-			mainContainer.classList.add("main-middle-right");
-			mainContainer.classList.remove("main-left-middle-right");
+			mainLeftContainer.classList.remove("main-left-screen-share");
+			mainLeftContainer.classList.add("main-left-videos");
 		}
 	};
 
 	offcanvasCloseGrid = () => {
 		const mainContainer = document.querySelector("#mainContainer");
+		const mainLeftContainer = document.querySelector("#mainLeftContainer");
+		mainContainer.classList.remove("main-left-right");
+		mainContainer.classList.add("main-left");
 
 		if (isScreenSharing) {
-			mainContainer.classList.remove("main-middle");
-			mainContainer.classList.add("main-left-middle");
-			mainContainer.classList.remove("main-middle-right");
-			mainContainer.classList.remove("main-left-middle-right");
+			mainLeftContainer.classList.remove("main-left-videos");
+			mainLeftContainer.classList.add("main-left-screen-share");
 		} else {
-			mainContainer.classList.add("main-middle");
-			mainContainer.classList.remove("main-left-middle");
-			mainContainer.classList.remove("main-middle-right");
-			mainContainer.classList.remove("main-left-middle-right");
+			mainLeftContainer.classList.remove("main-left-screen-share");
+			mainLeftContainer.classList.add("main-left-videos");
+		}
+	};
+
+	displayChatBadage = (elementObj) => {
+		if (elementObj.participantId === PARTICIPANT_ID) {
+			return;
+		}
+
+		if (offcanvasMap.get("isOpen") === "chatOffcanvasBtn") {
+			this.chatBadage.classList.add("none");
+		} else {
+			this.chatBadage.classList.remove("none");
 		}
 	};
 }

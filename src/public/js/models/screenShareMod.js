@@ -1,5 +1,3 @@
-/** @format */
-
 import StreamMod from "../models/streamMod.js";
 import MainDisplayMod from "../models/mainDisplayMod.js";
 import ParticipantMod from "../models/participantMod.js";
@@ -17,7 +15,11 @@ class ScreenShareMod {
 		}
 
 		try {
-			myScreenShareStream = await this.streamMod.getDisplayMediaStream();
+			myScreenShareStream = await this.streamMod.getDisplayMediaStream({
+				video: {
+					cursor: "always",
+				},
+			});
 			screenShareMap.set("screenSharing", PARTICIPANT_ID);
 			const screenShareDOMElement = {
 				screenShareId: PARTICIPANT_ID,
@@ -59,9 +61,6 @@ class ScreenShareMod {
 		return true;
 	};
 
-	/**
-	 * Make call to send screen sharing stream to all the users in room
-	 */
 	makeScreenShareCall = () => {
 		for (const key of Object.keys(peers)) {
 			if (key === PARTICIPANT_ID) continue;

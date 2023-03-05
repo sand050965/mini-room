@@ -1,10 +1,5 @@
-/** @format */
-
-const express = require("express");
-require("dotenv").config();
 const shortid = require("shortid");
-const Joi = require("joi");
-const JoiUtil = require("../utils/joiUtil");
+const JoiUtil = require("../utils/JoiUtil");
 
 module.exports = {
 	joinRoomValidator: (req, res, next) => {

@@ -1,12 +1,27 @@
-/** @format */
-
-const express = require("express");
-require("dotenv").config();
 const participantService = require("../services/participantService");
+const roomService = require("../services/roomService");
 
 module.exports = {
 	readyToJoin: async (req, res) => {
 		try {
+			const checkInValidRoom = await roomService.getRoomCheck(
+				{
+					roomId: req.body.roomId,
+				},
+				{
+					status: "closed",
+				}
+			);
+
+			if (checkInValidRoom !== null) {
+				await roomService.updateRoomStatus(
+					{
+						roomId: req.query.roomId,
+					},
+					{ status: "start" }
+				);
+			}
+
 			const participant = await participantService.insertParticipant({
 				roomId: req.body.roomId,
 				participantId: req.body.participantId,
@@ -51,27 +66,6 @@ module.exports = {
 				console.log(e);
 			}
 			res
-				.status(500)
-				.json({ error: true, message: "Sorry, something went wrong!" });
-		}
-	},
-
-	getBeforeParticipants: async (req, res) => {
-		try {
-			const participantInfo = await participantService.getParticipant({
-				roomId: req.params.roomId,
-				participantId: req.query.participantId,
-			});
-			const beforeParticipantCnt =
-				await participantService.getBeforeParticipants(participantInfo);
-			return res
-				.status(200)
-				.json({ data: { beforeParticipantCnt: beforeParticipantCnt } });
-		} catch (e) {
-			if (process.env.NODE_ENV !== "development") {
-				console.log(e);
-			}
-			return res
 				.status(500)
 				.json({ error: true, message: "Sorry, something went wrong!" });
 		}
@@ -131,22 +125,6 @@ module.exports = {
 			return res
 				.status(500)
 				.json({ error: true, message: "Sorry, something went wrong!" });
-		}
-	},
-
-	deleteAllParticipants: async (req, res) => {
-		try {
-			await participantService.deleteAllParticipants({
-				roomId: req.body.roomId,
-			});
-			return res.status(200).json({ ok: true });
-		} catch (e) {
-			if (process.env.NODE_ENV !== "development") {
-				console.log(e);
-			}
-			return res
-				.status(500)
-				.json({ error: true, message: "Sorry, something went wrong." });
 		}
 	},
 };

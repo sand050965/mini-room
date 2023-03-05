@@ -1,5 +1,3 @@
-/** @format */
-
 import StreamMod from "../models/streamMod.js";
 import OffcanvasMod from "../models/offcanvasMod.js";
 import ParticipantMod from "../models/participantMod.js";
@@ -20,11 +18,9 @@ class MainDisplayMod {
 		const video = DOMElement.video;
 		video.srcObject = stream;
 
-		// avatar style
 		const avatarDOMElement = await this.setRoomAvatarAttribute(DOMElement);
 		await this.setRoomAvatarStyle(avatarDOMElement);
 
-		// video grid style
 		const videoDOMElement = await this.setRoomVideoAttribute(DOMElement);
 		await this.setRoomVideoGridStyle(videoDOMElement);
 		await this.listenOnVideoStream(DOMElement);
@@ -40,7 +36,6 @@ class MainDisplayMod {
 			otherAvatars: [],
 		};
 
-		// set origin DOM element
 		const otherAvatarContainers = document.querySelectorAll(
 			'[name="otherAvatarContainer"]'
 		);
@@ -63,7 +58,6 @@ class MainDisplayMod {
 			avatarDOMElement.otherAvatars = Array.from(otherAvatars);
 		}
 
-		// get DOM from DOM element
 		const avatarContainer = DOMElement.avatarContainer;
 		const avatarContent = DOMElement.avatarContent;
 		const avatar = DOMElement.avatar;
@@ -71,7 +65,6 @@ class MainDisplayMod {
 		const avatarImgUrl = DOMElement.avatarImgUrl;
 		const participantId = DOMElement.participantId;
 
-		// append and add common style
 		avatar.classList.add("center");
 		avatarContainer.classList.add("center");
 		avatar.appendChild(avatarImg);
@@ -82,7 +75,6 @@ class MainDisplayMod {
 		avatarImg.setAttribute("src", avatarImgUrl);
 		avatarImg.addEventListener("load", this.avatarController.resizeAvatar);
 
-		// set new DOM element id and name attributes
 		if (participantId === PARTICIPANT_ID) {
 			avatarContainer.setAttribute("id", "selfAvatarContainer");
 			avatarContent.setAttribute("id", "selfAvatarContent");
@@ -115,7 +107,6 @@ class MainDisplayMod {
 			otherVideos: [],
 		};
 
-		// set origin DOM element
 		const otherVideoItemContainers = document.querySelectorAll(
 			'[name="otherVideoItemContainer"]'
 		);
@@ -138,7 +129,6 @@ class MainDisplayMod {
 			videoElement.otherVideos = Array.from(otherVideos);
 		}
 
-		// get DOM from DOM element
 		const videosContainer = document.querySelector("#videosContainer");
 		const videoItemContainer = DOMElement.videoItemContainer;
 		const videoItem = DOMElement.videoItem;
@@ -154,7 +144,6 @@ class MainDisplayMod {
 			participantName = "You";
 		}
 
-		// append and add common class
 		videoItem.appendChild(video);
 		videoItem.classList.add("center");
 		nameTag.textContent = participantName;
@@ -171,7 +160,6 @@ class MainDisplayMod {
 		videoItemContainer.classList.add("center");
 		videosContainer.append(videoItemContainer);
 
-		// set new DOM element id and name attributes
 		if (participantId === PARTICIPANT_ID) {
 			videoItemContainer.setAttribute("id", "selfVideoItemContainer");
 			videoItem.setAttribute("id", "selfVideoItem");
@@ -199,35 +187,29 @@ class MainDisplayMod {
 	};
 
 	setRoomAvatarStyle = (DOMElement) => {
-		// self avatart elements
 		const selfAvatarContainer = DOMElement.selfAvatarContainer;
 		const selfAvatarContent = DOMElement.selfAvatarContent;
 		const selfAvatar = DOMElement.selfAvatar;
 
-		// original other avatar elements
 		const otherAvatarContainers = DOMElement.otherAvatarContainers;
 		const otherAvatarContents = DOMElement.otherAvatarContents;
 		const otherAvatars = DOMElement.otherAvatars;
 
-		// reset style
 		this.resetRoomAvatarStyle(DOMElement);
 
 		selfAvatarContent.classList.add("avatar-content");
 
-		// add self avatar style
 		if (cnt === 1) {
 			selfAvatarContainer.classList.add("one-self-avatar-container");
 			selfAvatar.classList.add("avatar");
 		} else if (cnt === 2) {
 			selfAvatarContainer.classList.add("more-avatar-container");
-			// add self avatar style
 			selfAvatar.classList.add("two-self-avatar");
 		} else {
 			selfAvatarContainer.classList.add("more-avatar-container");
 			selfAvatar.classList.add("avatar");
 		}
 
-		// add other avatar style
 		for (const otherAvatarContainer of otherAvatarContainers) {
 			otherAvatarContainer.classList.add("more-avatar-container");
 		}
@@ -244,23 +226,18 @@ class MainDisplayMod {
 	setRoomVideoGridStyle = (DOMElement) => {
 		const videosContainer = document.querySelector("#videosContainer");
 
-		// self video elements
 		const selfVideoItemContainer = DOMElement.selfVideoItemContainer;
 		const selfVideoItem = DOMElement.selfVideoItem;
 		const selfVideo = DOMElement.selfVideo;
 
-		// other's video elements
 		const otherVideoItemContainers = DOMElement.otherVideoItemContainers;
 		const otherVideoItems = DOMElement.otherVideoItems;
 		const otherVideos = DOMElement.otherVideos;
 
-		// reset style
 		this.resetRoomVideoGrid(DOMElement);
 
-		// check if any offcanvas open or anyone is sharing screen to adjust style
 		this.mainContainerGrid();
 
-		// sharing screen style
 		if (isScreenSharing) {
 			this.setScreenShareAvatarStyle();
 			this.setScreenShareGridStyle();
@@ -268,7 +245,6 @@ class MainDisplayMod {
 		}
 
 		if (cnt === 1) {
-			// self video
 			selfVideoItemContainer.classList.add("video-container");
 			selfVideoItem.classList.add("one-self-item");
 			selfVideo.classList.add("one-self-video");
@@ -278,7 +254,6 @@ class MainDisplayMod {
 			selfVideoItem.classList.add("two-self-item");
 			selfVideo.classList.add("video");
 
-			// other's video
 			for (const otherVideoItemContainer of otherVideoItemContainers) {
 				otherVideoItemContainer.classList.add("video-container");
 			}
@@ -296,19 +271,16 @@ class MainDisplayMod {
 				columns = parseInt(cnt / 2) + (cnt % 2);
 			}
 
-			// set common style
 			videosContainer.classList.add("more-videos-grid");
 			videosContainer.style.setProperty(
 				"grid-template-columns",
 				`repeat(${columns}, 1fr)`
 			);
 
-			// set self video style
 			selfVideoItemContainer.classList.add("video-container");
 			selfVideoItem.classList.add("more-item");
 			selfVideo.classList.add("video");
 
-			// set other's video style
 			for (const otherVideoItemContainer of otherVideoItemContainers) {
 				otherVideoItemContainer.classList.add("video-container");
 			}
@@ -324,7 +296,6 @@ class MainDisplayMod {
 	};
 
 	setScreenShareAvatarStyle = () => {
-		//self avatar elements
 		const selfAvatarContainer = document.querySelector("#selfAvatarContainer");
 		const selfAvatar = document.querySelector("#selfAvatar");
 
@@ -333,10 +304,8 @@ class MainDisplayMod {
 			selfAvatar: selfAvatar,
 		};
 
-		// reset all style
 		this.resetRoomAvatarStyle(avatarDOMElement);
 
-		// add self avatart style
 		selfAvatarContainer.classList.add("more-avatar-container");
 		selfAvatar.classList.add("avatar");
 	};
@@ -344,14 +313,12 @@ class MainDisplayMod {
 	setScreenShareGridStyle = () => {
 		const videosContainer = document.querySelector("#videosContainer");
 
-		// self video elements
 		const selfVideoItemContainer = document.querySelector(
 			"#selfVideoItemContainer"
 		);
 		const selfVideoItem = document.querySelector("#selfVideoItem");
 		const selfVideo = document.querySelector("#selfVideo");
 
-		// other video elements
 		let otherVideoItemContainers = [];
 		let otherVideoItems = [];
 		let otherVideos = [];
@@ -372,18 +339,17 @@ class MainDisplayMod {
 			otherVideos: otherVideos,
 		};
 
-		// reset all style
 		this.resetRoomVideoGrid(videoDOMElement);
 
-		// add common style
-		videosContainer.classList.add("more-videos-grid");
+		videosContainer.classList.add("screen-share-videos-grid");
+		if (cnt > 5) {
+			videosContainer.classList.add("screen-share-videos-grid-column");
+		}
 
-		// add self video style
 		selfVideoItemContainer.classList.add("video-container");
 		selfVideoItem.classList.add("more-item");
 		selfVideo.classList.add("video");
 
-		// add ther's video style
 		for (const otherVideoItemContainer of otherVideoItemContainers) {
 			otherVideoItemContainer.classList.add("video-container");
 		}
@@ -398,11 +364,9 @@ class MainDisplayMod {
 	};
 
 	resetRoomAvatarStyle = (DOMElement) => {
-		// self avatar elements
 		const selfAvatarContainer = DOMElement.selfAvatarContainer;
 		const selfAvatar = DOMElement.selfAvatar;
 
-		// remove self avatar style
 		selfAvatarContainer.classList.remove("one-self-avatar-container");
 		selfAvatarContainer.classList.remove("more-avatar-container");
 		selfAvatar.classList.remove("avatar");
@@ -412,21 +376,19 @@ class MainDisplayMod {
 	resetRoomVideoGrid = (DOMElement) => {
 		const videosContainer = document.querySelector("#videosContainer");
 
-		// self video elements
 		const selfVideoItemContainer = DOMElement.selfVideoItemContainer;
 		const selfVideoItem = DOMElement.selfVideoItem;
 		const selfVideo = DOMElement.selfVideo;
 
-		// other's video elements
 		const otherVideoItemContainers = DOMElement.otherVideoItemContainers;
 		const otherVideoItems = DOMElement.otherVideoItems;
 		const otherVideos = DOMElement.otherVideos;
 
-		// remove common style
 		videosContainer.classList.remove("more-videos-grid");
+		videosContainer.classList.remove("screen-share-videos-grid");
+		videosContainer.classList.remove("screen-share-videos-grid-column");
 		videosContainer.style.removeProperty("grid-template-columns");
 
-		// remove self video style
 		selfVideoItemContainer.classList.remove("video-container");
 		selfVideoItemContainer.classList.remove("two-self-video-container");
 		selfVideoItemContainer.classList.remove("offcanvas-open");
@@ -436,7 +398,6 @@ class MainDisplayMod {
 		selfVideo.classList.remove("video");
 		selfVideo.classList.remove("one-self-video");
 
-		// remove other's video style
 		for (const otherVideoItemContainer of otherVideoItemContainers) {
 			otherVideoItemContainer.classList.remove("video-container");
 		}
@@ -469,7 +430,7 @@ class MainDisplayMod {
 	};
 
 	listenOnVideoStream = (DOMElement) => {
-		let participantId = DOMElement.participantId;
+		const participantId = DOMElement.participantId;
 		const video = DOMElement.video;
 		video.addEventListener("loadedmetadata", this.startPlayStream);
 		if (participantId === PARTICIPANT_ID) {
@@ -479,8 +440,6 @@ class MainDisplayMod {
 
 	startPlayStream = async (e) => {
 		await e.target.play();
-		beforeCnt = await this.participantMod.getBeforeParticipants();
-		loadedCnt++;
 		this.commonMod.closePreload("#preloader");
 		socket.emit("finished-render");
 	};

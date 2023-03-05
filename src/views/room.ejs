@@ -1,5 +1,3 @@
-<!-- @format -->
-
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -131,7 +129,10 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button id="addInviteList" type="button" class="btn btn-info">
+						<button
+							id="addInviteList"
+							type="button"
+							class="btn add-invite-list-btn">
 							Add invite list
 						</button>
 						<button
@@ -147,37 +148,35 @@
 		</div>
 		<!-- / Add Participan Modal Ends -->
 		<!-- Main Container -->
-		<div id="mainContainer" class="main-container main-middle">
+		<div id="mainContainer" class="main-container">
 			<!-- Main Left -->
-			<div
-				id="screenShareContainer"
-				class="main-left screen-share-container center">
-				<div
-					id="screenShareAlertContainer"
-					class="alert alert-primary d-flex align-items-center screen-share-alert none"
-					role="alert">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
-						viewBox="0 0 16 16"
-						role="img"
-						aria-label="Warning:">
-						<path
-							d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-					</svg>
-					<div id="screenShareAlert"></div>
+			<div id="mainLeftContainer" class="main-left-container">
+				<!-- Screen Share Video Conntainer -->
+				<div id="screenShareContainer" class="screen-share-container center">
+					<div
+						id="screenShareAlertContainer"
+						class="alert alert-primary d-flex align-items-center screen-share-alert none"
+						role="alert">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+							viewBox="0 0 16 16"
+							role="img"
+							aria-label="Warning:">
+							<path
+								d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+						</svg>
+						<div id="screenShareAlert"></div>
+					</div>
+					<div class="screen-share-content center">
+						<div id="screenShare" class="screen-share center"></div>
+					</div>
 				</div>
-				<div class="screen-share-content center">
-					<div id="screenShare"></div>
-				</div>
-			</div>
-			<!-- Main Middle -->
-			<div class="main-middle center">
 				<!-- Videos Conntainer -->
 				<div id="videosContainer" class="videos-container"></div>
 			</div>
 			<!-- Main Right -->
-			<div class="main-right">
+			<div class="main-right-container">
 				<!-- Info Offcanvas -->
 				<div
 					id="infoOffcanvas"
@@ -380,6 +379,74 @@
 						</ul>
 					</div>
 				</div>
+				<!-- Hand Tracking Offcanvas -->
+				<div
+					id="handCanvasOffcanvas"
+					class="offcanvas offcanvas-end offcanvas-outlayer"
+					data-bs-keyboard="false"
+					data-bs-backdrop="false"
+					tabindex="-1"
+					aria-labelledby="offcanvasRightLabel">
+					<div class="offcanvas-header">
+						<h5 class="offcanvas-title" id="staticBackdropLabel">
+							Hand Tracking Canvas
+						</h5>
+						<button
+							id="handCanvasOffcanvasCloseBtn"
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="offcanvas"
+							aria-label="Close"></button>
+					</div>
+					<div class="offcanvas-body">
+						<div class="download-btns-container">
+							<div class="download-btn">
+								<a
+									href="https://s3.amazonaws.com/www.miniroom.online/hand_tracking_canvas/Hand+Tracking+Canvas+(Windows).exe">
+									<button type="button" class="btn btn-primary">
+										<span>
+											<img
+												src="https://go.overwolf.com/wp-content/uploads/2022/02/Windows.svg"
+												alt="windows"
+												download="Hand_Tracking_Canvas.zip" />
+											&nbsp
+											<span>Download for Windows</span>
+										</span>
+									</button>
+								</a>
+							</div>
+							<div class="download-btn">
+								<a
+									href="https://s3.amazonaws.com/www.miniroom.online/hand_tracking_canvas/Hand+Tracking+Canvas+(Mac_x86x64).app.zip"
+									download="Hand_Tracking_Canvas.zip">
+									<button type="button" class="btn btn-primary">
+										<span>
+											<img
+												src="https://go.overwolf.com/wp-content/uploads/2022/02/Apple_logo_black-1.svg"
+												alt="MacOS" />
+											&nbsp
+											<span>Download for MacOS (x86_64)</span>
+										</span>
+									</button>
+								</a>
+							</div>
+							<div class="demo-mode">
+								<div>
+									<div>Selection Mode</div>
+									<img src="../img/selection-mode.gif" />
+								</div>
+								<div>
+									<div>Painting Mode</div>
+									<img src="../img/painting-mode.gif" />
+								</div>
+								<div>
+									<div>Drag and Drop Mode (Drawing Shape)</div>
+									<img src="../img/drag-and-drop-mode.gif" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 				<!-- / Offcanvas Ends -->
 			</div>
 			<!-- / Main Right Ends -->
@@ -414,37 +481,61 @@
 				</div>
 				<div class="side-control-container right-center">
 					<div class="side-control">
-						<div id="infoOffcanvasBtn" class="center side-btn">
+						<div
+							id="infoOffcanvasBtn"
+							class="center side-btn chat-offcanvas-btn">
 							<i id="infoOffcanvasBtnIcon" class="fa-solid fa-circle-info"></i>
 						</div>
-						<div id="participantOffcanvasBtn" class="center side-btn">
-							<i
-								id="participantOffcanvasBtnIcon"
-								class="fa-solid fa-user-group">
-							</i>
+						<div class="participant-offcanvas-btn-container">
+							<span
+								id="participantCnt"
+								class="position-absolute badge rounded-pill bg-secondary participant-cnt"
+								>1</span
+							>
+							<div id="participantOffcanvasBtn" class="center side-btn">
+								<i
+									id="participantOffcanvasBtnIcon"
+									class="fa-solid fa-user-group">
+								</i>
+							</div>
 						</div>
-						<div id="chatOffcanvasBtn" class="center side-btn">
-							<i id="chatOffcanvasBtnIcon" class="fa-solid fa-message"></i>
+						<div class="chat-offcanvas-btn-container">
+							<span
+								id="chatBadage"
+								class="position-absolute translate-middle bg-danger border border-light rounded-circle chat-badage none">
+								<span class="visually-hidden">New alerts</span>
+							</span>
+							<div id="chatOffcanvasBtn" class="center side-btn">
+								<i id="chatOffcanvasBtnIcon" class="fa-solid fa-message"> </i>
+							</div>
+						</div>
+						<div class="hand-canvas-offcanvas-btn-container">
+							<div id="handCanvasOffcanvasBtn" class="center side-btn">
+								<i
+									id="handCanvasOffcanvasBtnIcon"
+									class="fa-regular fa-hand-point-up"></i>
+							</div>
 						</div>
 					</div>
 				</div>
-				<span
-					id="participantCnt"
-					class="position-absolute translate-middle badge rounded-pill bg-secondary participant-cnt"
-					>1</span
-				>
+			</div>
+		</div>
+		<div id="screenRecordNotify" class="screen-record-notify">
+			<div class="spinner-grow text-danger" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+			<div class="screen-record-notify-content left-center">
+				Recording is on
 			</div>
 		</div>
 		<div id="inviteNotify" class="invite-notify center">
 			Invitation emails have been sent
 		</div>
-		<div id="leaveRoomNotify" class="leave-room-notify">he left</div>
+		<div id="leaveRoomNotify" class="leave-room-notify"></div>
 		<div id="joinRoomNotify" class="join-room-notify">
 			<div class="join-room-avatar-container center">
 				<div class="join-room-avatar">
-					<img
-						name="avatarImg"
-						src="https://s3.amazonaws.com/www.miniroom.online/images/avatar.png" />
+					<img id="notifyAvatarImg" name="avatarImg" />
 				</div>
 			</div>
 			<div id="joinRoomContent" class="join-room-content left-center"></div>

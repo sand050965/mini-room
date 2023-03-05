@@ -1,5 +1,3 @@
-/** @format */
-
 import UserController from "../controllers/userController.js";
 import AvatarController from "../controllers/avatarController.js";
 

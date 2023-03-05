@@ -1,10 +1,4 @@
-/** @format */
-
-const session = require("express-session");
-require("dotenv").config();
-const express = require("express");
-const Joi = require("joi");
-const JoiUtil = require("../utils/joiUtil");
+const JoiUtil = require("../utils/JoiUtil");
 
 module.exports = {
 	deleteAvatarValidator: (req, res, next) => {

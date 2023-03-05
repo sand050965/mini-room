@@ -1,5 +1,3 @@
-/** @format */
-
 import CommonMod from "../models/commonMod.js";
 import StreamMod from "../models/streamMod.js";
 import UserMod from "../models/userMod.js";
@@ -30,9 +28,6 @@ class PremeetingMod {
 		return result;
 	};
 
-	/**
-	 * Get Video and Audio Stream
-	 */
 	getStream = async (DOMElement) => {
 		try {
 			const myStream = await this.streamMod.getUserMediaStream();
@@ -51,9 +46,6 @@ class PremeetingMod {
 		return DOMElement;
 	};
 
-	/**
-	 * Add Video and Audio Stream
-	 */
 	addStream = (DOMElement) => {
 		const videoContainer = DOMElement.videoContainer;
 		const video = DOMElement.video;
@@ -70,9 +62,6 @@ class PremeetingMod {
 		return DOMElement;
 	};
 
-	/**
-	 * Add Video and Audio Stream
-	 */
 	initAuth = async () => {
 		const checkResult = await this.userMod.checkUserAuth();
 		if (checkResult.data !== null) {
@@ -96,9 +85,6 @@ class PremeetingMod {
 		return false;
 	};
 
-	/**
-	 * Display Alert
-	 */
 	displayAlert = (isSuccess) => {
 		if (isSuccess) {
 			this.successAlert.classList.remove("none");
@@ -113,18 +99,12 @@ class PremeetingMod {
 		}
 	};
 
-	/**
-	 * Set Confirm Button Disable
-	 */
 	setConfirmBtnDisabled = () => {
 		this.commonMod.openPreload("#preloader");
 		this.confirmBtn.disabled = true;
 		this.confirmBtn.textContent = "Loading ...";
 	};
 
-	/**
-	 * Set Confirm Button Enable
-	 */
 	setConfirmBtnEnabled = () => {
 		this.commonMod.closePreload("#preloader");
 		this.confirmBtn.disabled = false;

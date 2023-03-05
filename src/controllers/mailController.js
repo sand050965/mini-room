@@ -1,7 +1,3 @@
-/** @format */
-
-const express = require("express");
-require("dotenv").config();
 const mailService = require("../services/mailService");
 
 module.exports = {

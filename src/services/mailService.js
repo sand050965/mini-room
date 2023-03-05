@@ -1,5 +1,3 @@
-/** @format */
-
 const nodemailer = require("nodemailer");
 const mailer = require("../utils/mailUtil.js");
 
@@ -8,7 +6,7 @@ module.exports = {
 		const senderName = data.senderName;
 		const recipientEmailArray = data.recipientEmailArray;
 		const roomId = data.roomId;
-		const roomLink = `miniroom.online/${roomId}`;
+		const roomLink = `${process.env.SERVER_URI}/${roomId}`;
 		const mailContent = {
 			from: `Mini Room <${senderName}>`,
 			to: recipientEmailArray,
@@ -27,10 +25,10 @@ module.exports = {
             <a style="font-size: 19px; color: #000; text-decoration: none" href="${roomLink}">
               ${senderName} has invited you to join a video meeting on Mini Room
             </a>
-            <div style="text-align: center; vertical-align: middle; background-color: #fff; padding: 20px; margin-top: 30px;">
-              <div style="margin-bottom: 10px; text-align: center; vertical-align: middle; ">
+            <div style="text-align: center; vertical-align: middle; background-color: #fff; padding: 20px; margin-top: 30px; height: 100px;">
+              <div style="margin-top: 10px; margin-bottom: 20px; text-align: center; vertical-align: middle; ">
                 <a style="cursor: pointer; text-align: center; vertical-align: middle; color: #fff; text-decoration: none" href="${roomLink}">
-                  <div style="cursor: pointer; text-align: center; vertical-align: middle; width: 100px; height: 20px; background-color: rgb(59, 59, 236); color: #fff; border-radius: 10px; border: 0; padding: 15px; font-size: 16px; font-weight: 700; margin-left: 246px;">
+                  <div style="cursor: pointer; text-align: center; vertical-align: middle; width: 150px; height: 20px; background-color: rgb(59, 59, 236); color: #fff; border-radius: 10px; border: 0; padding: 15px; font-size: 16px; font-weight: 700; margin-left: 220px;">
                     Join Meeting
                   </div>
                 </a>

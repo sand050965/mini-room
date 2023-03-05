@@ -1,19 +1,12 @@
-/** @format */
-
 const express = require("express");
+const router = express.Router();
 const participantValidator = require("../validators/participantValidator");
 const participantController = require("../controllers/participantController");
-const router = express.Router();
 
 router.get(
 	"/all/:roomId",
 	participantValidator.getAllParticipantsValidator,
 	participantController.getAllParticipants
-);
-router.get(
-	"/before/:roomId",
-	participantValidator.getParticipantValidator,
-	participantController.getBeforeParticipants
 );
 
 router.get(
@@ -38,12 +31,6 @@ router.delete(
 	"/",
 	participantValidator.participantLeaveValidator,
 	participantController.participantLeave
-);
-
-router.delete(
-	"/all",
-	participantValidator.deleteAllParticipantsValidator,
-	participantController.deleteAllParticipants
 );
 
 module.exports = router;
