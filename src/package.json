@@ -40,6 +40,7 @@
 		"peer": "^0.6.1",
 		"peerjs": "^1.4.7",
 		"rabbit.js": "^0.4.4",
+		"redis": "^4.6.5",
 		"shortid": "^2.2.16",
 		"socket.io": "^4.5.4",
 		"socket.io-client": "^4.5.4",

@@ -1,6 +1,11 @@
-/*--------------------------------------------------------------
-# Common (Element)
---------------------------------------------------------------*/
+/**
+ * --------------------------------------------------------------
+ * # Common (Element)
+ * --------------------------------------------------------------
+ *
+ * @format
+ */
+
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@600;700&display=swap");
 
 @font-face {
@@ -244,9 +249,23 @@ button {
 /*--------------------------------------------------------------
 # Footer
 --------------------------------------------------------------*/
-.footer {
+.footer-container {
 	position: absolute;
 	bottom: 0;
 	width: 100%;
 	height: calc(20vh - 90px);
+	background-color:#fff;
+}
+
+.footer-content {
+	margin: 20px 10px;
+	font-weight: 700;
+	font-size: 28px;
+}
+
+@media (max-width: 1200px) {
+	.footer-content {
+		font-weight: 700;
+		font-size: 16px;
+	}
 }

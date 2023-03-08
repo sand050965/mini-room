@@ -162,7 +162,6 @@ h6 {
 @media (max-width: 991px) {
 	.hero {
 		position: relative;
-		height: 100vh;
 		text-align: center;
 	}
 
@@ -181,8 +180,9 @@ h6 {
 
 	.hero .hero-img {
 		position: absolute;
-		top: 180px;
+		top: 6vh;
 		max-width: 720px;
+		max-height: 300px;
 		text-align: center;
 		vertical-align: middle;
 	}
@@ -206,6 +206,7 @@ h6 {
 
 	.hero .hero-img {
 		max-width: 540px;
+		max-height: 225px;
 	}
 
 	.hero .hero-img img {
@@ -215,7 +216,8 @@ h6 {
 
 @media (max-width: 575px) {
 	.hero .hero-img img {
-		width: 80%;
+		width: 80vw;
+		max-height: calc((300 / 720) * 80vw);
 	}
 
 	.hero .btn-get-started {
