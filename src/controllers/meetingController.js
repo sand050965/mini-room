@@ -16,6 +16,7 @@ module.exports = {
 					status: "closed",
 				}
 			);
+			
 			const checkValidRoom = await roomService.getRoomCheck(
 				{
 					roomId: roomId,
@@ -60,13 +61,7 @@ module.exports = {
 			if (process.env.NODE_ENV !== "development") {
 				console.log(e);
 			}
-			res
-				.status(500)
-				.json({ error: true, message: "Sorry, something went wrong!" });
+			return res.render("error");
 		}
-	},
-
-	getToThankyou: async (req, res) => {
-		res.render("thankyou");
 	},
 };

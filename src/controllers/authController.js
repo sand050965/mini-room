@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const redisClient = require("../utils/redisUtil");
 const userService = require("../services/userService.js");
 
 module.exports = {
@@ -6,9 +7,15 @@ module.exports = {
 		try {
 			const profile = req.user;
 
-			let user = await userService.getUser({
-				email: profile.emails[0].value,
-			});
+			let user = null;
+
+			user = await redisClient.hget("User", profile.emails[0].value);
+
+			if (!user) {
+				user = await userService.getUser({
+					email: profile.emails[0].value,
+				});
+			}
 
 			if (user) {
 				if (user.googleId !== profile.id) {
@@ -22,11 +29,26 @@ module.exports = {
 							avatarImgUrl: profile.photos[0].value,
 						}
 					);
+
+					await redisClient.hSet(
+						"User",
+						profile.emails[0].value,
+						JSON.stringify({
+							email: profile.emails[0].value,
+							googleId: profile.id,
+							username: profile.displayName,
+							avatarImgUrl: profile.photos[0].value,
+						})
+					);
 				}
 			} else {
-				user = await userService.getUser({
-					googleId: profile.id,
-				});
+				user = await redisClient.hget("User", profile.id);
+
+				if (!user) {
+					user = await userService.getUser({
+						googleId: profile.id,
+					});
+				}
 
 				if (!user) {
 					user = await userService.postUser({
@@ -35,6 +57,17 @@ module.exports = {
 						username: profile.displayName,
 						avatarImgUrl: profile.photos[0].value,
 					});
+
+					await redisClient.hSet(
+						"User",
+						profile.emails[0].value,
+						JSON.stringify({
+							googleId: profile.id,
+							email: profile.emails[0].value,
+							username: profile.displayName,
+							avatarImgUrl: profile.photos[0].value,
+						})
+					);
 				}
 			}
 

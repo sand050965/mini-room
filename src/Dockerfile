@@ -10,4 +10,6 @@ COPY . .
 
 EXPOSE 3000
 
+EXPOSE 6379
+
 CMD [ "node", "server.js" ]

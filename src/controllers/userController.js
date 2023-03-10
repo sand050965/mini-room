@@ -1,5 +1,8 @@
+/** @format */
+
 const jwt = require("jsonwebtoken");
 const userService = require("../services/userService.js");
+const redisClient = require("../utils/redisUtil.js");
 
 module.exports = {
 	getUserData: async (req, res) => {
@@ -7,9 +10,12 @@ module.exports = {
 			const userData = await userService.getUser({
 				email: req.user.email,
 			});
+
+			await redisClient.hSet("User", req.user.email, JSON.stringify(userData));
+
 			return res.status(200).json({ data: userData });
 		} catch (e) {
-			if (config.get("nodeEnv") !== "development") {
+			if (process.env.NODE_ENV !== "development") {
 				console.log(e);
 			}
 			return res
@@ -20,12 +26,27 @@ module.exports = {
 
 	signup: async (req, res) => {
 		try {
-			await userService.postUser({
+			const userData = {
 				email: req.body.email,
 				password: req.body.password,
 				username: req.body.username,
 				avatarImgUrl: req.body.avatarImgUrl,
-			});
+			};
+
+			const redisUserData = {
+				email: req.body.email,
+				username: req.body.username,
+				avatarImgUrl: req.body.avatarImgUrl,
+			};
+
+			await userService.postUser(userData);
+
+			await redisClient.hSet(
+				"User",
+				req.body.email,
+				JSON.stringify(redisUserData)
+			);
+
 			return res.status(200).json({ ok: true });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
@@ -59,8 +80,13 @@ module.exports = {
 			const isMatch = await user.comparePassword(req.body.password);
 
 			if (isMatch) {
+
+				const tokenData = {
+					email: user.email,
+				};
+
 				const accessToken = await jwt.sign(
-					user._doc,
+					tokenData,
 					process.env.JWT_ACCESS_TOKEN_SECRET,
 					{
 						expiresIn: "7d",
@@ -92,10 +118,6 @@ module.exports = {
 
 	logout: async (req, res) => {
 		try {
-			const { access_token } = req.cookies;
-			if (access_token === undefined || access_token === null) {
-				return res.status(204).json({ ok: true });
-			}
 			return res
 				.clearCookie("access_token", { httpOnly: true })
 				.status(200)
@@ -112,14 +134,16 @@ module.exports = {
 
 	chageUserInfo: async (req, res) => {
 		try {
-			await userService.updateUserInfo(
-				{ email: req.user.email },
-				{
-					email: req.body.email,
-					username: req.body.username,
-					avatarImgUrl: req.body.avatarImgUrl,
-				}
-			);
+			const userData = {
+				email: req.body.email,
+				username: req.body.username,
+				avatarImgUrl: req.body.avatarImgUrl,
+			};
+
+			await userService.updateUserInfo({ email: req.user.email }, userData);
+
+			await redisClient.hDel("User", req.user.email);
+
 			return res.status(200).json({ ok: true });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
@@ -133,18 +157,32 @@ module.exports = {
 
 	refreshUserToken: async (req, res) => {
 		try {
-			const { access_token } = req.cookies;
 			res.clearCookie("access_token", { httpOnly: true });
-			const user = await userService.putUser({
-				email: req.body.email,
-			});
+
+			let user = null;
+
+			user = await redisClient.hGet("User", req.body.email);
+
+			if (!user) {
+				user = await userService.getUser({
+					email: req.body.email,
+				});
+
+				await redisClient.hSet("User", req.body.email, JSON.stringify(user));
+			}
+
+			const tokenData = {
+				email: user.email,
+			};
+
 			const accessToken = await jwt.sign(
-				user._doc,
+				tokenData,
 				process.env.JWT_ACCESS_TOKEN_SECRET,
 				{
 					expiresIn: "7d",
 				}
 			);
+			
 			return res
 				.cookie("access_token", accessToken, {
 					httpOnly: true,
