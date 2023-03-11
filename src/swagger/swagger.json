@@ -1,10 +1,9 @@
 {
-	"openapi": "3.0.0",
+	"openapi": "3.0.3",
 	"info": {
 		"title": "Mini Room API",
 		"description": "RESTful API in Node.js",
-		"version": "1.0.0",
-		"contact": "sand050965@gmail.com"
+		"version": "1.0.0"
 	},
 	"servers": [
 		{
@@ -35,7 +34,7 @@
 	"paths": {
 		"/api/user/auth": {
 			"get": {
-				"summary": "Get logge-in User's data.",
+				"summary": "Get logged-in User's data.",
 				"tags": ["User"],
 				"description": "Check if a user is logged-in, and verify user's token.",
 				"security": {
@@ -1013,8 +1012,8 @@
 		"securitySchemes": {
 			"AccessToken": {
 				"type": "apiKey",
-      			"in": "cookie",
-      			"name": "access_token"
+				"in": "cookie",
+				"name": "access_token"
 			}
 		},
 		"schemas": {

@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const userService = require("../services/userService.js");
 const redisClient = require("../utils/redisUtil.js");
+const userService = require("../services/userService.js");
 
 module.exports = {
 	getUserData: async (req, res) => {

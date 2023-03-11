@@ -1,27 +1,23 @@
+const redisClient = require("../utils/redisUtil.js");
+
 module.exports = {
-
-	closeRoomCache: (req, res, next) => {
-		const roomId = req.params.roomId;
-
-		redisClient.hget(roomId, (err, data) => {
-			if (err) {
+	joinMeetingCache: async (req, res, next) => {
+		try {
+			const checkRoom = await redisClient.hGet(req.query.roomId, "start");
+			if (checkRoom !== null) {
+				res.status(200).json({ ok: true });
+			}
+			next();
+		} catch (e) {
+			if (e) {
 				if (process.env.NODE_ENV !== "development") {
-					console.log(error);
+					console.log(e);
 				}
 
 				return res
 					.status(400)
-					.json({ error: true, message: error.details[0].message });
+					.json({ error: true, message: e });
 			}
-
-			if (data !== null) {
-				return res
-					.status(200)
-					.json({ data: { participantCnt: data.length() } });
-			} else {
-				next();
-			}
-		});
+		}
 	},
-
 };

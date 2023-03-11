@@ -1,121 +1,50 @@
+const redisClient = require("../utils/redisUtil.js");
+
 module.exports = {
-	getAllParticipantsCache: (req, res, next) => {
-		const roomId = req.params.roomId;
-
-		redisClient.hget(roomId, (err, data) => {
-			if (err) {
-				if (process.env.NODE_ENV !== "development") {
-					console.log(error);
-				}
-
-				return res
-					.status(400)
-					.json({ error: true, message: error.details[0].message });
-			}
-
-			if (data !== null) {
+	getAllParticipantsCache: async (req, res, next) => {
+		try {
+			const participantCnt = await redisClient.hLen(
+				`Participant_${req.params.roomId}`
+			);
+			
+			if (participantCnt) {
 				return res
 					.status(200)
-					.json({ data: { participantCnt: data.length() } });
+					.json({ data: { participantCnt: participantCnt } });
 			} else {
 				next();
 			}
-		});
+		} catch (e) {
+			if (e) {
+				if (process.env.NODE_ENV !== "development") {
+					console.log(e);
+				}
+
+				return res.status(400).json({ error: true, message: e });
+			}
+		}
 	},
 
-	getParticipantInfoCache: (req, res, next) => {
-		const roomId = req.params.roomId;
+	getParticipantInfoCache: async (req, res, next) => {
+		try {
+			const participantInfo = await redisClient.hGet(
+				`Participant_${req.params.roomId}`,
+				req.query.participantId
+			);
 
-		redisClient.hget(roomId, (err, data) => {
-			if (err) {
-				if (process.env.NODE_ENV !== "development") {
-					console.log(error);
-				}
-
-				return res
-					.status(400)
-					.json({ error: true, message: error.details[0].message });
-			}
-
-			if (data !== null) {
-				return res
-					.status(200)
-					.json({ data: { participantCnt: data.length() } });
+			if (participantInfo) {
+				return res.status(200).json({ data: JSON.parse(participantInfo) });
 			} else {
 				next();
 			}
-		});
-	},
-
-	readyToJoinCache: (req, res, next) => {
-		const roomId = req.params.roomId;
-
-		redisClient.hget(roomId, (err, data) => {
-			if (err) {
+		} catch (e) {
+			if (e) {
 				if (process.env.NODE_ENV !== "development") {
-					console.log(error);
+					console.log(e);
 				}
 
-				return res
-					.status(400)
-					.json({ error: true, message: error.details[0].message });
+				return res.status(400).json({ error: true, message: e });
 			}
-
-			if (data !== null) {
-				return res
-					.status(200)
-					.json({ data: { participantCnt: data.length() } });
-			} else {
-				next();
-			}
-		});
-	},
-
-	searchParticipantCache: (req, res, next) => {
-		const roomId = req.params.roomId;
-
-		redisClient.hget(roomId, (err, data) => {
-			if (err) {
-				if (process.env.NODE_ENV !== "development") {
-					console.log(error);
-				}
-
-				return res
-					.status(400)
-					.json({ error: true, message: error.details[0].message });
-			}
-
-			if (data !== null) {
-				return res
-					.status(200)
-					.json({ data: { participantCnt: data.length() } });
-			} else {
-				next();
-			}
-		});
-	},
-
-	participantLeaveCache: (req, res, next) => {
-		const roomId = req.params.roomId;
-
-		redisClient.hget(roomId, (err, data) => {
-			if (err) {
-				if (process.env.NODE_ENV !== "development") {
-					console.log(error);
-				}
-
-				return res
-					.status(400)
-					.json({ error: true, message: error.details[0].message });
-			}
-
-			if (data !== null) {
-				return res
-					.status(200)
-					.json({ data: { participantCnt: data.length() } });
-			} else {
-				next();
-			}
-		});
+		}
 	},
 };
