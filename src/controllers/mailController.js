@@ -9,7 +9,7 @@ module.exports = {
 				roomId: req.body.roomId,
 			};
 			const result = await mailService.sendEmail(mailData);
-			res.status(200).json({ ok: true, result: result });
+			res.status(200).json({ data: { result: result } });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
 				console.log(e);

@@ -1,5 +1,3 @@
-/** @format */
-
 const shortid = require("shortid");
 const roomService = require("../services/roomService");
 
@@ -44,7 +42,7 @@ module.exports = {
 				status: "start",
 			});
 
-			res.status(200).json({ roomId: roomId });
+			res.status(200).json({ data: { roomId: roomId } });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
 				console.log(e);

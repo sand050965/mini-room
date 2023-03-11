@@ -1,5 +1,3 @@
-/** @format */
-
 const jwt = require("jsonwebtoken");
 const userService = require("../services/userService.js");
 const redisClient = require("../utils/redisUtil.js");
@@ -10,6 +8,12 @@ module.exports = {
 			const userData = await userService.getUser({
 				email: req.user.email,
 			});
+
+			if (userData === null) {
+				return res
+					.status(401)
+					.json({ error: true, message: "Access token is invalid" });
+			}
 
 			await redisClient.hSet("User", req.user.email, JSON.stringify(userData));
 
@@ -80,7 +84,6 @@ module.exports = {
 			const isMatch = await user.comparePassword(req.body.password);
 
 			if (isMatch) {
-
 				const tokenData = {
 					email: user.email,
 				};
@@ -144,7 +147,12 @@ module.exports = {
 
 			await redisClient.hDel("User", req.user.email);
 
-			return res.status(200).json({ ok: true });
+			res.clearCookie("access_token", { httpOnly: true });
+
+			return res
+				.status(200)
+				.clearCookie("access_token", { httpOnly: true })
+				.json({ ok: true });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
 				console.log(e);
@@ -157,8 +165,6 @@ module.exports = {
 
 	refreshUserToken: async (req, res) => {
 		try {
-			res.clearCookie("access_token", { httpOnly: true });
-
 			let user = null;
 
 			user = await redisClient.hGet("User", req.body.email);
@@ -182,7 +188,7 @@ module.exports = {
 					expiresIn: "7d",
 				}
 			);
-			
+
 			return res
 				.cookie("access_token", accessToken, {
 					httpOnly: true,

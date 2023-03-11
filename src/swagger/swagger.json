@@ -1,17 +1,22 @@
 {
 	"openapi": "3.0.0",
 	"info": {
-		"version": "1.0.0",
 		"title": "Mini Room API",
-		"description": "RESTful API in Node.js"
+		"description": "RESTful API in Node.js",
+		"version": "1.0.0",
+		"contact": "sand050965@gmail.com"
 	},
 	"servers": [
 		{
-			"url": "http://localhost:3000/api",
-			"description": "Local server"
+			"url": "https://miniroom.online:3000/api-docs",
+			"description": "Swagger Hub API Auto Mocking"
 		}
 	],
+	"schemes": ["https", "http"],
 	"tags": [
+		{
+			"name": "User"
+		},
 		{
 			"name": "Participant"
 		},
@@ -19,33 +24,315 @@
 			"name": "Room"
 		},
 		{
-			"name": "Mail"
-		},
-		{
 			"name": "S3"
 		},
 		{
-			"name": "User"
+			"name": "Mail"
 		}
 	],
 	"cnsumes": ["application/json"],
 	"produces": ["application/json"],
 	"paths": {
-		"/api/participant/all/{roomId}": {
+		"/api/user/auth": {
 			"get": {
-				"summary": "Return all users with list.",
-				"tags": ["Participant"],
-				"description": "Return all existed users.",
+				"summary": "Get logge-in User's data.",
+				"tags": ["User"],
+				"description": "Check if a user is logged-in, and verify user's token.",
+				"security": {
+					"AccessToken": []
+				},
 				"responses": {
 					"200": {
-						"description": "A JSON array of user names",
+						"description": "Return User's data if user is logged-in.",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
+									"$ref": "#/components/schemas/User"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Access token is invalid.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error40x"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Access token is missing.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error40x"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error500"
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"summary": "User sign up.",
+				"tags": ["User"],
+				"description": "Insert new user's info into database.",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/requestBodies/UserBody"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "User sign up successfully.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Success20x"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "sign-up failed due to invald inputs, duplicated email or other resasons.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error40x"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error.",
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Error500"
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"summary": "User log in.",
+				"tags": ["User"],
+				"description": "Check whether user's email and password inputs are valid.",
+				"responses": {
+					"200": {
+						"description": "User log in successfully and store JWT encrypted access token in cookie.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Success20x"
+								}
+							}
+						},
+						"headers": {
+							"Set-Cookie": {
+								"schema": {
+									"$ref": "#/components/schemas/AccessTokenCookie"
+								},
+								"description": "JWT encrypted access token"
+							}
+						}
+					},
+					"400": {
+						"description": "Log-in failed due to invald email or password.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error40x"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error.",
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Error500"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "User log out.",
+				"tags": ["User"],
+				"description": "Delete user's JWT encrypted access token stored in cookie.",
+				"responses": {
+					"200": {
+						"description": "User log out successfully and JWT encrypted access token are removed from cookie.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Success20x"
+								}
+							}
+						}
+					},
+					"204": {
+						"description": "User log out successfully that no access token are found.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Success20x"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error.",
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Error500"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/user/info": {
+			"put": {
+				"summary": "Update user data.",
+				"tags": ["User"],
+				"description": "User change their email, name or avatar.",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/requestBodies/UserUpdateBody"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Operate successfully",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Success20x"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad request due to invalid inputs or other reasons",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error40x"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error.",
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Error500"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/user/token": {
+			"put": {
+				"summary": "Refresh user's access token.",
+				"tags": ["User"],
+				"description": "Refresh user's access token after user updates their data.",
+				"responses": {
+					"200": {
+						"description": "User log in successfully and store JWT encrypted access token in cookie.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Success20x"
+								}
+							}
+						},
+						"headers": {
+							"Set-Cookie": {
+								"schema": {
+									"$ref": "#/components/schemas/AccessTokenCookie"
+								},
+								"description": "JWT encrypted access token"
+							}
+						}
+					},
+					"400": {
+						"description": "Fail to refresh due to invalid email or other reasons.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error40x"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error.",
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Error500"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/participant/all/{roomId}": {
+			"get": {
+				"summary": "Get the number of participants in room by room ID.",
+				"tags": ["Participant"],
+				"description": "Return the number of all participants in the given ID's room.",
+				"parameters": [{ "$ref": "#/components/parameters/path/roomId" }],
+				"responses": {
+					"200": {
+						"description": "Operate successfully",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ParticipantCnt"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request or Invalid room ID",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error40x"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error500"
 								}
 							}
 						}
@@ -55,19 +342,40 @@
 		},
 		"/api/participant/{roomId}": {
 			"get": {
-				"summary": "Return all users with list.",
+				"summary": "Get participant info by room ID and participant ID.",
 				"tags": ["Participant"],
-				"description": "Return all existed users.",
+				"description": "Return the number of all participants in the given ID's room.",
+				"parameters": [
+					{ "$ref": "#/components/parameters/path/roomId" },
+					{ "$ref": "#/components/parameters/query/participantId" }
+				],
 				"responses": {
 					"200": {
-						"description": "A JSON array of user names",
+						"description": "Operate successfully, null means there are no data.",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
+									"$ref": "#/components/schemas/ParticipantInfo"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Falied to get participant's info due to invalid inputs or other reasons.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error40x"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error500"
 								}
 							}
 						}
@@ -77,19 +385,60 @@
 		},
 		"/api/participant/ready": {
 			"post": {
-				"summary": "Return all users with list.",
+				"summary": "Create a new participant.",
 				"tags": ["Participant"],
-				"description": "Return all existed users.",
+				"description": "Insert participant's info into database when participant is ready to join meeting.",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/requestBodies/ParticipantJoinBody"
+							}
+						}
+					}
+				},
 				"responses": {
 					"200": {
-						"description": "A JSON array of user names",
+						"description": "Join room successfully, and store participant info in Cookie.",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
+									"$ref": "#/components/schemas/Success20x"
+								}
+							}
+						},
+						"headers": {
+							"Set-Cookie": {
+								"schema": {
+									"$ref": "#/components/schemas/DataIdCookie"
+								},
+								"description": "dataId"
+							},
+							"Set-Cookie ": {
+								"schema": {
+									"$ref": "#/components/schemas/ParticipantIdCookie"
+								},
+								"description": "participantId"
+							}
+						}
+					},
+					"400": {
+						"description": "Fail to join room due to invalid inputs or other reasons.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error40x"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error500"
 								}
 							}
 						}
@@ -99,19 +448,40 @@
 		},
 		"/api/participant": {
 			"get": {
-				"summary": "Return all users with list.",
+				"summary": "Return all existed users.",
 				"tags": ["Participant"],
-				"description": "Return all existed users.",
+				"description": "Get specific participnat's info by room ID and participant's name.",
+				"parameters": [
+					{ "$ref": "#/components/parameters/query/roomId" },
+					{ "$ref": "#/components/parameters/query/participantName" }
+				],
 				"responses": {
 					"200": {
-						"description": "A JSON array of user names",
+						"description": "Operate successfully",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
+									"$ref": "#/components/schemas/ParticipantIdArray"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Fail to get participant info due to Invalid inputs or other reasons.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error40x"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error500"
 								}
 							}
 						}
@@ -119,19 +489,46 @@
 				}
 			},
 			"delete": {
-				"summary": "Return all users with list.",
+				"summary": "Participant leaves room.",
 				"tags": ["Participant"],
-				"description": "Return all existed users.",
+				"description": "Delete participant by participant ID.",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/requestBodies/ParticipantLeaveBody"
+							}
+						}
+					}
+				},
 				"responses": {
 					"200": {
-						"description": "A JSON array of user names",
+						"description": "Delete participant successfully.",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
+									"$ref": "#/components/schemas/Success20x"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Fail to delete participant due to Invalid inputs or other reasons.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error40x"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error500"
 								}
 							}
 						}
@@ -141,19 +538,26 @@
 		},
 		"/api/room/start": {
 			"get": {
-				"summary": "Return all users with list.",
+				"summary": "Host a new meeting.",
 				"tags": ["Room"],
-				"description": "Return all existed users.",
+				"description": "Create a meeting room.",
 				"responses": {
 					"200": {
-						"description": "A JSON array of user names",
+						"description": "Create room successfully.",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
+									"$ref": "#/components/schemas/Room"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error500"
 								}
 							}
 						}
@@ -163,19 +567,37 @@
 		},
 		"/api/room/join": {
 			"get": {
-				"summary": "Return all users with list.",
+				"summary": "Join an existing meeting.",
 				"tags": ["Room"],
-				"description": "Return all existed users.",
+				"description": "Check whether the room ID is valid.",
+				"parameters": [{ "$ref": "#/components/parameters/query/roomId" }],
 				"responses": {
 					"200": {
-						"description": "A JSON array of user names",
+						"description": "Join meeting successfully",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
+									"$ref": "#/components/schemas/Success20x"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request or Invalid room ID.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error40x"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error500"
 								}
 							}
 						}
@@ -185,41 +607,37 @@
 		},
 		"/api/room": {
 			"post": {
-				"summary": "Return all users with list.",
+				"summary": "Close a meeting room.",
 				"tags": ["Room"],
-				"description": "Return all existed users.",
+				"description": "Update room status into closed.",
+				"parameters": [{ "$ref": "#/components/parameters/query/roomId" }],
 				"responses": {
 					"200": {
-						"description": "A JSON array of user names",
+						"description": "Close meeting successfully",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
+									"$ref": "#/components/schemas/Room"
 								}
 							}
 						}
-					}
-				}
-			}
-		},
-		"/api/mail": {
-			"post": {
-				"summary": "Return all users with list.",
-				"tags": ["Mail"],
-				"description": "Return all existed users.",
-				"responses": {
-					"200": {
-						"description": "A JSON array of user names",
+					},
+					"400": {
+						"description": "Bad Request or Invalid room ID.",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
+									"$ref": "#/components/schemas/Error40x"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error500"
 								}
 							}
 						}
@@ -229,19 +647,46 @@
 		},
 		"/api/s3/avatar": {
 			"post": {
-				"summary": "Return all users with list.",
+				"summary": "Upload user's avatar image.",
 				"tags": ["S3"],
-				"description": "Return all existed users.",
+				"description": "Upload avatar image and store in AWS S3 bucket.",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"$ref": "#/components/requestBodies/S3AvatarBody"
+							}
+						}
+					}
+				},
 				"responses": {
 					"200": {
-						"description": "A JSON array of user names",
+						"description": "Upload avatar image successfully",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
+									"$ref": "#/components/schemas/S3Avatar"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Fail to upload avatar image due to invalid file type, file size too large, or other reasons.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error40x"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error500"
 								}
 							}
 						}
@@ -249,19 +694,46 @@
 				}
 			},
 			"delete": {
-				"summary": "Return all users with list.",
+				"summary": "Delete user's avatar image.",
 				"tags": ["S3"],
-				"description": "Return all existed users.",
+				"description": "Delete avatar image from AWS S3 bucket.",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/requestBodies/DeleteAvatarBody"
+							}
+						}
+					}
+				},
 				"responses": {
 					"200": {
-						"description": "A JSON array of user names",
+						"description": "Delete successfully.",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
+									"$ref": "#/components/schemas/Success20x"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Fail to delete due to Invalid URL or other reasons.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error40x"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error500"
 								}
 							}
 						}
@@ -271,45 +743,46 @@
 		},
 		"/api/s3/file": {
 			"post": {
-				"summary": "Return all users with list.",
+				"summary": "Upload file.",
 				"tags": ["S3"],
-				"description": "Return all existed users.",
+				"description": "Upload file and store in AWS S3 bucket.",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"$ref": "#/components/requestBodies/S3FileBody"
+							}
+						}
+					}
+				},
 				"responses": {
 					"200": {
-						"description": "A JSON array of user names",
+						"description": "Upload file successfully",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
+									"$ref": "#/components/schemas/S3File"
 								}
 							}
 						}
 					},
 					"400": {
-						"description": "A JSON array of user names",
+						"description": "Bad request due to no file uploaded.",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
+									"$ref": "#/components/schemas/Error40x"
 								}
 							}
 						}
 					},
 					"500": {
-						"description": "A JSON array of user names",
+						"description": "Internal server error.",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
+									"$ref": "#/components/schemas/Error500"
 								}
 							}
 						}
@@ -317,281 +790,44 @@
 				}
 			}
 		},
-		"/api/user/auth": {
-			"get": {
-				"summary": "Return all users with list.",
-				"tags": ["User"],
-				"description": "Return all existed users.",
-				"responses": {
-					"200": {
-						"description": "A JSON array of user names",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "A JSON array of user names",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
-								}
-							}
-						}
-					},
-					"500": {
-						"description": "A JSON array of user names",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
-								}
-							}
-						}
-					}
-				}
-			},
+		"/api/mail": {
 			"post": {
-				"summary": "Return all users with list.",
-				"tags": ["User"],
-				"description": "Return all existed users.",
+				"summary": "Send emails.",
+				"tags": ["Mail"],
+				"description": "Send invitation emails to recipients.",
+				"parameters": [
+					{ "$ref": "#/components/parameters/requestBodies/MailBody" }
+				],
 				"responses": {
 					"200": {
-						"description": "A JSON array of user names",
+						"description": "Operate successfully.",
 						"content": {
 							"application/json": {
 								"schema": {
 									"type": "array",
 									"items": {
-										"$ref": "#/components/schemas/User"
+										"$ref": "#/components/schemas/Mail"
 									}
 								}
 							}
 						}
 					},
 					"400": {
-						"description": "A JSON array of user names",
+						"description": "Bad Request or Invalid room ID.",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
+									"$ref": "#/components/schemas/Error40x"
 								}
 							}
 						}
 					},
 					"500": {
-						"description": "A JSON array of user names",
+						"description": "Internal server error.",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
-								}
-							}
-						}
-					}
-				}
-			},
-			"put": {
-				"summary": "Return all users with list.",
-				"tags": ["User"],
-				"description": "Return all existed users.",
-				"responses": {
-					"200": {
-						"description": "A JSON array of user names",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "A JSON array of user names",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
-								}
-							}
-						}
-					},
-					"500": {
-						"description": "A JSON array of user names",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
-								}
-							}
-						}
-					}
-				}
-			},
-			"delete": {
-				"summary": "Return all users with list.",
-				"tags": ["User"],
-				"description": "Return all existed users.",
-				"responses": {
-					"200": {
-						"description": "A JSON array of user names",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "A JSON array of user names",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
-								}
-							}
-						}
-					},
-					"500": {
-						"description": "A JSON array of user names",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/api/user/info": {
-			"put": {
-				"summary": "Return all users with list.",
-				"tags": ["User"],
-				"description": "Return all existed users.",
-				"responses": {
-					"200": {
-						"description": "A JSON array of user names",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "A JSON array of user names",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
-								}
-							}
-						}
-					},
-					"500": {
-						"description": "A JSON array of user names",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/api/user/token": {
-			"put": {
-				"summary": "Return all users with list.",
-				"tags": ["User"],
-				"description": "Return all existed users.",
-				"responses": {
-					"200": {
-						"description": "A JSON array of user names",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "A JSON array of user names",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
-								}
-							}
-						}
-					},
-					"500": {
-						"description": "A JSON array of user names",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/User"
-									}
+									"$ref": "#/components/schemas/Error500"
 								}
 							}
 						}
@@ -601,24 +837,343 @@
 		}
 	},
 	"components": {
-		"schemas": {
-			"User": {
+		"parameters": {
+			"path": {
+				"roomId": {
+					"name": "roomId",
+					"in": "path",
+					"description": "meeting room ID",
+					"required": true,
+					"type": "string"
+				}
+			},
+			"query": {
+				"roomId": {
+					"name": "roomId",
+					"in": "query",
+					"description": "meeting room ID",
+					"required": true,
+					"type": "string"
+				},
+				"participantId": {
+					"name": "participantId",
+					"in": "query",
+					"description": "participant ID",
+					"required": true,
+					"type": "string"
+				},
+				"participantName": {
+					"name": "participantName",
+					"in": "query",
+					"description": "participant Name",
+					"required": true,
+					"type": "string"
+				}
+			}
+		},
+		"requestBodies": {
+			"ParticipantJoinBody": {
 				"properties": {
-					"id": {
-						"type": "integer",
-						"format": "int64",
-						"example": 1
+					"roomId": {
+						"type": "string",
+						"example": "o64ehiGZy"
+					},
+					"participantId": {
+						"type": "string",
+						"example": "1f72fc05-9819-451a-ac81-2c16c2b22a58"
+					},
+					"participantName": {
+						"type": "string",
+						"example": "test"
+					},
+					"avatarImgUrl": {
+						"type": "string",
+						"example": "https://s3.amazonaws.com/xxx/xxx/xxxxx.jpg"
+					},
+					"isMuted": {
+						"type": "boolean",
+						"example": true
+					},
+					"isStoppedVideo": {
+						"type": "boolean",
+						"example": false
+					}
+				},
+				"required": [
+					"roomId",
+					"participantId",
+					"participantName",
+					"avatarImgUrl",
+					"isMuted",
+					"isStoppedVideo"
+				]
+			},
+			"ParticipantLeaveBody": {
+				"properties": {
+					"roomId": {
+						"type": "string",
+						"example": "o64ehiGZy"
+					},
+					"participantId": {
+						"type": "string",
+						"example": "1f72fc05-9819-451a-ac81-2c16c2b22a58"
+					}
+				},
+				"required": ["roomId", "participantId"]
+			},
+			"MailBody": {
+				"properties": {
+					"senderName": {
+						"type": "string",
+						"example": "test"
+					},
+					"recipientEmailArray": {
+						"type": "array",
+						"example": [
+							"test1@gmail.com",
+							"test2@gmail.com",
+							"test3@gmail.com",
+							"test4@gmail.com",
+							"test5@gmail.com"
+						]
+					},
+					"roomId": {
+						"type": "string",
+						"example": "o64ehiGZy"
+					}
+				},
+				"required": ["roomId", "participantId"]
+			},
+			"S3AvatarBody": {
+				"type": "object",
+				"properties": {
+					"avatar": {
+						"type": "string",
+						"format": "binary"
+					}
+				}
+			},
+			"DeleteAvatarBody": {
+				"properties": {
+					"avatarImgUrl": {
+						"type": "string",
+						"example": "https://s3.amazonaws.com/xxx/xxx/xxxxx.jpg"
+					}
+				},
+				"required": ["avatarImgUrl"]
+			},
+			"S3FileBody": {
+				"type": "object",
+				"properties": {
+					"file": {
+						"type": "string",
+						"format": "binary"
+					}
+				}
+			},
+			"UserBody": {
+				"properties": {
+					"email": {
+						"type": "string",
+						"example": "test@gmail.com"
+					},
+					"password": {
+						"type": "string",
+						"example": "123456"
 					},
 					"username": {
 						"type": "string",
-						"example": "Jimmy"
+						"example": "test"
 					},
-					"email": {
+					"avatarImgUrl": {
 						"type": "string",
-						"example": "test@test.com"
+						"example": "https://s3.amazonaws.com/xxx/xxx/xxxxx.jpg"
 					}
 				},
-				"required": ["id", "username", "email"]
+				"required": ["email", "password", "username", "avatarImgUrl"]
+			},
+			"UserUpdateBody": {
+				"properties": {
+					"email": {
+						"type": "string",
+						"example": "test@gmail.com"
+					},
+					"username": {
+						"type": "string",
+						"example": "test"
+					},
+					"avatarImgUrl": {
+						"type": "string",
+						"example": "https://s3.amazonaws.com/xxx/xxx/xxxxx.jpg"
+					}
+				},
+				"required": ["email", "username", "avatarImgUrl"]
+			}
+		},
+		"securitySchemes": {
+			"AccessToken": {
+				"type": "apiKey",
+      			"in": "cookie",
+      			"name": "access_token"
+			}
+		},
+		"schemas": {
+			"ParticipantCnt": {
+				"properties": {
+					"data": {
+						"type": "object",
+						"example": { "participantCnt": 5 }
+					}
+				},
+				"required": ["data"]
+			},
+			"ParticipantInfo": {
+				"properties": {
+					"data": {
+						"type": "object",
+						"example": {
+							"_id": "640c4559048fdae960271d17",
+							"roomId": "o64ehiGZy",
+							"participantId": "1f72fc05-9819-451a-ac81-2c16c2b22a58",
+							"participantName": "test",
+							"avatarImgUrl": "https://s3.amazonaws.com/xxx/xxx/xxxxx.jpg",
+							"isMuted": true,
+							"isStoppedVideo": false,
+							"createdAt": "2023-03-11T09:09:45.525Z",
+							"updatedAt": "2023-03-11T09:09:45.525Z",
+							"__v": 0
+						}
+					}
+				},
+				"required": ["data"]
+			},
+			"ParticipantIdArray": {
+				"properties": {
+					"data": {
+						"type": "array",
+						"example": [
+							"1f72fc05-9819-451a-ac81-2c16c2b22a58",
+							"81ff75f3-b1e6-41ff-b785-859df0cc600b"
+						]
+					}
+				},
+				"required": ["data"]
+			},
+			"Room": {
+				"properties": {
+					"data": {
+						"type": "object",
+						"example": {
+							"roomId": "o64ehiGZy"
+						}
+					}
+				},
+				"required": ["data"]
+			},
+			"DataIdCookie": {
+				"type": "string",
+				"example": "dataId=xxx; Max-Age=216; Path=/; Expires=Sat, 11 Mar 2023 12:31:29 GMT; HttpOnly; Secure"
+			},
+			"ParticipantIdCookie": {
+				"type": "string",
+				"example": "participantId=xxx; Max-Age=216; Path=/; Expires=Sat, 11 Mar 2023 12:31:29 GMT; HttpOnly; Secure"
+			},
+			"Mail": {
+				"properties": {
+					"data": {
+						"properties": {
+							"result": {
+								"properties": {
+									"success": {
+										"type": "array",
+										"example": [
+											"test1@gmail.com",
+											"test3@gmail.com",
+											"test4@gmail.com"
+										]
+									},
+									"failed": {
+										"type": "array",
+										"example": ["test2@gmail.com", "test5@gmail.com"]
+									}
+								}
+							}
+						}
+					}
+				},
+				"required": ["data"]
+			},
+			"S3Avatar": {
+				"properties": {
+					"data": {
+						"type": "object",
+						"example": { "url": "https://s3.amazonaws.com/xxx/xxx/xxxxx.jpg" }
+					}
+				},
+				"required": ["data"]
+			},
+			"S3File": {
+				"properties": {
+					"data": {
+						"type": "object",
+						"example": { "url": "https://s3.amazonaws.com/xxx/xxx/xxxxx.pdf" }
+					}
+				},
+				"required": ["data"]
+			},
+			"User": {
+				"properties": {
+					"data": {
+						"type": "object",
+						"example": {
+							"_id": "640c4559048fdae960271d17",
+							"googleId": "87687giu989g",
+							"email": "test@gmail.com",
+							"username": "test",
+							"avatarImgUrl": "https://s3.amazonaws.com/xxx/xxx/xxxxx.jpg"
+						}
+					}
+				},
+				"required": ["data"]
+			},
+			"AccessTokenCookie": {
+				"type": "string",
+				"example": "access_token=xxx; Max-Age=604; Path=/; Expires=Sat, 11 Mar 2023 16:53:11 GMT; HttpOnly; Secure"
+			},
+			"Success20x": {
+				"properties": {
+					"ok": {
+						"type": "boolean",
+						"example": true
+					}
+				},
+				"required": ["ok"]
+			},
+			"Error40x": {
+				"properties": {
+					"error": {
+						"type": "boolean",
+						"example": true
+					},
+					"message": {
+						"type": "string",
+						"example": "corresponding error message."
+					}
+				},
+				"required": ["error", "message"]
+			},
+			"Error500": {
+				"properties": {
+					"error": {
+						"type": "boolean",
+						"example": true
+					},
+					"message": {
+						"type": "string",
+						"example": "Sorry, something went wrong!"
+					}
+				},
+				"required": ["error", "message"]
 			}
 		}
 	}

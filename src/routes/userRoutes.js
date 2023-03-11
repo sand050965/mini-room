@@ -26,7 +26,6 @@ router.put(
 
 router.put(
 	"/token",
-	JWTverify.verifyAccessToken,
 	userValidator.refreshUserValidator,
 	userController.refreshUserToken
 );

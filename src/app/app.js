@@ -36,6 +36,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compression());
 app.use(passport.initialize());
+
+// Swagger Hub
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use("/api/participant", participantRoutes);

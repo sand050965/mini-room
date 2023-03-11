@@ -129,8 +129,6 @@ class UserMod {
 
 	storeAvatarToS3 = async (data) => {
 		const file = data.file;
-
-		// put image to s3 bucket and get url
 		const formData = new FormData();
 		formData.append("avatar", file);
 		const response = await fetch("/api/s3/avatar", {

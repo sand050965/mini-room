@@ -70,7 +70,7 @@ module.exports = {
 		if (!shortid.isValid(req.params.roomId)) {
 			return res
 				.status(400)
-				.json({ error: true, message: "Room id is invalid" });
+				.json({ error: true, message: "Room ID is invalid" });
 		}
 
 		const { error, value } = JoiUtil.roomIdSchema.validate(data, {
