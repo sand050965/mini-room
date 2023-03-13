@@ -1,0 +1,16 @@
+version: 0.0
+os: linux
+
+hooks:
+    AfterInstall:
+        - location: scripts/setup.sh
+          timeout: 300
+          runas: root
+    ApplicationStart:
+        - location: scripts/run.sh
+          timeout: 300
+          runas: root
+    ApplicationStop:
+        - location: scripts/stop.sh
+          timeout: 300
+          runas: root
