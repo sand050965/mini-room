@@ -14,7 +14,11 @@ Test password: 123456
 <br/>
 <br/>
 
-![image](https://github.com/)
+  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/index.png?raw=true)
+
+  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/premeeting.png?raw=true)
+  
+  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/meeting-room.png?raw=true)
 
 ## Table of Contents
 
@@ -54,6 +58,8 @@ Test password: 123456
 - Supports file uploading and emojis sending in chatroom.
 - User can change their own avatar image.
 - [Supports Hand Tracking Canvas. (more info ...)](https://github.com/sand050965/Hand-Tracking-Canvas)
+
+![image](https://github.com/sand050965/Hand-Tracking-Canvas/blob/main/readme/painting-mode.gif?raw=true)
 
 ## Architecture
 
