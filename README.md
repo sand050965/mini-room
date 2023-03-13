@@ -1,8 +1,7 @@
 # Mini-Room
 
 <p align="center">
-  <img width="350" src="https://github.com/">
-
+  <img width="350" src="https://github.com/sand050965/Mini-Room/blob/main/readme/logo.png?raw=true">
 </p>
 Mini Room is a video-communication service allows you to host real-time meetings online, make peer-to-peer video calls and chat in messages.
 <br/>
@@ -20,6 +19,8 @@ Test password: 123456
 ## Table of Contents
 
 - [Main Features](#main-features)
+- [Architecture](#architecture)
+- [Database Schema](#database-schema)
 - [Backend Technique](#backend-technique)
   - [Infrastructure](#infrastructure)
   - [Environment](#environment)
@@ -27,13 +28,11 @@ Test password: 123456
   - [Cache](#cache)
   - [Cloud Services](#cloud-services)
   - [Networking](#networking)
-  - [CI / CD](#ci-cd)
+  - [CI / CD](#ci--cd)
   - [Test](#test)
   - [Third Party Library](#third-party-library)
   - [Version Control](#version-control)
   - [Key Points](#key-points)
-- [Architecture](#architecture)
-- [Database Schema](#database-schema)
 - [Frontend Technique](#frontend-technique)
   - [WebRTC](#webrtc)
   - [PeerJS](#peerjs)
@@ -45,16 +44,30 @@ Test password: 123456
 
 ## Main Features
 
+- Use Socket.IO for meeting room management and real-time chat room.
+- Use WebRTC and PeerJS to achieve Peer-to-Peer video calls.
 - Users can sign in locally or use Google OAuth 2.0.
 - User authentication with Json Web Token.
-- Use socket.io for real time co-editing.
-- Supports English and Chinese.
-- Setup CICD pipeline with cloudbuild cloud pub/sub.
-- Differentiate every user with different colors in editor.
-- Supports mobile devices so you can update content anytime anywhere.
-- Only host can grant or remove access to your documents.
-- Supports exporting your documents as PDF files.
-- Hosting images on firebase storage.
+- Setup CI/CD workflow with GitHub Actions, Docker Hub Webhooks and Jenkins.
+- Supports meeting recording and screen sharing functions.
+- Supports invitation mail sending.
+- Supports file uploading and emojis sending in chatroom.
+- User can change their own avatar image.
+- [Supports Hand Tracking Canvas. (more info ...)](https://github.com/sand050965/Hand-Tracking-Canvas)
+
+## Architecture
+
+- Server Architecture
+
+  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/archetecture.png?raw=true)
+
+- Socket Architecture
+
+  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/websocket.png?raw=true)
+
+- PeerJS Architecture
+
+  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/peerjs.png?raw=true)
 
 ## Backend Technique
 
@@ -104,6 +117,7 @@ Test password: 123456
 
 ### Third Party Library
 
+- Socket.IO
 - mongoose
 - passport.js
 - nodemailer
@@ -119,18 +133,8 @@ Test password: 123456
 
 ### Key Points
 
-- socket.io
+- WebSocket
 - MVC Pattern
-
-## Architecture
-
-- Server Architecture
-
-  ![image](https://github.com)
-
-- Socket Architecture
-
-  ![image](https://github.com/)
 
 ## Database Schema
 
