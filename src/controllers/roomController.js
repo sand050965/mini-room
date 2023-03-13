@@ -1,12 +1,34 @@
-/** @format */
-
 const shortid = require("shortid");
+const redisClient = require("../utils/redisUtil.js");
 const roomService = require("../services/roomService");
 
 module.exports = {
 	startMeeting: async (req, res) => {
 		try {
 			let roomId = shortid.generate();
+
+			let checkInUseRoom;
+
+			checkInUseRoom = await roomService.getRoomCheck(
+				{
+					roomId: roomId,
+				},
+				{
+					status: "start",
+				}
+			);
+
+			while (checkInUseRoom !== null) {
+				roomId = shortid.generate();
+				checkInUseRoom = await roomService.getRoomCheck(
+					{
+						roomId: roomId,
+					},
+					{
+						status: "start",
+					}
+				);
+			}
 
 			const checkInvalidRoom = await roomService.getRoomCheck(
 				{
@@ -17,18 +39,7 @@ module.exports = {
 				}
 			);
 
-			const checkValidRoom = await roomService.getRoomCheck(
-				{
-					roomId: roomId,
-				},
-				{
-					status: "start",
-				}
-			);
-
-			if (checkValidRoom !== null) {
-				roomId = shortid.generate();
-			} else if (checkInvalidRoom !== null) {
+			if (checkInvalidRoom !== null) {
 				await roomService.updateRoomStatus(
 					{
 						roomId: roomId,
@@ -37,14 +48,17 @@ module.exports = {
 						status: "start",
 					}
 				);
+				await redisClient.del(`Room_${roomId}`);
+			} else {
+				await roomService.createRoom({
+					roomId: roomId,
+					status: "start",
+				});
 			}
 
-			await roomService.createRoom({
-				roomId: roomId,
-				status: "start",
-			});
+			await redisClient.set(`Room_${roomId}`, "start");
 
-			res.status(200).json({ roomId: roomId });
+			return res.status(200).json({ data: { roomId: roomId } });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
 				console.log(e);
@@ -57,20 +71,29 @@ module.exports = {
 
 	joinMeeting: async (req, res) => {
 		try {
-			const checkRoom = await roomService.getRoomCheck(
-				{
-					roomId: req.query.roomId,
-				},
-				{
-					status: "start",
+			let checkValidRoom = null;
+
+			checkValidRoom = await redisClient.get(`Room_${req.query.roomId}`);
+
+			if (checkValidRoom === null) {
+				checkValidRoom = await roomService.getRoomCheck(
+					{
+						roomId: req.query.roomId,
+					},
+					{
+						status: "start",
+					}
+				);
+
+				if (checkValidRoom === null) {
+					await redisClient.set(`Room_${req.query.roomId}`, "start");
+
+					return res
+						.status(400)
+						.json({ error: true, message: "room id doesn't exist!" });
 				}
-			);
-			if (checkRoom === null) {
-				res
-					.status(400)
-					.json({ error: true, message: "room id doesn't exist!" });
-				return;
 			}
+
 			res.status(200).json({ ok: true });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
@@ -88,8 +111,9 @@ module.exports = {
 				{
 					roomId: req.query.roomId,
 				},
-				{ status: "close" }
+				{ status: "closed" }
 			);
+			await redisClient.del(`Room_${req.query.roomId}`);
 			res.status(200).json({ ok: true });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {

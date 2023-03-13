@@ -16,28 +16,8 @@ services:
     image: sand050965/miniroom
     container_name: app
     ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=${NODE_ENV}
-      - PORT=${PORT}
-      - SECRET=${SECRET}
-      - SERVER_URI=${SERVER_URI}
-      - JWT_ACCESS_TOKEN_SECRET=${JWT_ACCESS_TOKEN_SECRET}
-      - JWT_REFRESH_TOKEN_SECRET=${JWT_REFRESH_TOKEN_SECRET}
-      - SOCKET_IO_ORIGIN=${SOCKET_IO_ORIGIN}
-      - DB_URI=${DB_URI}
-      - MAIL_HOST=${MAIL_HOST}
-      - MAIL_POSRT=${MAIL_POSRT}
-      - MAIL_USER=${MAIL_USER}
-      - MAIL_PASSWORD=${MAIL_PASSWORD}
-      - AWS_S3_REGION=${AWS_S3_REGION}
-      - AWS_BUCKET_NAME=${AWS_BUCKET_NAME}
-      - AWS_SIGNATURE_VERSION=${AWS_SIGNATURE_VERSION}
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY_ID=${AWS_SECRET_ACCESS_KEY_ID}
-      - AWS_CLOUDFRONT_URL=${AWS_CLOUDFRONT_URL}
-      - AWS_S3_URL_PREFIX=${AWS_S3_URL_PREFIX}
-      - DEFAULT_AVATAR_IMG_URL=${DEFAULT_AVATAR_IMG_URL}
-      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - "8080:8080"
+      - "6379:6379"
+    network_mode: "host"
+    env_file: ./.env
     restart: on-failure

@@ -1,3 +1,4 @@
+const redisClient = require("../utils/redisUtil.js");
 const participantService = require("../services/participantService");
 const roomService = require("../services/roomService");
 
@@ -16,20 +17,32 @@ module.exports = {
 			if (checkInValidRoom !== null) {
 				await roomService.updateRoomStatus(
 					{
-						roomId: req.query.roomId,
+						roomId: req.body.roomId,
 					},
 					{ status: "start" }
 				);
+
+				await redisClient.set(`Room_${req.body.roomId}`, "start");
 			}
 
-			const participant = await participantService.insertParticipant({
+			const participantData = {
 				roomId: req.body.roomId,
 				participantId: req.body.participantId,
 				participantName: req.body.participantName,
 				avatarImgUrl: req.body.avatarImgUrl,
 				isMuted: req.body.isMuted,
 				isStoppedVideo: req.body.isStoppedVideo,
-			});
+			};
+
+			const participant = await participantService.insertParticipant(
+				participantData
+			);
+
+			await redisClient.hSet(
+				`Participant_${req.body.roomId}`,
+				req.body.participantId,
+				JSON.stringify(participantData)
+			);
 
 			return res
 				.status(200)
@@ -77,6 +90,7 @@ module.exports = {
 				roomId: req.params.roomId,
 				participantId: req.query.participantId,
 			});
+
 			return res.status(200).json({ data: participantInfo });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
@@ -117,6 +131,12 @@ module.exports = {
 				roomId: req.body.roomId,
 				participantId: req.body.participantId,
 			});
+
+			await redisClient.hDel(
+				`Participant_${req.body.roomId}`,
+				req.body.participantId
+			);
+
 			return res.status(200).json({ ok: true });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {

@@ -50,7 +50,7 @@ class IndexController {
 
 	startMeeting = async () => {
 		const result = await this.indexMod.startMeeting();
-		window.location = `/${result.roomId}`;
+		window.location = `/${result.data.roomId}`;
 	};
 
 	joinMeeting = async () => {

@@ -1,6 +1,11 @@
-/*--------------------------------------------------------------
-# General
---------------------------------------------------------------*/
+/**
+ * --------------------------------------------------------------
+ * # General
+ * --------------------------------------------------------------
+ *
+ * @format
+ */
+
 @import "common.css";
 
 .thankyou-container {
@@ -14,6 +19,14 @@
 
 .thankyou-container h1 {
 	color: #fff;
+}
+
+.thankyou-container .hero-img {
+	width: 40vw;
+	max-width: 100%;
+	height: auto;
+	max-height: 40vh;
+	margin: 0 50px;
 }
 
 .thankyou-container button {

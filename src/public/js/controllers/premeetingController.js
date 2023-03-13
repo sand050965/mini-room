@@ -162,13 +162,13 @@ class PremeetingController {
 
 				this.commonMod.closePreload("#preloader");
 				this.commonMod.displayModal(modalDOMElement);
-				this.setConfirmBtnEnabled();
+				this.premeetingMod.setConfirmBtnEnabled();
 				this.isJoining = false;
 				return;
 			}
 		} catch (e) {
 			console.log(e);
-			this.setConfirmBtnEnabled();
+			this.premeetingMod.setConfirmBtnEnabled();
 			const modalDOMElement = {
 				page: "premeeting",
 				isDisplayModal: true,

@@ -23,7 +23,7 @@ class MemberController {
 		this.commonMod.openPreload("#preloader");
 		const checkResult = await this.userMod.checkUserAuth();
 		this.initInfo = checkResult.data;
-		if (checkResult.data !== null) {
+		if (!checkResult.error) {
 			this.memberAvatarImg.src = checkResult.data.avatarImgUrl;
 			this.memberEmail.value = checkResult.data.email;
 			this.memberUsername.value = checkResult.data.username;

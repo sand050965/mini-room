@@ -2,7 +2,8 @@
 const app = require("./app/app");
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
+const redisClient = require("./utils/redisUtil");
 const participantService = require("./services/participantService");
 const roomService = require("./services/roomService");
 
@@ -74,6 +75,11 @@ io.on("connection", (socket) => {
 						participantId: participantId,
 					});
 
+					await redisClient.hDel(
+						`Participant_${roomId}`,
+						participantId
+					);
+
 					const participantCheck =
 						await participantService.getAllParticipantsCnt({
 							roomId: roomId,
@@ -86,6 +92,7 @@ io.on("connection", (socket) => {
 							},
 							{ status: "closed" }
 						);
+						await redisClient.del(`Room_${roomId}`);
 					}
 				}
 
