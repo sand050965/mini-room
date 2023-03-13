@@ -1,7 +1,8 @@
 const redis = require("redis");
 
 const client = redis.createClient({
-	url: process.env.AWS_ELASTICACHE_REDIS_HOST,
+	url: process.env.AWS_ELASTICACHE_REDIS_URL,
+	tls: {},
 });
 
 client.on("connect", () => {
