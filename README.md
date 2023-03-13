@@ -67,13 +67,22 @@ Test password: 123456
 
   ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/archetecture.png?raw=true)
 
+<br/>
+<br/>
+
 - Socket Architecture
 
   ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/websocket.png?raw=true)
 
+<br/>
+<br/>
+
 - PeerJS Architecture
 
   ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/peerjs.png?raw=true)
+
+<br/>
+<br/>
 
 ## Backend Technique
 
@@ -145,6 +154,9 @@ Test password: 123456
 ## Database Schema
 
 ![image](https://github.co)
+
+<br/>
+<br/>
 
 ## Frontend Technique
 
