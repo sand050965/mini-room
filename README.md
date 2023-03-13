@@ -2,6 +2,7 @@
 
 <p align="center">
   <img width="350" src="https://github.com/">
+
 </p>
 Mini Room is a video-communication service allows you to host real-time meetings online, make peer-to-peer video calls and chat in messages.
 <br/>
