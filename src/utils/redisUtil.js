@@ -1,9 +1,9 @@
 const redis = require("redis");
 
-const client = redis.createClient(
-	process.env.AWS_ELASTICACHE_REDIS_PORT,
-	process.env.AWS_ELASTICACHE_REDIS_URL
-);
+const client = redis.createClient({
+	host: process.env.REDIS_HOST,
+	port: process.env.REDIS_PORT,
+});
 
 client.on("connect", () => {
 	console.log("Connected to Redis");
