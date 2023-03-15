@@ -9,10 +9,10 @@ services:
       - "6379:6379"
     env_file: ./.env
     restart: on-failure
-    networks:
-      - my_bridge
     depends_on:
       - redis
+    networks:
+      - my_bridge
 
   nginx:
     build:
@@ -24,6 +24,8 @@ services:
       - "443:443"
     depends_on:
       - app
+    networks:
+      - my_bridge
   
   redis:
     image: redis:latest
