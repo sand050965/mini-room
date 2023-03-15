@@ -36,6 +36,6 @@ services:
     networks:
         - my_bridge
   
-  networks:
-    my_bridge:
-      external: true
+networks:
+  my_bridge:
+    external: true
