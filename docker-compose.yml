@@ -10,7 +10,7 @@ services:
     env_file: ./.env
     restart: on-failure
     networks:
-      - my-bridge
+      - my_bridge
     depends_on:
       - redis
 
@@ -34,8 +34,8 @@ services:
     volumes:
         - /home/ubuntu/redis-data:/data
     networks:
-        - my-bridge
+        - my_bridge
   
   networks:
-    my-bridge:
+    my_bridge:
       external: true
