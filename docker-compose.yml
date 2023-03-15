@@ -6,7 +6,6 @@ services:
     container_name: app
     ports:
       - "8080:8080"
-      - "6379:6379"
     env_file: ./.env
     restart: on-failure
     depends_on:
