@@ -5,7 +5,7 @@ services:
     image: sand050965/miniroom
     container_name: app
     ports:
-      - "8080:8080"
+      - "3000:3000"
     env_file: ./.env
     restart: on-failure
     depends_on:
