@@ -6,13 +6,18 @@
 Mini Room is a video-communication service allows you to host real-time meetings online, make peer-to-peer video calls and chat in messages.
 <br/>
 <br/>
-🔗Website URL: https://miniroom.online/
+🔗 Website URL: https://miniroom.online/
+<br/>
+📄 API Doc: https://app.swaggerhub.com/apis/SAND050965_1/mini-room_api/1.0.0
 <br/>
 <br/>
-Test account: test@gmail.com
-Test password: 123456
+Test Account: test@gmail.com
+<br/>
+Test Password: 123456
 <br/>
 <br/>
+
+## Demo
 
   ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/index.png?raw=true)
 
@@ -63,23 +68,23 @@ Test password: 123456
 
 ## Architecture
 
-- Server Architecture
+### Server Architecture
 
-  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/archetecture.png?raw=true)
-
-<br/>
-<br/>
-
-- Socket Architecture
-
-  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/websocket.png?raw=true)
+![image](https://github.com/sand050965/Mini-Room/blob/main/readme/archetecture.png?raw=true)
 
 <br/>
 <br/>
 
-- PeerJS Architecture
+### Socket Architecture
 
-  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/peerjs.png?raw=true)
+![image](https://github.com/sand050965/Mini-Room/blob/main/readme/websocket.png?raw=true)
+
+<br/>
+<br/>
+
+### PeerJS Architecture
+
+![image](https://github.com/sand050965/Mini-Room/blob/main/readme/peerjs.png?raw=true)
 
 <br/>
 <br/>
@@ -98,6 +103,7 @@ Test password: 123456
 ### Database
 
 - MongoDB Atlas
+
 ### Cache
 
 - Redis
@@ -123,8 +129,8 @@ Test password: 123456
 - CI: 
   - GitHub Actions
   - Docker Hub Webhooks
-- CD: 
   - Jenkins
+- CD: 
   - AWS CodeDeploy
 ### Test
 
@@ -153,29 +159,21 @@ Test password: 123456
 
 ## Database Schema
 
-![image](https://github.co)
+![image](https://github.com/sand050965/Mini-Room/blob/main/readme/ERD.png?raw=true)
 
 <br/>
 <br/>
 
 ## Frontend Technique
 
-### WebRTC
-
-- simply get client's video stream, and secure voice and video calls.voice and video encryption.
-### PeerJS
-
-- simplifies WebRTC peer-to-peer video transfer. 
-### EJS Template
-
-- simply create template and generate HTML markup with plain JavaScript.
-
-### Bootstrap
-
-- easy initiation and highly customizable, and
+- HTML, JavaScript, CSS
+- WebRTC
+- EJS Template
+- Bootstrap
 
 ### Third Party Library
 
+- PeerJS
 - FontAwesome
 - AOS
 - Open Emoji API
@@ -186,7 +184,7 @@ Test password: 123456
 
 ## Contact
 
-Hsien-Yu, Yang
+🙂 Hsien-Yu, Yang
 <br/>
 
-Email: sand050965@gmail.com
+📩 Email: sand050965@gmail.com
