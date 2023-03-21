@@ -17,7 +17,7 @@ module.exports = {
             <div style="vertical-align: middle; margin-bottom: 20px;">
               <span style="color: rgb(20, 55, 101); font-size: 30px; font-weight: 700; padding: 20px 10px;">
                 <span style="width: 32px; height: 32px; text-align: center; vertical-align: middle;">
-                  <img style="width: 32px; height: 32px" src="https://s3.amazonaws.com/www.miniroom.online/images/favicon.ico" />
+                  <img style="width: 32px; height: 32px" src="https://dpd6ot08xcncs.cloudfront.net/images/favicon.ico" />
                 </span>
                 Mini Room
               </span>

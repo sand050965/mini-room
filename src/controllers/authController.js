@@ -9,7 +9,7 @@ module.exports = {
 
 			let user = null;
 
-			user = await redisClient.hget("User", profile.emails[0].value);
+			user = await redisClient.hGet("User", profile.emails[0].value);
 
 			if (!user) {
 				user = await userService.getUser({
@@ -42,7 +42,7 @@ module.exports = {
 					);
 				}
 			} else {
-				user = await redisClient.hget("User", profile.id);
+				user = await redisClient.hGet("User", profile.id);
 
 				if (!user) {
 					user = await userService.getUser({
@@ -71,8 +71,12 @@ module.exports = {
 				}
 			}
 
+			const tokenData = {
+				email: profile.emails[0].value,
+			};
+
 			const accessToken = await jwt.sign(
-				user._doc,
+				tokenData,
 				process.env.JWT_ACCESS_TOKEN_SECRET,
 				{
 					expiresIn: "7d",

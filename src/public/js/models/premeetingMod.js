@@ -70,7 +70,7 @@ class PremeetingMod {
 			this.displayName();
 		} else {
 			this.avatarImg.src =
-				"https://s3.amazonaws.com/www.miniroom.online/images/avatar.png";
+				"https://dpd6ot08xcncs.cloudfront.net/images/avatar.png";
 		}
 	};
 
