@@ -8,12 +8,15 @@ Mini Room is a video-communication service allows you to host real-time meetings
 <br/>
 🔗 Website URL: https://miniroom.online/
 <br/>
+<br/>
 📄 API Doc: https://app.swaggerhub.com/apis/SAND050965_1/mini-room_api/1.0.0
 <br/>
 <br/>
-Test Account: test@gmail.com
+<b>🧑‍💻 Login with:</b>
 <br/>
-Test Password: 123456
+&nbsp; &nbsp; Test Account: test@gmail.com
+<br/>
+&nbsp; &nbsp; Test Password: 123456
 <br/>
 <br/>
 
@@ -37,17 +40,17 @@ Test Password: 123456
 ### Online Video Calls, Meetings and Conferencing
 - Use WebRTC and PeerJS to achieve Peer-to-Peer video calls.
 
-  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/videoCalls.png?raw=true)
+  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/videoCalls.gif?raw=true)
 
 ### Real-Time Messaging
 - Use Socket.IO for meeting room management and real-time chat room.
 
-  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/message.png?raw=true)
+  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/message.gif?raw=true)
 
 ### Screen Sharing and Meeting Recording
 - Supports meeting recording and screen sharing functions.
 
-  ![image](https://github.com/sand050965/Hand-Tracking-Canvas/blob/main/readme/screenShare.gif?raw=true)
+  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/screenShare.gif?raw=true)
 
 ### AI Hand Tracking Canvas
 - Use MediaPipe and OpenCV to implement this feature.
