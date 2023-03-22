@@ -69,6 +69,7 @@ class OffcanvasMod {
 	};
 
 	offcanvasCloseControl = (offcanvasDOMElement) => {
+		isOffcanvasOpen = false;
 		const target = this.bsOffcanvasObj[offcanvasDOMElement.target];
 		const targetBtn = document.querySelector(
 			`#${offcanvasDOMElement.btnId}Icon`
@@ -82,6 +83,7 @@ class OffcanvasMod {
 	};
 
 	offcanvasOpenControl = (offcanvasDOMElement) => {
+		isOffcanvasOpen = true;
 		const targetBtn = document.querySelector(
 			`#${offcanvasDOMElement.btnId}Icon`
 		);

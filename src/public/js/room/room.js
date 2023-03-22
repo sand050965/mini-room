@@ -154,10 +154,7 @@ peer.on("call", async (call) => {
 				await streamMod.initMediaControl(DOMElement);
 			}
 
-			if (!isFinishRender && cnt === Object.keys(peers).length + 1) {
-				this.commonMod.closePreload("#preloader");
-				socket.emit("finished-render");
-			}
+			mainDisplayMod.finishRender();
 
 		} else if (call.metadata.type === "screensharing") {
 			screenShareMod.checkScreenShare();
@@ -226,11 +223,7 @@ const connectToNewUser = async (DOMElement) => {
 			await participantMod.addParticipantList(DOMElement);
 			await mainDisplayMod.addRoomStream(DOMElement);
 			await streamMod.initMediaControl(DOMElement);
-
-			if (!isFinishRender && cnt === Object.keys(peers).length + 1) {
-				this.commonMod.closePreload("#preloader");
-				socket.emit("finished-render");
-			}
+			mainDisplayMod.finishRender();
 		}
 	});
 

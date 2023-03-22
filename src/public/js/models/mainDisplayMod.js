@@ -441,11 +441,7 @@ class MainDisplayMod {
 	startPlayStream = async (e) => {
 		await e.target.play();
 		cnt = await this.participantMod.getAllParticipants();
-
-		if (!isFinishRender && cnt === Object.keys(peers).length + 1) {
-			this.commonMod.closePreload("#preloader");
-			socket.emit("finished-render");
-		}
+		this.finishRender();
 	};
 
 	stopStream = async (e) => {
@@ -468,6 +464,14 @@ class MainDisplayMod {
 		await this.streamMod.mute(DOMElement);
 		await this.streamMod.stopVideo(DOMElement);
 		socket.emit("denied-media-permission");
+	};
+
+	finishRender = () => {
+		if (!isFinishRender && cnt === Object.keys(peers).length + 1) {
+			isFinishRender = true;
+			this.commonMod.closePreload("#preloader");
+			socket.emit("finished-render");
+		}
 	};
 }
 
