@@ -8,10 +8,6 @@ services:
       - "3000:3000"
     env_file: ./.env
     restart: on-failure
-    depends_on:
-      - redis
-    networks:
-      - my_bridge
 
   nginx:
     build:
@@ -23,20 +19,3 @@ services:
       - "443:443"
     depends_on:
       - app
-    networks:
-      - my_bridge
-  
-  redis:
-    image: redis:latest
-    container_name: redis
-    restart: on-failure
-    ports:
-        - "6379:6379"
-    volumes:
-        - /home/ubuntu/redis-data:/data
-    networks:
-        - my_bridge
-  
-networks:
-  my_bridge:
-    external: true
