@@ -74,6 +74,8 @@ class RoomController {
 			);
 			await this.mainDisplayMod.addRoomStream(DOMElement);
 			await this.streamMod.initMediaControl(DOMElement);
+			cnt = await this.participantMod.getAllParticipants();
+			this.mainDisplayMod.finishRender();
 			this.commonMod.closePreload("#preloader");
 		} catch (err) {
 			console.log(err);
