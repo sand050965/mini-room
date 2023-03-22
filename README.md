@@ -17,16 +17,14 @@ Test Password: 123456
 <br/>
 <br/>
 
-## Demo
-
-  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/index.png?raw=true)
-
 ## Table of Contents
 
 - [Main Features](#main-features)
   - [Online Video Calls, Meetings and Conferencing](#online-video-calls-meetings-and-conferencing)
   - [Real-Time Messaging](#real-time-messaging)
+  - [Screen Sharing and Meeting Recording](#screen-sharing-and-Meeting-recording)
   - [Hand Tracking Canvas](#ai-hand-tracking-canvas)
+- [Side Features](#side-features)
 - [Architecture](#architecture)
 - [Database Schema](#database-schema)
 - [Backend Technique](#backend-technique)
@@ -37,22 +35,35 @@ Test Password: 123456
 ## Main Features
 
 ### Online Video Calls, Meetings and Conferencing
+- Use WebRTC and PeerJS to achieve Peer-to-Peer video calls.
+
+  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/videoCalls.png?raw=true)
 
 ### Real-Time Messaging
+- Use Socket.IO for meeting room management and real-time chat room.
+
+  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/message.png?raw=true)
+
+### Screen Sharing and Meeting Recording
+- Supports meeting recording and screen sharing functions.
+
+  ![image](https://github.com/sand050965/Hand-Tracking-Canvas/blob/main/readme/screenShare.gif?raw=true)
 
 ### AI Hand Tracking Canvas
-![image](https://github.com/sand050965/Hand-Tracking-Canvas/blob/main/readme/painting-mode.gif?raw=true)
+- Use MediaPipe and OpenCV to implement this feature.
 
-- Use Socket.IO for meeting room management and real-time chat room.
-- Use WebRTC and PeerJS to achieve Peer-to-Peer video calls.
+  ![image](https://github.com/sand050965/Hand-Tracking-Canvas/blob/main/readme/painting-mode.gif?raw=true)
+
+  [(more info ...)](https://github.com/sand050965/Hand-Tracking-Canvas)
+
+## Side Features
+
 - Users can sign in locally or use Google OAuth 2.0.
-- User authentication with Json Web Token.
+- User authentication with Json Web Token (JWT).
 - Setup CI/CD workflow with GitHub Actions, Docker Hub Webhooks and Jenkins.
-- Supports meeting recording and screen sharing functions.
 - Supports invitation mail sending.
 - Supports file uploading and emojis sending in chatroom.
 - User can change their own avatar image.
-- [Supports Hand Tracking Canvas. (more info ...)](https://github.com/sand050965/Hand-Tracking-Canvas)
 
 
 ## Architecture
