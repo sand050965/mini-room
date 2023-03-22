@@ -153,6 +153,9 @@ peer.on("call", async (call) => {
 				await mainDisplayMod.addRoomStream(DOMElement);
 				await streamMod.initMediaControl(DOMElement);
 			}
+
+			mainDisplayMod.finishRender();
+
 		} else if (call.metadata.type === "screensharing") {
 			screenShareMod.checkScreenShare();
 			screenShareMap.set("screenSharing", call.peer);
@@ -220,6 +223,7 @@ const connectToNewUser = async (DOMElement) => {
 			await participantMod.addParticipantList(DOMElement);
 			await mainDisplayMod.addRoomStream(DOMElement);
 			await streamMod.initMediaControl(DOMElement);
+			mainDisplayMod.finishRender();
 		}
 	});
 
@@ -272,6 +276,10 @@ socket.on("user-finished-render", (participantId) => {
 });
 
 socket.on("user-mute", async (participantId) => {
+	if (!peers[participantId]) {
+		return;
+	}
+
 	let stream = null;
 	if (participantMap.get(participantId)) {
 		stream = participantMap.get(participantId).stream;
@@ -293,6 +301,10 @@ socket.on("user-mute", async (participantId) => {
 });
 
 socket.on("user-unmute", async (participantId) => {
+	if (!peers[participantId]) {
+		return;
+	}
+
 	let stream = null;
 	if (participantMap.get(participantId)) {
 		stream = participantMap.get(participantId).stream;
@@ -314,6 +326,10 @@ socket.on("user-unmute", async (participantId) => {
 });
 
 socket.on("user-stop-video", async (participantId) => {
+	if (!peers[participantId]) {
+		return;
+	}
+
 	let stream = null;
 	if (participantMap.get(participantId)) {
 		stream = participantMap.get(participantId).stream;
@@ -443,4 +459,5 @@ socket.on("user-disconnected", async (participantId, participantName) => {
 	};
 	await mainDisplayMod.setRoomVideoGridStyle(videoDOMElement);
 	participantMod.displayLeaveRoomNotify(participantName);
+	delete peers[participantId];
 });

@@ -21,37 +21,27 @@ Test Password: 123456
 
   ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/index.png?raw=true)
 
-  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/premeeting.png?raw=true)
-  
-  ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/meeting-room.png?raw=true)
-
 ## Table of Contents
 
 - [Main Features](#main-features)
+  - [Online Video Calls, Meetings and Conferencing](#online-video-calls-meetings-and-conferencing)
+  - [Real-Time Messaging](#real-time-messaging)
+  - [Hand Tracking Canvas](#ai-hand-tracking-canvas)
 - [Architecture](#architecture)
 - [Database Schema](#database-schema)
 - [Backend Technique](#backend-technique)
-  - [Infrastructure](#infrastructure)
-  - [Environment](#environment)
-  - [Database](#database)
-  - [Cache](#cache)
-  - [Cloud Services](#cloud-services)
-  - [Networking](#networking)
-  - [CI / CD](#ci--cd)
-  - [Test](#test)
-  - [Third Party Library](#third-party-library)
-  - [Version Control](#version-control)
-  - [Key Points](#key-points)
 - [Frontend Technique](#frontend-technique)
-  - [WebRTC](#webrtc)
-  - [PeerJS](#peerjs)
-  - [EJS Template](#ejs-template)
-  - [Bootstrap](#bootstrap)
-  - [Third-Party Library](#third-party-library)
 - [API Doc](#api-doc)
 - [Contact](#contact)
 
 ## Main Features
+
+### Online Video Calls, Meetings and Conferencing
+
+### Real-Time Messaging
+
+### AI Hand Tracking Canvas
+![image](https://github.com/sand050965/Hand-Tracking-Canvas/blob/main/readme/painting-mode.gif?raw=true)
 
 - Use Socket.IO for meeting room management and real-time chat room.
 - Use WebRTC and PeerJS to achieve Peer-to-Peer video calls.
@@ -64,7 +54,6 @@ Test Password: 123456
 - User can change their own avatar image.
 - [Supports Hand Tracking Canvas. (more info ...)](https://github.com/sand050965/Hand-Tracking-Canvas)
 
-![image](https://github.com/sand050965/Hand-Tracking-Canvas/blob/main/readme/painting-mode.gif?raw=true)
 
 ## Architecture
 
@@ -169,11 +158,11 @@ Test Password: 123456
 - HTML, JavaScript, CSS
 - WebRTC
 - EJS Template
-- Bootstrap
 
 ### Third Party Library
 
 - PeerJS
+- Bootstrap
 - FontAwesome
 - AOS
 - Open Emoji API
