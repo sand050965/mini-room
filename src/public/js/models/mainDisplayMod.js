@@ -440,8 +440,12 @@ class MainDisplayMod {
 
 	startPlayStream = async (e) => {
 		await e.target.play();
-		this.commonMod.closePreload("#preloader");
-		socket.emit("finished-render");
+		cnt = await this.participantMod.getAllParticipants();
+
+		if (!isFinishRender && cnt === Object.keys(peers).length + 1) {
+			this.commonMod.closePreload("#preloader");
+			socket.emit("finished-render");
+		}
 	};
 
 	stopStream = async (e) => {

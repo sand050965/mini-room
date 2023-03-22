@@ -4,6 +4,8 @@ let myScreenShareStream = null;
 
 let cnt = 1;
 
+let isFinishRender = false;
+
 let isLoseTrack = false;
 
 let isOffcanvasOpen = false;
