@@ -19,7 +19,6 @@ const userRoutes = require("../routes/userRoutes");
 const authRoutes = require("../routes/authRoutes");
 const s3Routes = require("../routes/s3Routes");
 const memberRoutes = require("../routes/memberRoutes");
-const canvasRoutes = require("../routes/canvasRoutes");
 const errorRoutes = require("../routes/errorRoutes");
 const thankyouRoutes = require("../routes/thankyouRoutes");
 
@@ -46,7 +45,6 @@ app.use("/api/mail", mailRoutes);
 app.use("/api/s3", s3Routes);
 app.use("/api/user", userRoutes);
 app.use("/auth", authRoutes);
-app.use("/canvas", canvasRoutes);
 app.use("/error", errorRoutes);
 app.use("/member", memberRoutes);
 app.use("/thankyou", thankyouRoutes);
