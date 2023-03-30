@@ -1,13 +1,13 @@
 const shortid = require("shortid");
-const redisClient = require("../utils/redisUtil.js");
 const roomService = require("../services/roomService");
 
 module.exports = {
 	startMeeting: async (req, res) => {
 		try {
+			
 			let roomId = shortid.generate();
 
-			let checkInUseRoom;
+			let checkInUseRoom = null;
 
 			checkInUseRoom = await roomService.getRoomCheck(
 				{
@@ -48,7 +48,6 @@ module.exports = {
 						status: "start",
 					}
 				);
-				await redisClient.del(`Room_${roomId}`);
 			} else {
 				await roomService.createRoom({
 					roomId: roomId,
@@ -56,9 +55,8 @@ module.exports = {
 				});
 			}
 
-			await redisClient.set(`Room_${roomId}`, "start");
-
 			return res.status(200).json({ data: { roomId: roomId } });
+
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
 				console.log(e);
@@ -71,30 +69,24 @@ module.exports = {
 
 	joinMeeting: async (req, res) => {
 		try {
-			let checkValidRoom = null;
-
-			checkValidRoom = await redisClient.get(`Room_${req.query.roomId}`);
+			const checkValidRoom = await roomService.getRoomCheck(
+				{
+					roomId: req.query.roomId,
+				},
+				{
+					status: "start",
+				}
+			);
 
 			if (checkValidRoom === null) {
-				checkValidRoom = await roomService.getRoomCheck(
-					{
-						roomId: req.query.roomId,
-					},
-					{
-						status: "start",
-					}
-				);
 
-				if (checkValidRoom === null) {
-					await redisClient.set(`Room_${req.query.roomId}`, "start");
-
-					return res
-						.status(400)
-						.json({ error: true, message: "room id doesn't exist!" });
-				}
+				return res
+					.status(400)
+					.json({ error: true, message: "room id doesn't exist!" });
 			}
 
 			res.status(200).json({ ok: true });
+
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
 				console.log(e);
@@ -107,14 +99,16 @@ module.exports = {
 
 	closeRoom: async (req, res) => {
 		try {
+
 			await roomService.updateRoomStatus(
 				{
 					roomId: req.query.roomId,
 				},
 				{ status: "closed" }
 			);
-			await redisClient.del(`Room_${req.query.roomId}`);
+
 			res.status(200).json({ ok: true });
+
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
 				console.log(e);
