@@ -29,7 +29,7 @@ class RoomController {
 			myStream = await this.streamMod.getUserMediaStream();
 			const myVideo = document.createElement("video");
 			myVideo.muted = true;
-			await this.chatRoomMod.loadEmoji();
+			this.chatRoomMod.loadEmoji();
 			const DOMElement = {
 				type: "roomSelf",
 				videoBtn: document.querySelector("#videoBtn"),
