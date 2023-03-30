@@ -60,7 +60,7 @@ class UserController {
 			this.authStatus.textContent = "Log Out";
 		} else {
 			this.avatarImg.src =
-				"https://s3.amazonaws.com/www.miniroom.online/images/avatar.png";
+				"https://dpd6ot08xcncs.cloudfront.net/avatars/avatar.png";
 			await this.userDropdown.removeAttribute("data-bs-toggle", "dropdown");
 			this.authStatus.textContent = "Log In / Sign Up";
 		}
@@ -146,7 +146,7 @@ class UserController {
 		let avatarCheck = false;
 		if (
 			this.signUpAvatarImg.src !==
-			"https://s3.amazonaws.com/www.miniroom.online/images/avatar.png"
+			"https://dpd6ot08xcncs.cloudfront.net/avatars/avatar.png"
 		) {
 			avatarCheck = this.userMod.validateAvatarImg();
 		} else {
@@ -166,7 +166,7 @@ class UserController {
 		this.userMod.resetValidateStyle();
 
 		let avatarImgUrl =
-			"https://s3.amazonaws.com/www.miniroom.online/images/avatar.png";
+			"https://dpd6ot08xcncs.cloudfront.net/avatars/avatar.png";
 
 		if (this.signUpAvatarImg.src !== avatarImgUrl) {
 			const s3Result = await this.userMod.storeAvatarToS3({

@@ -10,13 +10,17 @@ module.exports = {
 			const imgName = rawBytes.toString("hex");
 			const params = {
 				Bucket: process.env.AWS_BUCKET_NAME,
-				Key: `images/${imgName}`,
+				Key: `avatars/${imgName}`,
 				Body: req.file.buffer,
 				ACL: "public-read",
 				ContentType: req.file.mimetype,
 			};
 			const data = await s3Service.postFile(params);
-			return res.status(200).json({ data: { url: data.Location } });
+			const location = data.Location.replace(
+				process.env.AWS_S3_URL,
+				process.env.AWS_CLOUDFRONT_URL
+			);
+			return res.status(200).json({ data: { url: location } });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
 				console.log(e);
@@ -69,7 +73,11 @@ module.exports = {
 				ContentType: req.file.mimetype,
 			};
 			const data = await s3Service.postFile(params);
-			return res.status(200).json({ data: { url: data.Location } });
+			const location = data.Location.replace(
+				process.env.AWS_S3_URL,
+				process.env.AWS_CLOUDFRONT_URL
+			);
+			return res.status(200).json({ data: { url: location } });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
 				console.log(e);
