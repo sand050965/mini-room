@@ -5,6 +5,7 @@ class OffcanvasMod {
 			document.querySelector("#infoOffcanvasBtnIcon"),
 			document.querySelector("#participantOffcanvasBtnIcon"),
 			document.querySelector("#chatOffcanvasBtnIcon"),
+			document.querySelector("#handCanvasOffcanvasBtnIcon"),
 		];
 		this.BsInfoOffcanvas = new bootstrap.Offcanvas(
 			document.querySelector("#infoOffcanvas")
