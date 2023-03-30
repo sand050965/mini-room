@@ -70,7 +70,7 @@ class PremeetingMod {
 			this.displayName();
 		} else {
 			this.avatarImg.src =
-				"https://dpd6ot08xcncs.cloudfront.net/images/avatar.png";
+				"https://dpd6ot08xcncs.cloudfront.net/avatars/avatar.png";
 		}
 	};
 
