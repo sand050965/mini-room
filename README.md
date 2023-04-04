@@ -32,7 +32,6 @@ Mini Room is a video-communication service allows you to host real-time meetings
 - [Database Schema](#database-schema)
 - [Backend Technique](#backend-technique)
 - [Frontend Technique](#frontend-technique)
-- [API Doc](#api-doc)
 - [Contact](#contact)
 
 ## Main Features
@@ -78,11 +77,17 @@ Mini Room is a video-communication service allows you to host real-time meetings
 <br/>
 <br/>
 
-### Socket Architecture
+### WebSocket Architecture
 
 ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/websocket.png?raw=true)
 
 <br/>
+<br/>
+
+### WebRTC Architecture
+
+![image](https://github.com/sand050965/Mini-Room/blob/main/readme/webrtc.png?raw=true)
+
 <br/>
 
 ### PeerJS Architecture
@@ -125,7 +130,7 @@ Mini Room is a video-communication service allows you to host real-time meetings
 - WebSocket
 - Domain Name System (DNS)
 - NGINX
-- SSL (Let's Encrypt)
+- SSL (ZeroSSL)
 
 ### CI / CD
 
@@ -153,7 +158,7 @@ Mini Room is a video-communication service allows you to host real-time meetings
 ### Version Control
 
 - Git / GitHub
-- Dcoker Hub
+- Docker Hub
 
 ### Key Points
 
@@ -180,10 +185,6 @@ Mini Room is a video-communication service allows you to host real-time meetings
 - FontAwesome
 - AOS
 - Open Emoji API
-
-## API Doc
-
-[API doc](https://app.swaggerhub.com/apis/SAND050965_1/mini-room_api/1.0.0)
 
 ## Contact
 
