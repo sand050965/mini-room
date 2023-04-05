@@ -20,6 +20,12 @@ Mini Room is a video-communication service allows you to host real-time meetings
 <br/>
 <br/>
 
+<p align="center">
+  <img width="350" height="330" src="https://github.com/sand050965/Mini-Room/blob/main/readme/index.png?raw=true">
+  &nbsp; &nbsp; &nbsp;
+  <img width="350" height="330" src="https://github.com/sand050965/Mini-Room/blob/main/readme/meeting.png?raw=true">
+</p>
+
 ## Table of Contents
 
 - [Main Features](#main-features)
@@ -47,50 +53,52 @@ Mini Room is a video-communication service allows you to host real-time meetings
   ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/message.gif?raw=true)
 
 ### Screen Sharing and Meeting Recording
-- Supports meeting recording and screen sharing functions.
+- Support meeting recording and screen sharing functions.
 
   ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/screenShare.gif?raw=true)
 
-### AI Hand Tracking Canvas
-- Use MediaPipe and OpenCV to implement this feature.
+### AI Hand Tracking Canvas [(more info ...)](https://github.com/sand050965/Hand-Tracking-Canvas)
+- Use MediaPipe to implement hand tracking.
+- Use OpenCV to process images.
 
-  ![image](https://github.com/sand050965/Hand-Tracking-Canvas/blob/main/readme/painting-mode.gif?raw=true)
+  <p>
+    <img width="714" src="https://github.com/sand050965/Hand-Tracking-Canvas/blob/main/readme/painting-mode.gif?raw=true">
+  </p>
 
-  [(more info ...)](https://github.com/sand050965/Hand-Tracking-Canvas)
 
 ## Side Features
 
-- Users can sign in locally or use Google OAuth 2.0.
+- User can sign in locally or use Google OAuth 2.0.
 - User authentication with Json Web Token (JWT).
 - Setup CI/CD workflow with GitHub Actions, Docker Hub Webhooks and Jenkins.
-- Supports invitation mail sending.
-- Supports file uploading and emojis sending in chatroom.
+- Support invitation mail sending.
+- Support file uploading and emojis sending in chatroom.
 - User can change their own avatar image.
 
 
 ## Architecture
 
-### Server Architecture
+#### Server Architecture
 
 ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/archetecture.png?raw=true)
 
 <br/>
 <br/>
 
-### WebSocket Architecture
+#### WebSocket Architecture
 
 ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/websocket.png?raw=true)
 
 <br/>
 <br/>
 
-### WebRTC Architecture
+#### WebRTC Architecture
 
 ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/webrtc.png?raw=true)
 
 <br/>
 
-### PeerJS Architecture
+#### PeerJS Architecture
 
 ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/peerjs.png?raw=true)
 
