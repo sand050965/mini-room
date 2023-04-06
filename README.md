@@ -21,9 +21,9 @@ Mini Room is a video-communication service allows you to host real-time meetings
 <br/>
 
 <p align="center">
-  <img width="350" height="330" src="https://github.com/sand050965/Mini-Room/blob/main/readme/index.png?raw=true">
+  <img height="250" src="https://github.com/sand050965/Mini-Room/blob/main/readme/index.png?raw=true">
   &nbsp; &nbsp; &nbsp;
-  <img width="350" height="330" src="https://github.com/sand050965/Mini-Room/blob/main/readme/meeting.png?raw=true">
+  <img height="250" src="https://github.com/sand050965/Mini-Room/blob/main/readme/meeting.png?raw=true">
 </p>
 
 ## Table of Contents
