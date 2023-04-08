@@ -45,12 +45,6 @@ module.exports = {
 
 			await userService.postUser(userData);
 
-			await redisClient.hSet(
-				"User",
-				req.body.email,
-				JSON.stringify(redisUserData)
-			);
-
 			return res.status(200).json({ ok: true });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
@@ -165,17 +159,11 @@ module.exports = {
 
 	refreshUserToken: async (req, res) => {
 		try {
-			let user = null;
+			const user = await userService.getUser({
+				email: req.body.email,
+			});
 
-			user = await redisClient.hGet("User", req.body.email);
-
-			if (!user) {
-				user = await userService.getUser({
-					email: req.body.email,
-				});
-
-				await redisClient.hSet("User", req.body.email, JSON.stringify(user));
-			}
+			await redisClient.hSet("User", req.body.email, JSON.stringify(user));
 
 			const tokenData = {
 				email: user.email,
