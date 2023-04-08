@@ -91,6 +91,14 @@ module.exports = {
 				participantId: req.query.participantId,
 			});
 
+			if (participantInfo) {
+				await redisClient.hSet(
+					`Participant_${req.params.roomId}`,
+					req.query.participantId,
+					JSON.stringify(participantData)
+				);
+			}
+			
 			return res.status(200).json({ data: participantInfo });
 		} catch (e) {
 			if (process.env.NODE_ENV !== "development") {
