@@ -3,10 +3,7 @@
 <p align="center">
   <img width="350" src="https://github.com/sand050965/Mini-Room/blob/main/readme/logo.png?raw=true">
 </p>
-Mini Room is a video-communication service allows you to host real-time meetings online, make peer-to-peer video calls and chat in messages.
-<br/>
-<br/>
-🔗 Website URL: https://miniroom.online/
+Mini Room is a real-time video conferencing system that supports concurrent peer-to-peer video calls, online meetings, and instant messaging.
 <br/>
 <br/>
 📄 API Doc: https://app.swaggerhub.com/apis/SAND050965_1/mini-room_api/1.0.0
@@ -20,72 +17,84 @@ Mini Room is a video-communication service allows you to host real-time meetings
 <br/>
 <br/>
 
+<p align="center">
+  <img height="250" src="https://github.com/sand050965/Mini-Room/blob/main/readme/index.png?raw=true">
+  &nbsp; &nbsp; &nbsp;
+  <img height="250" src="https://github.com/sand050965/Mini-Room/blob/main/readme/meeting.png?raw=true">
+</p>
 ## Table of Contents
 
 - [Main Features](#main-features)
-  - [Online Video Calls, Meetings and Conferencing](#online-video-calls-meetings-and-conferencing)
-  - [Real-Time Messaging](#real-time-messaging)
-  - [Screen Sharing and Meeting Recording](#screen-sharing-and-Meeting-recording)
-  - [Hand Tracking Canvas](#ai-hand-tracking-canvas)
+    - [Online Video Calls, Meetings and Conferencing](#online-video-calls-meetings-and-conferencing)
+    - [Real-Time Messaging](#real-time-messaging)
+    - [Screen Sharing and Meeting Recording](#screen-sharing-and-Meeting-recording)
+    - [Hand Tracking Canvas](#ai-hand-tracking-canvas)
 - [Side Features](#side-features)
 - [Architecture](#architecture)
 - [Database Schema](#database-schema)
 - [Backend Technique](#backend-technique)
 - [Frontend Technique](#frontend-technique)
-- [API Doc](#api-doc)
 - [Contact](#contact)
 
 ## Main Features
 
-### Online Video Calls, Meetings and Conferencing
+### Online Video Calls, Meetings, and Conferencing
 - Use WebRTC and PeerJS to achieve Peer-to-Peer video calls.
 
   ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/videoCalls.gif?raw=true)
 
 ### Real-Time Messaging
-- Use Socket.IO for meeting room management and real-time chat room.
+- Use Socket.IO for meeting room management and a real-time chat room.
 
   ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/message.gif?raw=true)
 
 ### Screen Sharing and Meeting Recording
-- Supports meeting recording and screen sharing functions.
+- Support meeting recording and screen sharing functions.
 
   ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/screenShare.gif?raw=true)
 
-### AI Hand Tracking Canvas
-- Use MediaPipe and OpenCV to implement this feature.
+### AI Hand Tracking Canvas [(more info ...)](https://github.com/sand050965/Hand-Tracking-Canvas)
+- Use MediaPipe to implement hand tracking.
+- Use OpenCV to process images.
 
-  ![image](https://github.com/sand050965/Hand-Tracking-Canvas/blob/main/readme/painting-mode.gif?raw=true)
+  <p>
+    <img width="714" src="https://github.com/sand050965/Hand-Tracking-Canvas/blob/main/readme/painting-mode.gif?raw=true">
+  </p>
 
-  [(more info ...)](https://github.com/sand050965/Hand-Tracking-Canvas)
 
 ## Side Features
 
 - Users can sign in locally or use Google OAuth 2.0.
 - User authentication with Json Web Token (JWT).
-- Setup CI/CD workflow with GitHub Actions, Docker Hub Webhooks and Jenkins.
-- Supports invitation mail sending.
-- Supports file uploading and emojis sending in chatroom.
-- User can change their own avatar image.
+- Set up CI/CD workflow with GitHub Actions, Docker Hub Webhooks and Jenkins.
+- Support sending invitation mail.
+- Support file uploading and sending emojis in the chatroom.
+- User can change their avatar image.
 
 
 ## Architecture
 
-### Server Architecture
+#### Server Architecture
 
 ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/archetecture.png?raw=true)
 
 <br/>
 <br/>
 
-### Socket Architecture
+#### WebSocket Architecture
 
 ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/websocket.png?raw=true)
 
 <br/>
 <br/>
 
-### PeerJS Architecture
+#### WebRTC Architecture
+
+![image](https://github.com/sand050965/Mini-Room/blob/main/readme/webrtc.png?raw=true)
+
+<br/>
+
+#### PeerJS Architecture
 
 ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/peerjs.png?raw=true)
 
@@ -125,16 +134,16 @@ Mini Room is a video-communication service allows you to host real-time meetings
 - WebSocket
 - Domain Name System (DNS)
 - NGINX
-- SSL (Let's Encrypt)
+- SSL (ZeroSSL)
 
 ### CI / CD
 
-- CI: 
-  - GitHub Actions
-  - Docker Hub Webhooks
-  - Jenkins
-- CD: 
-  - AWS CodeDeploy
+- CI:
+    - GitHub Actions
+    - Docker Hub Webhooks
+    - Jenkins
+- CD:
+    - AWS CodeDeploy
 ### Test
 
 - Unit test: Supertest
@@ -153,7 +162,7 @@ Mini Room is a video-communication service allows you to host real-time meetings
 ### Version Control
 
 - Git / GitHub
-- Dcoker Hub
+- Docker Hub
 
 ### Key Points
 
@@ -180,10 +189,6 @@ Mini Room is a video-communication service allows you to host real-time meetings
 - FontAwesome
 - AOS
 - Open Emoji API
-
-## API Doc
-
-[API doc](https://app.swaggerhub.com/apis/SAND050965_1/mini-room_api/1.0.0)
 
 ## Contact
 
