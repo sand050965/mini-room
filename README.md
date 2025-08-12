@@ -3,10 +3,7 @@
 <p align="center">
   <img width="350" src="https://github.com/sand050965/Mini-Room/blob/main/readme/logo.png?raw=true">
 </p>
-Mini Room is a video-communication service allows you to host real-time meetings online, make peer-to-peer video calls and chat in messages.
-<br/>
-<br/>
-🔗 Website URL: https://miniroom.online/
+Mini Room is a real-time video conferencing system that supports concurrent peer-to-peer video calls, online meetings, and instant messaging.
 <br/>
 <br/>
 📄 API Doc: https://app.swaggerhub.com/apis/SAND050965_1/mini-room_api/1.0.0
@@ -25,14 +22,13 @@ Mini Room is a video-communication service allows you to host real-time meetings
   &nbsp; &nbsp; &nbsp;
   <img height="250" src="https://github.com/sand050965/Mini-Room/blob/main/readme/meeting.png?raw=true">
 </p>
-
 ## Table of Contents
 
 - [Main Features](#main-features)
-  - [Online Video Calls, Meetings and Conferencing](#online-video-calls-meetings-and-conferencing)
-  - [Real-Time Messaging](#real-time-messaging)
-  - [Screen Sharing and Meeting Recording](#screen-sharing-and-Meeting-recording)
-  - [Hand Tracking Canvas](#ai-hand-tracking-canvas)
+    - [Online Video Calls, Meetings and Conferencing](#online-video-calls-meetings-and-conferencing)
+    - [Real-Time Messaging](#real-time-messaging)
+    - [Screen Sharing and Meeting Recording](#screen-sharing-and-Meeting-recording)
+    - [Hand Tracking Canvas](#ai-hand-tracking-canvas)
 - [Side Features](#side-features)
 - [Architecture](#architecture)
 - [Database Schema](#database-schema)
@@ -42,13 +38,13 @@ Mini Room is a video-communication service allows you to host real-time meetings
 
 ## Main Features
 
-### Online Video Calls, Meetings and Conferencing
+### Online Video Calls, Meetings, and Conferencing
 - Use WebRTC and PeerJS to achieve Peer-to-Peer video calls.
 
   ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/videoCalls.gif?raw=true)
 
 ### Real-Time Messaging
-- Use Socket.IO for meeting room management and real-time chat room.
+- Use Socket.IO for meeting room management and a real-time chat room.
 
   ![image](https://github.com/sand050965/Mini-Room/blob/main/readme/message.gif?raw=true)
 
@@ -70,10 +66,10 @@ Mini Room is a video-communication service allows you to host real-time meetings
 
 - User can sign in locally or use Google OAuth 2.0.
 - User authentication with Json Web Token (JWT).
-- Setup CI/CD workflow with GitHub Actions, Docker Hub Webhooks and Jenkins.
-- Support invitation mail sending.
-- Support file uploading and emojis sending in chatroom.
-- User can change their own avatar image.
+- Set up CI/CD workflow with GitHub Actions, Docker Hub Webhooks and Jenkins.
+- Support sending invitation mail.
+- Support file uploading and sending emojis in the chatroom.
+- User can change their avatar image.
 
 
 ## Architecture
@@ -142,12 +138,12 @@ Mini Room is a video-communication service allows you to host real-time meetings
 
 ### CI / CD
 
-- CI: 
-  - GitHub Actions
-  - Docker Hub Webhooks
-  - Jenkins
-- CD: 
-  - AWS CodeDeploy
+- CI:
+    - GitHub Actions
+    - Docker Hub Webhooks
+    - Jenkins
+- CD:
+    - AWS CodeDeploy
 ### Test
 
 - Unit test: Supertest
